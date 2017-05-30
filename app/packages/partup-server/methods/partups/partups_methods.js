@@ -41,6 +41,7 @@ Meteor.methods({
             };
             Boards.insert(board);
 
+
             newPartup.board_id = board_id
 
             // Set the default board lanes
