@@ -1,4 +1,5 @@
 var url = Npm.require('url');
+var UserApiAccessToken = process.env.USER_API_ACCESS_TOKEN;
 
 // Disable all default response headers (we want to control them manually)
 JsonRoutes.setResponseHeaders({});
@@ -43,6 +44,14 @@ JsonRoutes.Middleware.use(function(request, response, next) {
     }
 
     response.setHeader('Cache-Control', cacheControl);
+
+    next();
+});
+
+JsonRoutes.Middleware.use(function(request, response, next) {
+    if (request.headers['authorization'] == UserApiAccessToken) {
+        request.userId = request.headers['x-authenticated-userid']
+    }
 
     next();
 });

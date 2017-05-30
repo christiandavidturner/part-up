@@ -9,7 +9,8 @@ Meteor.methods({
     'partups.insert': function(fields) {
         check(fields, Partup.schemas.forms.partup);
 
-        var user = Meteor.user();
+        // var user = Meteor.user();
+        var user = Meteor.users.findOneOrFail(this.userId)
         if (!user) throw new Meteor.Error(401, 'unauthorized');
 
         try {
@@ -29,7 +30,17 @@ Meteor.methods({
             newPartup.refreshed_at = new Date();
 
             // Create a board
-            newPartup.board_id = Meteor.call('boards.insert', newPartup._id);
+            // newPartup.board_id = Meteor.call('boards.insert', newPartup._id);
+            let board_id = Random.id()
+            let board = {
+                _id: board_id,
+                created_at: new Date(),
+                lanes: [],
+                partup_id: newPartup._id,
+                updated_at: new Date()
+            };
+            Boards.insert(board);
+            newPartup.board_id = board_id
 
             // Set the default board lanes
             var board = Boards.findOneOrFail(newPartup.board_id);
