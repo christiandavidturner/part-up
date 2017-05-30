@@ -40,11 +40,13 @@ Meteor.methods({
                 updated_at: new Date()
             };
             Boards.insert(board);
-            newPartup.board_id = board_id
 
             // Set the default board lanes
-            var board = Boards.findOneOrFail(newPartup.board_id);
-            board.createDefaultLane();
+            let inserted_board = Boards.findOneOrFail(board_id);
+            inserted_board.createDefaultLane();
+
+            // If the board is inserted, add it to the partup
+            newPartup.board_id = board_id
 
             Partups.insert(newPartup);
             Meteor.users.update(user._id, {$addToSet: {'upperOf': newPartup._id}});
@@ -113,7 +115,7 @@ Meteor.methods({
         check(partupId, String);
         check(fields, Partup.schemas.forms.partup);
 
-        var user = Meteor.user();
+        var user = Meteor.users.findOneOrFail(this.userId)
         var partup = Partups.findOneOrFail(partupId);
         var oldLanguage = partup.language;
         var oldPrivacyType = partup.privacy_type;
@@ -144,11 +146,22 @@ Meteor.methods({
             }
             // Create a board
             if (!partup.board_id) {
-                newPartupFields.board_id = Meteor.call('boards.insert', partup._id);
+                // newPartupFields.board_id = Meteor.call('boards.insert', partup._id);
+                let board_id = Random.id()
+                let board = {
+                    _id: board_id,
+                    created_at: new Date(),
+                    lanes: [],
+                    partup_id: partupId,
+                    updated_at: new Date()
+                };
+                Boards.insert(board)
 
                 // Set the default board lanes
-                var board = Boards.findOneOrFail(newPartupFields.board_id);
-                board.createDefaultLane();
+                var inserted_board = Boards.findOneOrFail(newPartupFields.board_id);
+                inserted_board.createDefaultLane();
+
+                newPartupFields.board_id = board_id
             }
 
             Partups.update(partupId, {$set: newPartupFields});
@@ -177,7 +190,7 @@ Meteor.methods({
     'partups.remove': function(partupId) {
         check(partupId, String);
 
-        var user = Meteor.user();
+        var user = Meteor.users.findOneOrFail(this.userId)
         var partup = Partups.findOneOrFail(partupId);
 
         if (!partup.isRemovableBy(user)) {
