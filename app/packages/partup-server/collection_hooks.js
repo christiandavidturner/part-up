@@ -1,3 +1,5 @@
+import { get } from 'lodash';
+
 // For the collection events documentation, see [https://github.com/matb33/meteor-collection-hooks].
 var equal = Npm.require('deeper');
 
@@ -10,6 +12,16 @@ var equal = Npm.require('deeper');
  */
 var basicAfterInsert = function(namespace) {
     return function(userId, document) {
+
+        // If no userId is present, try getting it from the document 
+        // Used for User-API access, as no user is specified
+        if (!userId) { 
+            userId = document.creator_id || 
+                     document.upper_id || 
+                     get(document, 'type_data.creator._id')
+        }
+        
+        console.log(userId, namespace, document)
         Event.emit(namespace + '.inserted', userId, document);
     };
 };
@@ -24,6 +36,15 @@ var basicAfterInsert = function(namespace) {
  */
 var basicAfterUpdate = function(namespace) {
     return function(userId, document, fieldNames, modifier, options) {
+
+        // If no userId is present, try getting it from the document 
+        // Used for User-API access, as no user is specified
+        if (!userId) { 
+            userId = document.creator_id || 
+                     document.upper_id || 
+                     get(document, 'type_data.creator._id')
+        }
+        
         Event.emit(namespace + '.updated', userId, document, this.previous);
 
         if (this.previous) {
