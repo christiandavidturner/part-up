@@ -21,7 +21,6 @@ var basicAfterInsert = function(namespace) {
                      get(document, 'type_data.creator._id')
         }
         
-        console.log(userId, namespace, document)
         Event.emit(namespace + '.inserted', userId, document);
     };
 };
