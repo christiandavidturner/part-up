@@ -9,9 +9,9 @@ Meteor.startup(function() {
                 'hours' : 10,
                 'rate' : 50,
                 'created_at' : new Date('2015-03-26T16:25:07.816Z'),
-                'activity_id' : 'ZtJwZWikiFE7HpXLk',
-                'upper_id' : '124',
-                'partup_id' : '1111',
+                'activity_id' : 'ruvTupX9WMmqFTLwL',
+                'upper_id' : 'q63Kii9wwJX3Q6rHS',
+                'partup_id' : 'gJngF65ZWyS9f3NDE',
                 'verified' : true,
                 'update_id' : 'FzvicjkgyXPiYTqbs',
                 'updated_at' : new Date('2015-03-26T16:25:07.816Z')
@@ -23,9 +23,9 @@ Meteor.startup(function() {
                 'hours' : null,
                 'rate' : null,
                 'created_at' : new Date('2015-03-26T16:25:07.816Z'),
-                'activity_id' : 'ZtJwZWikiFE7HpXLk',
-                'upper_id' : '124',
-                'partup_id' : '1111',
+                'activity_id' : 'ruvTupX9WMmqFTLwL',
+                'upper_id' : 'q63Kii9wwJX3Q6rHS',
+                'partup_id' : 'gJngF65ZWyS9f3NDE',
                 'verified' : false,
                 'update_id' : '38mpZCcjpS8vBA8Ys'
             });

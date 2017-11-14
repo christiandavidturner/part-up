@@ -18,7 +18,11 @@ Event.on('partups.inserted', function(userId, partup) {
     Updates.insert(update_systemmessage);
 
     // If the Partup has been created in a Network, notify its specific users
+    console.log(partup)
+    console.log(partup.network_id)
+
     if (partup.network_id) {
+        console.log(partup.network_id)
         var network = Networks.findOneOrFail(partup.network_id);
         var creator = Meteor.users.findOneOrFail(userId);
         var recipients = network.admins; // Always send to admins
