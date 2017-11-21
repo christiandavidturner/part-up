@@ -1,4 +1,5 @@
 import _ from 'lodash';
+var moment = require("moment");
 
 Meteor.methods({
     /**
@@ -8,6 +9,12 @@ Meteor.methods({
      * @param {mixed[]} fields
      */
     'activities.insert': function(partupId, fields) {
+
+        // If activity is added via the API, the end_date is a string
+        // We need to convert is to a js date object.
+        if (fields && fields.end_date && typeof fields.end_date === "string") {
+           fields.end_date = moment(fields.end_date).toDate()
+        }
         check(partupId, String);
         check(fields, Partup.schemas.forms.startActivities);
         var upper = Meteor.users.findOneOrFail(this.userId);
