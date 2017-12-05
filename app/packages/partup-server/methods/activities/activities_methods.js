@@ -62,6 +62,11 @@ Meteor.methods({
      * @param {mixed[]} fields
      */
     'activities.update': function(activityId, fields) {
+
+        if (fields && fields.end_date && typeof fields.end_date === "string") {
+           fields.end_date = moment(fields.end_date).toDate()
+        }
+        
         check(activityId, String);
         check(fields, Partup.schemas.forms.startActivities);
         var upper = Meteor.users.findOneOrFail(this.userId);
