@@ -91,6 +91,7 @@ Package.onUse(function(api) {
     api.addFiles([
         'logger.js',
         'api.js',
+        's3.js',
         'namespace.js',
         'constants.js',
         'bootstrap.js',
@@ -239,7 +240,7 @@ Package.onUse(function(api) {
         'package-tap.i18n'
     ], ['server']);
 
-    api.export(['Log', 'Api'], 'server');
+    api.export(['Log', 'Api', 'S3'], 'server');
 });
 
 Npm.depends({

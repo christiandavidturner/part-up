@@ -1,0 +1,1 @@
+S3 = new AWS.S3({ params: { Bucket: process.env.AWS_BUCKET_NAME } });

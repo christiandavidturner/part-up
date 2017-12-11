@@ -6,15 +6,13 @@ if (process.env.PARTUP_CRON_ENABLED) {
         },
         job: function() {
             if (!process.env.NODE_ENV.match(/development/)) {
-                var s3 = new AWS.S3({params: {Bucket: process.env.AWS_BUCKET_NAME}});
-
                 var baseUrl = 'https://part-up.com/';
 
                 // Create networks sitemap
                 var networkXml = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
                 Networks.find({
-                    archived_at: {$exists: false}
-                }, {fields: {slug: 1, updated_at: 1}}).forEach(function(network) {
+                    archived_at: { $exists: false }
+                }, { fields: { slug: 1, updated_at: 1 } }).forEach(function(network) {
                     networkXml += '<url>';
                     networkXml += '<loc>' + baseUrl + 'tribes/' + network.slug + '</loc>';
                     networkXml += '<lastmod>' + network.updated_at.toISOString() + '</lastmod>';
@@ -25,14 +23,14 @@ if (process.env.PARTUP_CRON_ENABLED) {
                 networkXml += '</urlset>';
 
                 // Upload to S3
-                s3.putObjectSync({Key: 'tribes.xml', Body: networkXml, ContentType: 'application/xml'});
+                S3.putObjectSync({ Key: 'tribes.xml', Body: networkXml, ContentType: 'application/xml' });
 
                 // Create Part-ups sitemap
                 var partupXml = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
                 Partups.find({
-                    archived_at: {$exists: false},
-                    deleted_at: {$exists: false}
-                }, {fields: {slug: 1}}).forEach(function(partup) {
+                    archived_at: { $exists: false },
+                    deleted_at: { $exists: false }
+                }, { fields: { slug: 1 } }).forEach(function(partup) {
                     partupXml += '<url>';
                     partupXml += '<loc>' + baseUrl + 'partups/' + partup.slug + '</loc>';
                     partupXml += '<changefreq>weekly</changefreq>';
@@ -42,11 +40,11 @@ if (process.env.PARTUP_CRON_ENABLED) {
                 partupXml += '</urlset>';
 
                 // Upload to S3
-                s3.putObjectSync({Key: 'part-ups.xml', Body: partupXml, ContentType: 'application/xml'});
+                S3.putObjectSync({ Key: 'part-ups.xml', Body: partupXml, ContentType: 'application/xml' });
 
                 // Create profiles sitemap
                 var profilesXml = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-                Meteor.users.find({deactivatedAt: {$exists: false}}, {fields: {_id: 1}}).forEach(function(user) {
+                Meteor.users.find({ deactivatedAt: { $exists: false } }, { fields: { _id: 1 } }).forEach(function(user) {
                     profilesXml += '<url>';
                     profilesXml += '<loc>' + baseUrl + 'profile/' + user._id + '</loc>';
                     profilesXml += '<changefreq>monthly</changefreq>';
@@ -56,11 +54,11 @@ if (process.env.PARTUP_CRON_ENABLED) {
                 profilesXml += '</urlset>';
 
                 // Upload to S3
-                s3.putObjectSync({Key: 'profiles.xml', Body: profilesXml, ContentType: 'application/xml'});
+                S3.putObjectSync({ Key: 'profiles.xml', Body: profilesXml, ContentType: 'application/xml' });
 
                 // Create swarms sitemap
                 var swarmsXml = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-                Swarms.find({}, {fields: {slug: 1, updated_at: 1}}).forEach(function(swarm) {
+                Swarms.find({}, { fields: { slug: 1, updated_at: 1 } }).forEach(function(swarm) {
                     swarmsXml += '<url>';
                     swarmsXml += '<loc>' + baseUrl + swarm.slug + '</loc>';
                     swarmsXml += '<lastmod>' + swarm.updated_at.toISOString() + '</lastmod>';
@@ -71,7 +69,7 @@ if (process.env.PARTUP_CRON_ENABLED) {
                 swarmsXml += '</urlset>';
 
                 // Upload to S3
-                s3.putObjectSync({Key: 'swarms.xml', Body: swarmsXml, ContentType: 'application/xml'});
+                S3.putObjectSync({ Key: 'swarms.xml', Body: swarmsXml, ContentType: 'application/xml' });
             }
         }
     });

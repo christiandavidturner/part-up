@@ -1,4 +1,4 @@
-var gm = Npm.require('gm').subClass({imageMagick: true});
+var gm = Npm.require('gm').subClass({ imageMagick: true });
 var path = Npm.require('path');
 import _ from 'lodash';
 
@@ -20,8 +20,6 @@ Partup.server.services.images = {
      * @param {Object} options.meta
      */
     upload: function(filename, body, mimetype, options) {
-        var s3 = new AWS.S3({params: {Bucket: process.env.AWS_BUCKET_NAME}});
-
         var options = options || {};
         var meta = options.meta || {};
         var id = options.id || Random.id();
@@ -42,10 +40,10 @@ Partup.server.services.images = {
 
         // TODO (extra): Add .autoOrient() to gm calls
 
-        s3.putObjectSync({Key: 'images/' + filekey, Body: body, ContentType: mimetype});
-        image.copies['original'] = {key: 'images/' + filekey, size: body.length};
+        S3.putObjectSync({ Key: 'images/' + filekey, Body: body, ContentType: mimetype });
+        image.copies['original'] = { key: 'images/' + filekey, size: body.length };
 
-        var sizes = [{w:32, h:32}, {w:80, h:80}, {w:360, h:360}, {w:1200, h:520}];
+        var sizes = [{ w: 32, h: 32 }, { w: 80, h: 80 }, { w: 360, h: 360 }, { w: 1200, h: 520 }];
 
         var resize = function(filename, body, width, height, callback) {
             gm(body, filename).resize(width, height).toBuffer(function(error, resizedBody) {
@@ -59,8 +57,8 @@ Partup.server.services.images = {
         sizes.forEach(function(size) {
             var directory = size.w + 'x' + size.h;
             var resizedBody = resizeSync(filename, body, size.w, size.h);
-            image.copies[directory] = {key: 'images/' + filekey, size: resizedBody.length};
-            s3.putObjectSync({Key: directory + '/images/' + filekey, Body: resizedBody, ContentType: mimetype});
+            image.copies[directory] = { key: 'images/' + filekey, size: resizedBody.length };
+            S3.putObjectSync({ Key: directory + '/images/' + filekey, Body: resizedBody, ContentType: mimetype });
         });
 
         Images.insert(image);
@@ -69,16 +67,15 @@ Partup.server.services.images = {
     },
 
     remove(id) {
-        const s3 = new AWS.S3({ params: { Bucket: process.env.AWS_BUCKET_NAME } });
         const image = Images.findOne(id);
 
         if (image && image.copies) {
             const s3Key = `${image._id}-${image.name}`;
             _.each(Object.keys(image.copies), (key) => {
                 if (key === 'original') {
-                    s3.deleteObjectSync({ Key: `images/${s3Key}` });
+                    S3.deleteObjectSync({ Key: `images/${s3Key}` });
                 } else {
-                    s3.deleteObjectSync({ Key: `${key}/images/${s3Key}` });
+                    S3.deleteObjectSync({ Key: `${key}/images/${s3Key}` });
                 }
             });
 
@@ -112,7 +109,7 @@ Partup.server.services.images = {
             y: focuspoint_y
         };
 
-        Images.update(imageId, {$set: {focuspoint: focuspoint}});
+        Images.update(imageId, { $set: { focuspoint: focuspoint } });
 
     }
 
