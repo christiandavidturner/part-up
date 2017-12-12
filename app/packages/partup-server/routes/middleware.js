@@ -50,10 +50,15 @@ JsonRoutes.Middleware.use(function(request, response, next) {
 
 // This allows the User API to directly access 
 JsonRoutes.Middleware.use(function(request, response, next) {
-    if (request.headers['authorization'] == UserApiAccessToken) {
+
+    // If the authorization header matches with the set USER_API_ACCESS_TOKEN it is a request
+    // via the User API. We then set the userId in the request object to the authenticated user
+    // to enable the calling of Meteor methods.
+    if (request.headers['authorization'] === UserApiAccessToken) {
         request.userId = request.headers['x-authenticated-userid']
     }
 
+    // Otherwise just proceed as a normal request
     next();
 });
 
