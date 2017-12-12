@@ -1,5 +1,5 @@
 var url = Npm.require('url');
-var UserApiAccessToken = process.env.USER_API_ACCESS_TOKEN;
+var userApiAccessToken = process.env.USER_API_ACCESS_TOKEN; 
 
 // Disable all default response headers (we want to control them manually)
 JsonRoutes.setResponseHeaders({});
@@ -48,19 +48,21 @@ JsonRoutes.Middleware.use(function(request, response, next) {
     next();
 });
 
-// This allows the User API to directly access 
-JsonRoutes.Middleware.use(function(request, response, next) {
 
-    // If the authorization header matches with the set USER_API_ACCESS_TOKEN it is a request
-    // via the User API. We then set the userId in the request object to the authenticated user
-    // to enable the calling of Meteor methods.
-    if (request.headers['authorization'] === UserApiAccessToken) {
-        request.userId = request.headers['x-authenticated-userid']
-    }
+if (userApiAccessToken) {
+    // This allows the User API to directly access 
+    JsonRoutes.Middleware.use(function(request, response, next) {
+        // If the authorization header matches with the set USER_API_ACCESS_TOKEN it is a request
+        // via the User API. We then set the userId in the request object to the authenticated user
+        // to enable the calling of Meteor methods.
+        if (userApiAccessToken && request.headers['authorization'] === userApiAccessToken) {
+            request.userId = request.headers['x-authenticated-userid']
+        }
 
-    // Otherwise just proceed as a normal request
-    next();
-});
+        // Otherwise just proceed as a normal request
+        next();
+    });
+}
 
 JsonRoutes.Middleware.use(JsonRoutes.Middleware.parseBearerToken);
 JsonRoutes.Middleware.use(JsonRoutes.Middleware.authenticateMeteorUserByToken);
