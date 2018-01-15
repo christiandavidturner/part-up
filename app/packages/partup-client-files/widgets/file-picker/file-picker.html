@@ -104,6 +104,24 @@
                                 </a>
                             {{/drivePicker }}
                         </li>
+                        <li>
+                          {{#onedrivePicker controller=controller }}
+                              <a class="browse-list-button" data-browse-onedrive>
+                                  <i class="picon-drive"></i>
+                                  {{#if screenWidthEqualOrAbove '450' }}
+                                      <span>
+                                          {{#if screenWidthEqualOrAbove '500'}}
+                                            OneDrive
+                                              <!-- {{_ 'filepicker-googledrive'}} -->
+                                          {{ else }}
+                                          OneDrive
+                                              <!-- {{_ 'filepicker-googledrive-short'}} -->
+                                          {{/if }}
+                                      </span>
+                                  {{/if }}
+                              </a>
+                          {{/onedrivePicker }}
+                      </li>
                     </ul>
                 </div>
             </div>
