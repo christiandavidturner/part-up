@@ -16,10 +16,16 @@ const onlyAllowedFiles = (file) => {
 };
 
 const successCallback = (controller) => async (data) => {
-    const transformedFiles = _.map(
-        data.value,
-        Partup.helpers.files.transform.onedrive
-    );
+    const transformedFiles = [];
+    _.each(data.value, (file) => {
+        const transformed = Partup.helpers.files.transform.onedrive(file);
+        if (!transformed) {
+            Partup.client.notify.info(TAPi18n.__(`upload-error-no_shareable_link`, file.name));
+        } else {
+            transformedFiles.push(transformed);
+        }
+    });
+
     const files = _.filter(controller.canAdd(transformedFiles, (removedFile) => {
         const category = Partup.helpers.files.isImage(removedFile)
             ? 'images'

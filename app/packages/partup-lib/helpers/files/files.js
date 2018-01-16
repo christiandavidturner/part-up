@@ -310,10 +310,10 @@ if (Meteor.isClient) {
             };
 
             file.link = Partup.helpers.files.isImage(file)
-                ? _.get(onedriveFile, '@microsoft.graph.downloadUrl', false)
-                : onedriveFile.webUrl;
+                ? _.get(onedriveFile, '@microsoft.graph.downloadUrl', null)
+                : _.get(onedriveFile.permissions[0], 'link.webUrl', null);
 
-            return file;
+            return file.link ? file : null;
         },
     };
 }
