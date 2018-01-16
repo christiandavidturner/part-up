@@ -9,7 +9,11 @@ const onedrivePickerConfig = {
         // filter: '' // for some reason the picker does not work when filters are applied
     },
 };
-const onlyAllowedExtensions = _.partial(_.includes, Partup.helpers.files.extensions.all);
+
+const onlyAllowedFiles = (file) => {
+    const ext = Partup.helpers.files.getExtension(file);
+    return _.includes(Partup.helpers.files.extensions.all, ext);
+};
 
 const successCallback = (controller) => async (data) => {
     const transformedFiles = _.map(
@@ -27,7 +31,7 @@ const successCallback = (controller) => async (data) => {
                 filename: removedFile.name,
             })
         );
-    }), onlyAllowedExtensions);
+    }), onlyAllowedFiles);
 
     controller.uploading.set(true);
     const uploadPromises = [];
