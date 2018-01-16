@@ -13,7 +13,7 @@ if (!Partup) {
 
 /**
  * Partup file helper
- * 
+ *
  * @description Provides helpers for the client and server to validate files.
  */
 Partup.helpers.files = {
@@ -54,6 +54,7 @@ Partup.helpers.files = {
         PARTUP: 'partup',
         DROPBOX: 'dropbox',
         GOOGLEDRIVE: 'googledrive',
+        ONEDRIVE: 'onedrive',
     },
 
     // #endregion
@@ -62,7 +63,7 @@ Partup.helpers.files = {
 
     /**
      * Get the file info object for a file
-     * 
+     *
      * @param {File} file
      * @returns {FileInfo} object containing info about a file
      */
@@ -136,7 +137,7 @@ Partup.helpers.files = {
 
     /**
      * Get the related SVG icon for a file, does not work for image files.
-     * 
+     *
      * @param {File} file
      * @returns {String} 'file.svg'
      */
@@ -155,7 +156,7 @@ Partup.helpers.files = {
     /**
      * Transform a file category to a Plupload mime filter,
      * pass in extensions to create custom filters.
-     * 
+     *
      * @param {String} category
      * @param {[String]} extensions optional
      * @returns plupload mime filter
@@ -169,8 +170,8 @@ Partup.helpers.files = {
 
     /**
      * Convert a shorthand string size to binary size, e.g. 5mb
-     * 
-     * @param {String} size e.g. '5mb' 
+     *
+     * @param {String} size e.g. '5mb'
      * @returns {Number} binary value of size
      */
     shortToBinarySize(size) {
@@ -243,7 +244,7 @@ _.each(_filemap, ({ category, icon, data }) => {
             Partup.helpers.files.info[mime] = info;
 
         _.each(signatures, ({ bytes }) => {
-            
+
             if (!Partup.helpers.files.signatures[bytes]) {
                 Partup.helpers.files.signatures[bytes] = [];
             }
@@ -297,6 +298,20 @@ if (Meteor.isClient) {
             file.link = Partup.helpers.files.isImage(file) ?
                 `https://docs.google.com/uc?id=${driveFile.id}` :
             driveFile.url.toString();
+
+            return file;
+        },
+        onedrive(onedriveFile) {
+            const file = {
+                name: onedriveFile.name,
+                type: onedriveFile.file.mimeType,
+                bytes: (!isNaN(onedriveFile.size) ? parseInt(onedriveFile.size) : 0),
+                service: Partup.helpers.files.FILE_SERVICES.ONEDRIVE,
+            };
+
+            file.link = Partup.helpers.files.isImage(file)
+                ? _.get(onedriveFile, '@microsoft.graph.downloadUrl', false)
+                : onedriveFile.webUrl;
 
             return file;
         },
