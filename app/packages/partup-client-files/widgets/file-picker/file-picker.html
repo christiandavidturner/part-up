@@ -104,18 +104,20 @@
                                 </a>
                             {{/drivePicker }}
                         </li>
-                        <li>
+                        <li style="vertical-align:top;">
                           {{#onedrivePicker controller=controller }}
                               <a class="browse-list-button" data-browse-onedrive>
-                                  <i class="picon-drive"></i>
+                                <span style="display:inline-block;">
+                                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" version="1.1" width="24px" height="24px">
+                                    <path style="fill:#fff;" d="M 13 6 C 11.320313 6 9.871094 7.03125 9.28125 8.5 C 8.753906 8.183594 8.160156 8 7.5 8 C 5.566406 8 4 9.566406 4 11.5 C 4 11.6875 4.035156 11.851563 4.0625 12.03125 C 2.898438 12.242188 2 13.277344 2 14.5 C 2 15.875 3.125 17 4.5 17 L 6.0625 17 C 5.859375 16.539063 5.75 16.035156 5.75 15.5 C 5.75 13.671875 7.078125 12.140625 8.8125 11.8125 C 9.546875 9.988281 11.316406 8.75 13.34375 8.75 C 14.5 8.75 15.59375 9.167969 16.46875 9.90625 C 16.632813 9.859375 16.796875 9.804688 16.96875 9.78125 C 16.855469 7.671875 15.136719 6 13 6 Z M 13.34375 10 C 11.550781 10 10.058594 11.296875 9.75 13 L 9.5 13 C 8.125 13 7 14.125 7 15.5 C 7 16.875 8.125 18 9.5 18 L 20 18 C 21.101563 18 22 17.101563 22 16 C 22 14.898438 21.101563 14 20 14 L 19.9375 14 C 19.96875 13.839844 20 13.671875 20 13.5 C 20 12.117188 18.882813 11 17.5 11 C 17.015625 11 16.570313 11.136719 16.1875 11.375 C 15.515625 10.539063 14.496094 10 13.34375 10 Z "/>
+                                  </svg>
+                                </span>
                                   {{#if screenWidthEqualOrAbove '450' }}
                                       <span>
                                           {{#if screenWidthEqualOrAbove '500'}}
-                                            OneDrive
-                                              <!-- {{_ 'filepicker-googledrive'}} -->
+                                            {{_ 'filepicker-onedrive'}}
                                           {{ else }}
-                                          OneDrive
-                                              <!-- {{_ 'filepicker-googledrive-short'}} -->
+                                            {{_ 'filepicker-onedrive-short'}}
                                           {{/if }}
                                       </span>
                                   {{/if }}
