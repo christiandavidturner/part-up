@@ -1965,6 +1965,7 @@
   "upload-error-702": "Image __filename__ is too big",
   "upload-error-not_image": "Image __filename__ is not an image",
   "upload-error-unknown_category": "Cannot determine the category for __filename__",
+  "upload-error-no_shareable_link": "File __filename__ removed from uploads, could not get shareable link from file",
   "upload-info-limit-reached": "Maximum number of __category__ reached, __filename__ is removed",
   "upper-tile-partups": "Partner",
   "upper-tile-supporter": "Supporter",
