@@ -505,6 +505,10 @@ User = function(user) {
             return locale;
         },
 
+        getProperLocale() {
+            return _.get(user, 'profile.settings.locale');
+        },
+
         /**
          * Get users email address
          *
