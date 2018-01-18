@@ -6,7 +6,6 @@ const onedrivePickerConfig = {
     multiSelect: true,
     advanced: {
         redirectUri: `${window.location.origin}/drivePicker`,
-        // filter: '' // for some reason the picker does not work when filters are applied
     },
 };
 
@@ -55,10 +54,11 @@ const successCallback = (controller) => async (data) => {
     });
 
     Promise.all(uploadPromises)
-        .catch((error) =>
-            Partup.client.notify.error(TAPi18n.__(`upload-error-100`))
-        )
-        .finally(() => controller.uploading.set(false));
+        .then(() => controller.uploading.set(false))
+        .catch((error) => {
+            Partup.client.notify.error(TAPi18n.__(`upload-error-100`));
+            controller.uploading.set(false);
+        });
 };
 
 const errorCallback = async (error) => Partup.client.notify.error(TAPi18n.__('upload-error-100'));
