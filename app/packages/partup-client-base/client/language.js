@@ -82,7 +82,7 @@ Partup.client.language = {
             });
 
             const user = Meteor.user();
-            if (user && User(user).getProperlocale() !== language) {
+            if (user && User(user).getProperLocale() !== language) {
               // Only update if there's actually a new language, reactiveness causes this to run many times.
               Meteor.call('settings.update', {locale: language}, function(err) {
                   if (err) {
