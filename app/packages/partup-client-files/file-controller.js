@@ -29,7 +29,7 @@ class _FileController {
         this.documentsRemaining = new ReactiveVar(this.limit.documents, (oldVal, newVal) => calculateLimit('imagesRemaining', newVal));
         this.haveFiles = new ReactiveVar(false);
         this.limitReached = new ReactiveVar(false);
-        
+
         this.files = new ReactiveVar([], (oldVal, newVal) => {
             this.haveFiles.set(newVal && newVal.length > 0);
             if (newVal) {
@@ -47,7 +47,7 @@ class _FileController {
         // We store the references the user removes here and clean up afterwards, see 'removeAllFilesBesides'
         this.removedFromCache = new ReactiveVar([]);
     }
-    
+
     /**
      * insert a dropbox or googledrive file to the Files collection,
      * it's very important this file is transformed (and thus has a service attached)!
@@ -66,6 +66,7 @@ class _FileController {
                     const allowedServices = [
                         Partup.helpers.files.FILE_SERVICES.DROPBOX,
                         Partup.helpers.files.FILE_SERVICES.GOOGLEDRIVE,
+                        Partup.helpers.files.FILE_SERVICES.ONEDRIVE,
                     ];
                     if (!_.includes(allowedServices, file.service)) {
                         return reject({
@@ -74,9 +75,9 @@ class _FileController {
                             message: `this file has an invalid file service: '${file.service}', see 'Partup.helpers.files.FILE_SERVICES' for more information`,
                         });
                     }
-                    
+
                     const collection = Partup.helpers.files.isImage(file) ? 'images' : 'files';
-                    
+
                     Meteor.call(`${collection}.insert`, file, function (error, { _id }) {
                         if (!_id) {
                             reject(error || {
@@ -127,7 +128,7 @@ class _FileController {
             if (file) {
                 const fileId = file._id || file;
                 check(fileId, String);
-    
+
                 let col = collection;
                 if (!collection) {
                     const foundFile = _.find(_.concat(this.files.get(), this.removedFromCache.get()), ({ _id }) => _id === fileId);

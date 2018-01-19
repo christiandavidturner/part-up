@@ -27,6 +27,8 @@ Package.onUse(function (api) {
         'pickers/dropbox-picker/dropbox-picker.js',
         'pickers/drive-picker/drive-picker.html',
         'pickers/drive-picker/drive-picker.js',
+        'pickers/onedrive-picker/onedrive-picker.html',
+        'pickers/onedrive-picker/onedrive-picker.js',
 
         'renderers/document-renderer/document-renderer.html',
         'renderers/document-renderer/document-renderer.js',
