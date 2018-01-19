@@ -80,7 +80,7 @@ Template.onedrivePicker.onRendered(function() {
         );
     }
 
-    this.$trigger = $('[data-browse-onedrive');
+    this.$trigger = $('[data-browse-onedrive]');
     if (!this.$trigger) {
         throw new Error(
             'onedrivePicker: expected to find an html element with the "data-browse-onedrive" attribute'
