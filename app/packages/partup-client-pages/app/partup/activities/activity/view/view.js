@@ -274,7 +274,6 @@ Template.ActivityView.events({
                 }
             }
         } else {
-          console.log('should toggle2!')
             toggleHide();
         }
     },

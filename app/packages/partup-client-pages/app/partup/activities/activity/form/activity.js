@@ -158,8 +158,6 @@ Template.activityForm.events({
     'click [data-do]'(event, templateInstance) {
       // event.preventDefault();
       const { doSelf } = templateInstance;
-
-      console.log(doSelf.get());
       doSelf.set(!doSelf.get());
     },
     'click [data-archive]'(event, templateInstance) {
