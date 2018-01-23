@@ -39,7 +39,8 @@ export class UpdateTileMeta extends React.Component<Props, {}> {
                         className={`pur-UpdateTileMeta__created-at`}
                         dateTime={created_at.toString()}
                     >
-                        { moment(created_at).format('H:mm ddd MMMM YYYY') }
+                        {/* { moment(created_at).format('H:mm ddd MMMM YYYY') } */}
+                        { moment(created_at).format('LLLL') }
                     </time>
                 </div>
             </div>
