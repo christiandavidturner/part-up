@@ -69,7 +69,7 @@
                     placeholder=placeholders.description
                     rows=3
                     class="pu-form-textarea" }}
-                
+
 
                 <div class="markdown-support">
                     {{> markdownSupport }}
@@ -83,28 +83,42 @@
             {{> filePicker controller=fileController }}
         </div>
         {{/unless }}
-        
+
         <footer class="pu-form-footer">
-            {{#if isExistingActivity }}
-                <ul class="left">
-                    <li>
-                        {{#if isArchived }}
-                            <button type="button" class="pu-button pu-button-text pu-button-text-subtle" data-unarchive>
-                                {{_ 'unarchive' }}
-                            </button>
-                        {{ else }}
-                            <button type="button" class="pu-button pu-button-text pu-button-text-subtle" data-archive>
-                                {{_ 'archive' }}
-                            </button>
-                        {{/if }}
-                    </li>
-                    <li>
-                        <button type="button" class="pu-button pu-button-text pu-button-text-subtle" data-remove>
-                            {{_ 'activity-button-remove' }}
-                        </button>
-                    </li>
-                </ul>
-            {{/if }}
+            <!-- {{#unless isExistingActivity}}pu-clear{{/unless }} -->
+          <ul class="left">
+              {{#if isExistingActivity }}
+                  <li>
+                      {{#if isArchived }}
+                          <button type="button" class="pu-button pu-button-text pu-button-text-subtle" data-unarchive>
+                              {{_ 'unarchive' }}
+                          </button>
+                      {{ else }}
+                          <button type="button" class="pu-button pu-button-text pu-button-text-subtle" data-archive>
+                              {{_ 'archive' }}
+                          </button>
+                      {{/if }}
+                  </li>
+                  <li>
+                      <button type="button" class="pu-button pu-button-text pu-button-text-subtle" data-remove>
+                          {{_ 'activity-button-remove' }}
+                      </button>
+                  </li>
+              {{ else }}
+                  <li>
+                    <div class="pu-switch {{#if doSelf}}pu-switch-enabled{{else}}pu-switch-disabled{{/if}}" data-do>
+                      <div>
+                          <div type="button" class="pu-button pu-button-checkmark pu-button-checkmark-confirm"> <i class="picon-check"></i> </div>
+                      </div>
+                      {{#if screenWidthEqualOrAbove '520' }}
+                        <span>{{_ 'activity-contribute' }}</span>
+                      {{ else }}
+                        <span>{{_ 'activity-contribute-short' }}</span>
+                      {{/if }}
+                    </div>
+                  </li>
+              {{/if }}
+          </ul>
             <ul>
                 <li>
                     <button class="pu-button pu-button-text pu-button-text-subtle" data-dismiss>
@@ -117,7 +131,11 @@
                             {{#if isExistingActivity }}
                                 {{_ 'activity-form-save' }}
                             {{ else }}
+                              {{#if screenWidthEqualOrAbove '465' }}
                                 {{_ 'activity-form-submit' }}
+                              {{ else }}
+                                {{_ 'activity-form-submit-short' }}
+                              {{/if }}
                             {{/if }}
                             {{#if isSubmitting }}
                                 {{> Spinner type='small' }}

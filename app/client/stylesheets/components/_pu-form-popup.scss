@@ -74,7 +74,7 @@
                 list-style: none;
                 margin: em(0);
                 padding: em(0);
-    
+
                 > li {
                     display: inline-block;
                 }
@@ -83,8 +83,17 @@
             .left {
                 float: left;
             }
+            .pu-clear {
+              display: block;
+              float: none;
+              text-align: center;
+
+              @include goingLarge(485) {
+                float:left;
+              }
+            }
         }
-        
+
     }
 
     .pu-hint:hover {
@@ -119,5 +128,36 @@
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
         margin-top: -2px;
+    }
+
+    .pu-switch {
+      height: 40px;
+      padding-top: 5px;
+      vertical-align: top;
+
+      &-enabled {
+        .pu-button-checkmark-confirm {
+          pointer-events: all;
+        }
+      }
+
+      > div {
+        display: inline-block;
+        vertical-align: top;
+
+        .pu-button-checkmark {
+          margin: 0px;
+          width: 40px;
+        }
+      }
+
+      > span {
+        display: inline-block;
+        float: none;
+        padding: 0;
+        margin-left: 5px;
+        line-height: 30px;
+        color: #292929
+      }
     }
 }

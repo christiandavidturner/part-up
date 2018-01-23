@@ -1,3 +1,20 @@
+<a name="3.4.0"></a>
+# [3.4.0](https://github.com/part-up/part-up/compare/3.3.0...3.4.0) (2018-01-09)
+
+
+### Bug Fixes
+
+* **client:** Add user check for edit and remove in more menu ([19e242f](https://github.com/part-up/part-up/commit/19e242f))
+* **client:** Make image count for has_documents flag in update ([49ad012](https://github.com/part-up/part-up/commit/49ad012))
+* **client:** No longer set permissions for drive files ([58ae140](https://github.com/part-up/part-up/commit/58ae140)), closes [#1be159d8c21d0a7a988e0263f1d641d3e790f748](https://github.com/part-up/part-up/issues/1be159d8c21d0a7a988e0263f1d641d3e790f748)
+
+
+### Features
+
+* **client:** Change main menu order and make scrollable ([8c99a4d](https://github.com/part-up/part-up/commit/8c99a4d))
+
+
+
 <a name="3.3.0"></a>
 # [3.3.0](https://github.com/part-up/part-up/compare/3.2.1...3.3.0) (2018-01-09)
 

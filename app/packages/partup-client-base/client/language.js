@@ -13,15 +13,15 @@ Partup.client.language = {
      * @memberof Partup.client.language
      * @param {String} language
      */
-    change: function(language) {
-        var self = this;
+    change(language) {
+        const self = this;
+        const currentLanguage = self.current.get();
 
-        // prevent unnessesary language changes
-        var currentLanguage = self.current.get();
-        if (language === currentLanguage) return;
+        if (language === currentLanguage) {
+          return;
+        }
 
         TAPi18n.setLanguage(language).done(function() {
-            // Change MomentJS language
             moment.locale(language);
             self.current.set(language);
             // Change datepicker language
@@ -81,17 +81,16 @@ Partup.client.language = {
                 shouldNotContainUrls:   TAPi18n.__('base-client-language-ss-shouldNotContainUrls'),
             });
 
-            var user = Meteor.user();
-            if (!user) return;
-
-            // update the user stored language setting for future logins
-            Meteor.call('settings.update', {locale: language}, function(err) {
-                if (err) {
-                    Partup.client.notify.error('Could not set the correct language');
-                    return;
-                }
-            });
-
+            const user = Meteor.user();
+            if (user && User(user).getProperLocale() !== language) {
+              // Only update if there's actually a new language, reactiveness causes this to run many times.
+              Meteor.call('settings.update', {locale: language}, function(err) {
+                  if (err) {
+                      Partup.client.notify.error('Could not set the correct language');
+                      return;
+                  }
+              });
+            }
         }).fail(function(error_message) {
             Partup.client.notify.error('Could not load the language "' + language + '"');
         });

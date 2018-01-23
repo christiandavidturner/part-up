@@ -4,7 +4,8 @@
  * @license MIT
  */
 
-// Modified line 170!
+// Modified line 171 & 474 & 958!
+// If you want to update Sortable please ensure to include the modifications!
 
 (function sortableModule(factory) {
 	"use strict";
@@ -162,11 +163,11 @@
 					if (el) {
 						autoScroll.pid = setInterval(function () {
 							scrollOffsetY = vy ? vy * speed : 0;
-							scrollOffsetX = vx ? vx * speed : 0;
+              scrollOffsetX = vx ? vx * speed : 0;
 
 							if ('function' === typeof(scrollCustomFn)) {
 
-                                // Modified, passing 'el' and 'touchEvt' for horizontal scroll
+                // Modified, passing 'el' and 'touchEvt' for horizontal scroll
 								return scrollCustomFn.call(_this, scrollOffsetX, scrollOffsetY, evt, el, touchEvt);
 							}
 
@@ -468,10 +469,43 @@
 
 
 			}
-		},
+    },
 
-		_disableDelayedDrag: function () {
-			var ownerDocument = this.el.ownerDocument;
+    /* EDIT */
+    _previousPos: {
+      x: null,
+      y: null,
+      set(x, y) {
+          this.x = x;
+          this.y = y;
+      }
+    },
+    /* END EDIT */
+
+		_disableDelayedDrag: function (event) {
+      var ownerDocument = this.el.ownerDocument;
+
+      console.log('triggered _disableDelayedDrag');
+      /* EDIT */
+      if (event && Partup.client.isMobile.Android()) {
+        const offset = 10;
+
+        if (this._previousPos.x === null || this._previousPos.y === null) {
+            this._previousPos.set(event.x, event.y);
+        }
+
+        if (
+            !(event.x >= (this._previousPos.x + offset) || event.x <= (this._previousPos.x - offset)) &&
+            !(event.y >= (this._previousPos.y + offset) || event.y <= (this._previousPos.y - offset))
+            ) {
+            console.log('should not disable drag!');
+            return;
+        }
+
+        this._previousPos.set(event.x, event.y);
+
+      }
+      /* END EDIT */
 
 			clearTimeout(this._dragStartTimer);
 			_off(ownerDocument, 'mouseup', this._disableDelayedDrag);
@@ -518,7 +552,7 @@
 
 		_dragStarted: function () {
 			if (rootEl && dragEl) {
-				var options = this.options;
+        var options = this.options;
 
 				// Apply effect
 				_toggleClass(dragEl, options.ghostClass, true);
@@ -920,7 +954,8 @@
 
 			clearInterval(this._loopId);
 			clearInterval(autoScroll.pid);
-			clearTimeout(this._dragStartTimer);
+      clearTimeout(this._dragStartTimer);
+      this._previousPos.set(null, null);
 
 			_cancelNextTick(this._cloneId);
 			_cancelNextTick(this._dragStartId);

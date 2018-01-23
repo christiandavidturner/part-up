@@ -86,7 +86,7 @@
             <!-- Comments -->
             {{#if update.commentable }}
             {{#unless update.data.isActivityUpdate }}
-                {{> Comments update=update.data showCommentClicked=update.showCommentClicked FULLVIEW=update.isDetail SHOW_COMMENTS=SHOW_COMMENTS LIMIT=COMMENT_LIMIT }}
+                {{> Comments update=update.data showCommentClicked=update.showCommentClicked FULLVIEW=update.isDetail SHOW_COMMENTS=SHOW_COMMENTS LIMIT=COMMENT_LIMIT FROM_UPDATE=true }}
             {{/unless }}
             {{/if }}
         </section>

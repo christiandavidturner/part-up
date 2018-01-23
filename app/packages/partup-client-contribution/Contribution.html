@@ -56,7 +56,7 @@
             </div>
         {{ else }}
             {{# if upperContribution }}
-                <div class="pu-contribution pu-contribution-own">
+                <div class="pu-contribution pu-contribution-own {{#unless contribution.verified}}unverified{{/unless }}">
                     <figure class="pu-avatar pu-avatar-small" style="{{#with upper.profile.image }}background-image: url('{{ partupImageUrl id=. }}');{{/with }}}">
                         <i class="picon-pencil"></i>
                     </figure>
@@ -89,13 +89,13 @@
                             {{# if contribution.rate }}{{ contribution.rate }} {{ rateTranslation }} {{/ if }}
                         </p>
                     {{/ if }}
-                    <!-- {{# if contribution.verified }}
-                        {{> Ratings contribution=contribution ratings=ratings READONLY=READONLY }}
+                    {{# if contribution.verified }}
+                        <!-- {{> Ratings contribution=contribution ratings=ratings READONLY=READONLY }} -->
                     {{ else }}
                         <div class="pu-ratings">
                             <p class="pu-sub-no-rating pu-sub-unverified">{{_ 'contribution-unverified' }}</p>
                         </div>
-                    {{/ if }} -->
+                    {{/ if }}
 
                     {{# if canVerifyContribution }}
                     <div class="pu-sub-acceptbuttons">

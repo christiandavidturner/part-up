@@ -1081,6 +1081,15 @@ Router.route('/:slug', {
 
         let slug = this.params.slug;
 
+        // all lowecased
+        const filterSlugs = [
+          'drivepicker',
+        ];
+
+        if (filterSlugs.indexOf(slug) > -1) {
+          return;
+        }
+
         // this checks if the slug is a swarm or network and handles it accordingly
         Meteor.call('swarms.slug_is_swarm_or_network', slug, function(
             error,

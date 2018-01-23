@@ -165,7 +165,7 @@
                         {{#with contributions }}
                             <ul class="pu-avatar-stack pu-avatar-stack">
                                 {{# each . }}
-                                    <li class="pu-avatar pu-avatar-small" style="{{#with upper.profile.image }}background-image: url('{{ partupImageUrl id=. store='80x80' }}');{{/with }}}"></li>
+                                    <li class="pu-avatar pu-avatar-small {{#unless verified}}unverified{{/unless }}" style="{{#with upper.profile.image }}background-image: url('{{ partupImageUrl id=. store='80x80' }}');{{/with }}}"></li>
                                 {{/ each }}
                             </ul>
                         {{/with}}
@@ -200,9 +200,9 @@
                     <section class="pu-sub-section-comments">
                         <div class="comments">
                             {{#if EXPANDED }}
-                                {{> Comments update=update showCommentClicked=true FULLVIEW=true SHOW_COMMENTS=true LIMIT=0 hideCommentButtons=false }}
+                                {{> Comments update=update showCommentClicked=false FULLVIEW=true SHOW_COMMENTS=true LIMIT=0 hideCommentButtons=false HIDE_ADD_COMMENTS=true }}
                             {{ else }}
-                                {{> Comments update=update showCommentClicked=true FULLVIEW=true SHOW_COMMENTS=true LIMIT=2 hideCommentButtons=false HIDE_SYSTEM_MESSAGES=true }}
+                                {{> Comments update=update showCommentClicked=false FULLVIEW=false SHOW_COMMENTS=true LIMIT=2 hideCommentButtons=false HIDE_SYSTEM_MESSAGES=true }}
                             {{/if }}
                         </div>
                     </section>
@@ -247,6 +247,8 @@
         <a data-star-activity>{{_ 'star'}}</a>
       </li>
       {{/if}}
+      {{/if }}
+      {{#if isOwnActivity }}
       <li class="pu-dropdown-item">
         <a data-edit>{{_ 'edit' }}</a>
       </li>

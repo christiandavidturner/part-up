@@ -36,7 +36,9 @@ Template.Update.onCreated(function() {
 
     template.commentInputFieldExpanded = new ReactiveVar(false);
     template.showCommentClicked = new ReactiveVar(false);
-    template.commentsExpanded = new ReactiveVar(undefined, (oldVal, newVal) => {
+
+    const initialExpandedValue = ActiveRoute.name('partup-update') ? true : undefined;
+    template.commentsExpanded = new ReactiveVar(initialExpandedValue, (oldVal, newVal) => {
         template.commentInputFieldExpanded.set(newVal);
         template.showCommentClicked.set(newVal);
     });

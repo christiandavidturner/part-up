@@ -51,23 +51,22 @@ Meteor.startup(function() {
     // or falls back to browser settings when user
     // logs in or out
     Meteor.autorun(function(computation) {
-        var user = Meteor.user();
-        var language = 'en';
+        if (Meteor.loggingIn()) {
+            return;
+        }
+
+        const user = Meteor.user();
+        let locale;
 
         if (user) {
-            // if the user is logged in, find the user language settings
-            var userLanguage = lodash.get(user, 'profile.settings.locale', 'en');
-            language = userLanguage;
+            locale = lodash.get(user, 'profile.settings.locale', 'en');
         } else {
-            // if the user is not logged in, get the browser language
-            var browserLanguage = Partup.client.language.getBrowserDefaultLocale();
-            language = browserLanguage;
+            locale = Partup.client.language.getBrowserDefaultLocale();
         }
 
         // make nonreactive to prevent template-rerender-flickering
         Tracker.nonreactive(function() {
-            // finally set the language of the partup interface
-            Partup.client.language.change(language);
+            Partup.client.language.change(locale);
         });
     });
 

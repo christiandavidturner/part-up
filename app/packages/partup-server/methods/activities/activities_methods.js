@@ -1,4 +1,5 @@
 import _ from 'lodash';
+var moment = require("moment");
 
 Meteor.methods({
     /**
@@ -8,10 +9,15 @@ Meteor.methods({
      * @param {mixed[]} fields
      */
     'activities.insert': function(partupId, fields) {
-        check(partupId, String);
-        check(fields, Partup.schemas.forms.activity);
 
-        var upper = Meteor.user();
+        // If activity is added via the API, the end_date is a string
+        // We need to convert is to a js date object.
+        if (fields && fields.end_date && typeof fields.end_date === "string") {
+           fields.end_date = moment(fields.end_date).toDate()
+        }
+        check(partupId, String);
+        check(fields, Partup.schemas.forms.startActivities);
+        var upper = Meteor.users.findOneOrFail(this.userId);
         var partup = Partups.findOneOrFail({_id: partupId});
         if (!upper || !partup.hasUpper(upper._id)) throw new Meteor.Error(401, 'unauthorized');
 
@@ -56,9 +62,14 @@ Meteor.methods({
      * @param {mixed[]} fields
      */
     'activities.update': function(activityId, fields) {
+
+        if (fields && fields.end_date && typeof fields.end_date === "string") {
+           fields.end_date = moment(fields.end_date).toDate()
+        }
+        
         check(activityId, String);
         check(fields, Partup.schemas.forms.startActivities);
-        var upper = Meteor.user();
+        var upper = Meteor.users.findOneOrFail(this.userId);
         var activity = Activities.findOneOrFail(activityId);
 
         // if (activity.isRemoved()) throw new Meteor.Error(404, 'activity_could_not_be_found');
@@ -125,7 +136,7 @@ Meteor.methods({
     'activities.remove': function(activityId) {
         check(activityId, String);
 
-        var upper = Meteor.user();
+        var upper = Meteor.users.findOneOrFail(this.userId);
         var activity = Activities.findOneOrFail(activityId);
 
         if (activity.isRemoved()) throw new Meteor.Error(404, 'activity_could_not_be_found');
@@ -181,7 +192,7 @@ Meteor.methods({
     'activities.unarchive': function(activityId) {
         check(activityId, String);
 
-        var upper = Meteor.user();
+        var upper = Meteor.users.findOneOrFail(this.userId);
         var activity = Activities.findOneOrFail(activityId);
 
         if (activity.isRemoved()) throw new Meteor.Error(404, 'activity_could_not_be_found');
@@ -217,7 +228,7 @@ Meteor.methods({
      */
     'activities.archive': function(activityId) {
         check(activityId, String);
-        var upper = Meteor.user();
+        var upper = Meteor.users.findOneOrFail(this.userId);
         var activity = Activities.findOneOrFail(activityId);
 
         if (activity.isRemoved()) throw new Meteor.Error(404, 'activity_could_not_be_found');

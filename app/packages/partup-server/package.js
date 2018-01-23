@@ -91,6 +91,7 @@ Package.onUse(function(api) {
     api.addFiles([
         'logger.js',
         'api.js',
+        's3.js',
         'namespace.js',
         'constants.js',
         'bootstrap.js',
@@ -152,6 +153,7 @@ Package.onUse(function(api) {
         'event_handlers/swarms/swarms_handler.js',
         'event_handlers/chats/chatmessages_handler.js',
         'fixtures/users.js',
+        'fixtures/networks.js',
         'fixtures/partups.js',
         'fixtures/updates.js',
         'fixtures/activities.js',
@@ -162,7 +164,6 @@ Package.onUse(function(api) {
         'fixtures/ratings.js',
         'fixtures/tags.js',
         'fixtures/notifications.js',
-        'fixtures/networks.js',
         'fixtures/invites.js',
         'fixtures/images.js',
         'fixtures/chats.js',
@@ -239,7 +240,7 @@ Package.onUse(function(api) {
         'package-tap.i18n'
     ], ['server']);
 
-    api.export(['Log', 'Api'], 'server');
+    api.export(['Log', 'Api', 'S3'], 'server');
 });
 
 Npm.depends({

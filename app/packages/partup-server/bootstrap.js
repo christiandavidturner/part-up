@@ -23,7 +23,7 @@ ServiceConfiguration.configurations.upsert({
 });
 
 Router.route('/ping', function() {
-    this.response.end('partupok');
+    this.response.end('partupok\n');
 }, { where: 'server' });
 
 // Configure AWS

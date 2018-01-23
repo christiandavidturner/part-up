@@ -24,9 +24,10 @@ Template.ActivityView.onCreated(function() {
     };
 
     this.update = Updates.findOne({ _id: this.data.updateId || get(Template.instance(), 'data.activity.update_id') });
+    const filesHidden = template.data.FILES_EXPANDED !== undefined ? !template.data.FILES_EXPANDED : !ActiveRoute.name('partup-update')
     template.hidden = {
-        comments: new ReactiveVar(template.data.BOARDVIEW || (template.data.EXPANDED && !_.get(this.update, 'comments_count'))),
-        files: new ReactiveVar(!template.data.FILES_EXPANDED),
+        comments: new ReactiveVar(template.data.BOARDVIEW || template.data.LIST_VIEW || (template.data.EXPANDED && !_.get(this.update, 'comments_count'))),
+        files: new ReactiveVar(filesHidden),
     };
 
     if (template.data.COMMENTS_EXPANDED) {
@@ -193,6 +194,12 @@ Template.ActivityView.helpers({
             updateIsStarred() {
                 return instance.updateIsStarred.get();
             },
+            isOwnActivity() {
+              // Check update or activity
+                const updateUpper = _.get(instance, 'update.upper_id', undefined);
+                const activityCreator = _.get(self, 'activity.creator_id', undefined);
+                return (updateUpper || activityCreator) === Meteor.userId();
+            },
         };
     },
 });
@@ -250,17 +257,24 @@ Template.ActivityView.events({
             if (!Meteor.user() && templateInstance.update.comments_count < 1) {
                 Intent.go({
                     route: 'login',
-                }, function () {
+                }, function() {
                     if (Meteor.user()) {
                         toggleHide();
                         setFocus();
                     }
                 });
             } else {
-                toggleHide();
-                setFocus();
+                if (!ActiveRoute.name(/!?update$/) && !newVal) {
+                    const { partup_id, update_id } = templateInstance.activity;
+                    const { slug } = Partups.findOne(partup_id);
+                    Router.go('partup-update', { slug, update_id: update_id });
+                } else {
+                    toggleHide();
+                    setFocus();
+                }
             }
         } else {
+          console.log('should toggle2!')
             toggleHide();
         }
     },

@@ -1,7 +1,7 @@
 /*
  * Main sitemap route
  */
-Router.route('/sitemap.xml', {where: 'server'}).get(function() {
+Router.route('/sitemap.xml', { where: 'server' }).get(function() {
     var response = this.response;
     var baseUrl = 'https://part-up.com/';
 
@@ -39,7 +39,7 @@ Router.route('/sitemap.xml', {where: 'server'}).get(function() {
 /*
  * Default sitemap route
  */
-Router.route('/default.xml', {where: 'server'}).get(function() {
+Router.route('/default.xml', { where: 'server' }).get(function() {
     var response = this.response;
     response.setHeader('Content-Type', 'application/xml');
 
@@ -61,7 +61,7 @@ Router.route('/default.xml', {where: 'server'}).get(function() {
 /*
  * Network sitemap route
  */
-Router.route('/tribes.xml', {where: 'server'}).get(function() {
+Router.route('/tribes.xml', { where: 'server' }).get(function() {
     var response = this.response;
     response.setHeader('Content-Type', 'application/xml');
     var xml = getSitemap('tribes.xml');
@@ -72,7 +72,7 @@ Router.route('/tribes.xml', {where: 'server'}).get(function() {
 /*
  * Part-ups sitemap route
  */
-Router.route('/part-ups.xml', {where: 'server'}).get(function() {
+Router.route('/part-ups.xml', { where: 'server' }).get(function() {
     var response = this.response;
     response.setHeader('Content-Type', 'application/xml');
     var xml = getSitemap('part-ups.xml');
@@ -83,7 +83,7 @@ Router.route('/part-ups.xml', {where: 'server'}).get(function() {
 /*
  * Profiles sitemap route
  */
-Router.route('/profiles.xml', {where: 'server'}).get(function() {
+Router.route('/profiles.xml', { where: 'server' }).get(function() {
     var response = this.response;
     response.setHeader('Content-Type', 'application/xml');
     var xml = getSitemap('profiles.xml');
@@ -94,7 +94,7 @@ Router.route('/profiles.xml', {where: 'server'}).get(function() {
 /*
  * Swarms sitemap route
  */
-Router.route('/swarms.xml', {where: 'server'}).get(function() {
+Router.route('/swarms.xml', { where: 'server' }).get(function() {
     var response = this.response;
     response.setHeader('Content-Type', 'application/xml');
     var xml = getSitemap('swarms.xml');
@@ -106,6 +106,5 @@ Router.route('/swarms.xml', {where: 'server'}).get(function() {
  * Retrieve sitemap from S3
  */
 function getSitemap(key) {
-    var s3 = new AWS.S3({params: {Bucket: process.env.AWS_BUCKET_NAME}});
-    return s3.getObjectSync({Key: key});
+    return S3.getObjectSync({ Key: key });
 }

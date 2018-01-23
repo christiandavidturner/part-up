@@ -11,6 +11,7 @@ Template.activityForm.onCreated(function() {
 
     this.isExistingActivity = this.data instanceof Activity;
     this.activity = this.isExistingActivity ? this.data : new Activity();
+    this.doSelf = new ReactiveVar(false);
 
     this.fileController = new FileController();
 
@@ -134,6 +135,9 @@ Template.activityForm.helpers({
     isArchived() {
         return this.archived;
     },
+    doSelf() {
+        return Template.instance().doSelf.get();
+    },
 });
 
 Template.activityForm.events({
@@ -150,6 +154,13 @@ Template.activityForm.events({
         if (target.name === 'description') {
             $(target).scrollTop(target.scrollHeight);
         }
+    },
+    'click [data-do]'(event, templateInstance) {
+      // event.preventDefault();
+      const { doSelf } = templateInstance;
+
+      console.log(doSelf.get());
+      doSelf.set(!doSelf.get());
     },
     'click [data-archive]'(event, templateInstance) {
         Meteor.call(
@@ -237,6 +248,22 @@ AutoForm.hooks({
                                 activityForm.data.createCallback(result._id);
                             }
                         } catch (err) {}
+
+                        if (activityForm.doSelf.get()) {
+                            Meteor.call('contributions.update', result._id, {}, function(error) {
+                                if (error) {
+                                    return;
+                                }
+
+                                try {
+                                    analytics.track('new contribution', {
+                                        partupId: activityForm.partupId,
+                                        userId: Meteor.userId(),
+                                        userType: 'upper',
+                                    });
+                                } catch (e) {}
+                            });
+                        }
                         self.done();
                     } else if (error) {
                         AutoForm.validateForm('newActivityForm');

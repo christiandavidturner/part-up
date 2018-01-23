@@ -107,6 +107,9 @@ Template.Comments.helpers({
         var template = Template.instance();
         var data = Template.currentData();
         return {
+            showAddCommentButton() {
+              return self.FROM_UPDATE || (!this.commentCount() && !self.HIDE_ADD_COMMENTS);
+            },
             submitButtonActive: function() {
                 return template.submitButtonActive.get();
             },

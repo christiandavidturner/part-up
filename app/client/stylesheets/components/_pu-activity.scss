@@ -237,6 +237,12 @@
 
             .pu-avatar-stack {
                 height: em(35);
+
+                .unverified {
+                  -webkit-filter: grayscale(80%);
+                  filter: grayscale(80%);
+                }
+
                 > li {
                     width: em(35);
                     height: em(35);
@@ -252,6 +258,15 @@
 
         .pu-contribution {
             padding: em(5) em(0);
+
+            &.unverified {
+              .pu-ratings {
+                display: inline-block;
+                vertical-align: middle;
+                float: none;
+                margin: 0;
+              }
+            }
         }
 
         &-comments {
@@ -264,7 +279,6 @@
                 .pu-sub-view-all-comments-button {
                     padding: em(5) em(0) em(0) em(0);
                     > a {
-                        font-size: em(14);
                         display: inline-block;
                         padding-right: em(8);
 
@@ -272,13 +286,9 @@
                             display: none;
                         }
                         &:last-child {
-                            color: $color-text-subtle;
                             padding-right: em(0);
                         }
 
-                        &.pu-sub-action {
-                            display: none;
-                        }
                     }
                     .pu-sub-seperator {
                         display: none;

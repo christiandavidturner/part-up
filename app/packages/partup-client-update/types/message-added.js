@@ -20,6 +20,11 @@ Template.update_partups_message_added.onCreated(function() {
 });
 
 Template.update_partups_message_added.helpers({
+    hasMenuEntries() {
+      const { upper_id, partup_id } = Template.instance().data;
+      const user = Meteor.user();
+      return upper_id === user._id || User(user).isPartnerInPartup(partup_id);
+    },
     dropdownOpen: function() {
         return Template.instance().dropdownOpen;
     },

@@ -8,7 +8,9 @@
                         {{pathFor route='partup-update' slug=partup.slug update_id=update._id }}
                     {{/if}}">{{_ 'widgetcommentfield-comment-totalcomments' count=state.commentCount}}</a>
                 <span class="pu-sub-seperator"></span>
-            <a href="#" data-expand-comments class="pu-sub-action">{{_ 'widgetcommentfield-comment-button'}}</a>
+            {{#if state.showAddCommentButton }}
+              <a href="#" data-expand-comments class="pu-sub-action">{{_ 'widgetcommentfield-comment-button'}}</a>
+            {{/if }}
             {{# if FULLVIEW }}
             {{#unless HIDE_SYSTEM_MESSAGES }}
                 {{# if state.systemCount }}
