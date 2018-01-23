@@ -1,3 +1,15 @@
+<a name="3.5.1"></a>
+## [3.5.1](https://github.com/part-up/part-up/compare/3.5.0...3.5.1) (2018-01-23)
+
+
+### Bug Fixes
+
+* **client:** Change copy activity invite ([c894685](https://github.com/part-up/part-up/commit/c894685))
+* **client:** Include OneDrive picker SDK locally ([5b5e4d0](https://github.com/part-up/part-up/commit/5b5e4d0))
+* **client:** Make picker open from static html ([d4d4478](https://github.com/part-up/part-up/commit/d4d4478))
+
+
+
 <a name="3.5.0"></a>
 # [3.5.0](https://github.com/part-up/part-up/compare/3.4.0...3.5.0) (2018-01-20)
 
@@ -8,6 +20,8 @@
 * **$meteor:** Changed event listeners to get userIds the other way and modified activity schema to h ([54242fc](https://github.com/part-up/part-up/commit/54242fc))
 * **$meteor:** Changed middleware to only run if USER_API_ACCESS_TOKEN is set and only add userId to ([9ba0d80](https://github.com/part-up/part-up/commit/9ba0d80))
 * **$server:** Changed activity to accept a iso8601 datestring ([83cd7a5](https://github.com/part-up/part-up/commit/83cd7a5))
+* **activities:** only show activities of non archived partups ([cbf3fe9](https://github.com/part-up/part-up/commit/cbf3fe9))
+* **breakpoints:** fixed breakpoints ([3ce7793](https://github.com/part-up/part-up/commit/3ce7793))
 * **client:** Add android handler for drag and drop delay ([6a1d812](https://github.com/part-up/part-up/commit/6a1d812))
 * **client:** Add check if user is still logging in ([972cd28](https://github.com/part-up/part-up/commit/972cd28))
 * **client:** Add event to handler parameters ([a1c8103](https://github.com/part-up/part-up/commit/a1c8103))
@@ -27,7 +41,19 @@
 * **client:** Typo on trigger element ([a413757](https://github.com/part-up/part-up/commit/a413757))
 * **client:** Update Chrome or Safari check to return true when chrome ([bacdf1f](https://github.com/part-up/part-up/commit/bacdf1f))
 * **client:** X comments always directs to update detail ([a6bbd5a](https://github.com/part-up/part-up/commit/a6bbd5a)), closes [#1454](https://github.com/part-up/part-up/issues/1454)
+* **conversations:** fixed a bug where conversations would get stuck ([2a30653](https://github.com/part-up/part-up/commit/2a30653))
 * **healthcheck:** Added newline to ping response ([fdfc509](https://github.com/part-up/part-up/commit/fdfc509))
+* **home:** enable home route ([4737290](https://github.com/part-up/part-up/commit/4737290))
+* **home:** re-enable homepage ([da1e272](https://github.com/part-up/part-up/commit/da1e272))
+* **images:** fixed images for conversations ([1b80f8d](https://github.com/part-up/part-up/commit/1b80f8d))
+* **login:** fixed login redirect (home) [#1480](https://github.com/part-up/part-up/issues/1480) ([45c877c](https://github.com/part-up/part-up/commit/45c877c))
+* **main:** mainjs ([b72686e](https://github.com/part-up/part-up/commit/b72686e))
+* **main:** mainjs for staging test ([0d22864](https://github.com/part-up/part-up/commit/0d22864))
+* **markdown:** switch out showdown for marked, it caused console.logs to be polyfilled with alert 🤨 ([ef01886](https://github.com/part-up/part-up/commit/ef01886))
+* **meteor:** fixed console errors ([3792f9d](https://github.com/part-up/part-up/commit/3792f9d))
+* **react:** did some changes/fixes discussed in [#1502](https://github.com/part-up/part-up/issues/1502) ([d510ee7](https://github.com/part-up/part-up/commit/d510ee7))
+* **router:** fixed basic router setup, it caused the double link click bug on reload ([0e47eba](https://github.com/part-up/part-up/commit/0e47eba))
+* **routing:** don't redirect after refresh ([bfb00d2](https://github.com/part-up/part-up/commit/bfb00d2))
 * **s3:** Allow configuration of custom s3 host ([1a203ad](https://github.com/part-up/part-up/commit/1a203ad))
 * **s3:** Made S3 bucket config central ([257f2c8](https://github.com/part-up/part-up/commit/257f2c8))
 * **style:** Changed list-style of ol elements to decimal ([81dc393](https://github.com/part-up/part-up/commit/81dc393))
@@ -51,6 +77,8 @@
 * **client:** Greyscale unverified contributions ([9d367e5](https://github.com/part-up/part-up/commit/9d367e5))
 * **client:** Hide comments on activity list view ([5ac13ad](https://github.com/part-up/part-up/commit/5ac13ad))
 * **client:** Store files in file-controller ([085437a](https://github.com/part-up/part-up/commit/085437a))
+* **dev:** add meteor.logintoken input for dev ([9508658](https://github.com/part-up/part-up/commit/9508658))
+* **main:** mainjs for staging test ([f828da6](https://github.com/part-up/part-up/commit/f828da6))
 
 
 
