@@ -51,11 +51,6 @@ Template.Update.helpers({
     update: function() {
         const templateInstance = Template.instance();
         let self = this;
-
-        // This causes new comments on updates not to be re-rendered!!
-        // // Cache for not hitting to mini mongo as often
-        // if (self._update) return self._update;
-
         let template = Template.instance();
         let updateId = template.data.updateId;
         if (!updateId) return; // no updateId found, return
@@ -78,7 +73,10 @@ Template.Update.helpers({
                 return update;
             },
             templateName: function() {
-                return 'update_' + update.type;
+              if (update.type === 'partups_activities_invited') {
+                return 'update_partups_invited';
+              }
+              return 'update_' + update.type;
             },
             activityData: function() {
                 return activity;
