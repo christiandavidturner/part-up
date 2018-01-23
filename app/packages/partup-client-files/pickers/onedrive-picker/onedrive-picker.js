@@ -1,11 +1,12 @@
 import _ from 'lodash';
+import OneDrive from './OneDrive';
 
 const onedrivePickerConfig = {
     clientId: 'a8ab6cd2-327e-4325-ba30-198c4d620278',
     action: 'share',
     multiSelect: true,
     advanced: {
-        redirectUri: `${window.location.origin}/drivePicker`,
+        redirectUri: `${new URL(window.location).origin}/onedrive/oauth_receiver.html`,
     },
 };
 
@@ -73,8 +74,8 @@ const open = (controller) => () => {
 };
 
 Template.onedrivePicker.onRendered(function() {
-    this.controller = this.data.controller;
-    if (!this.controller) {
+    const { data: { controller } } = this;
+    if (!controller) {
         throw new Error(
             'onedrivePicker: cannot operate without a FileController'
         );
@@ -87,9 +88,10 @@ Template.onedrivePicker.onRendered(function() {
         );
     }
 
-    this.$trigger.on('click', open(this.controller));
+    this.open = open(controller);
+    this.$trigger.on('click', this.open);
 });
 
 Template.onedrivePicker.onDestroyed(function() {
-    this.$trigger.off('click', open);
+    this.$trigger.off('click', this.open);
 });
