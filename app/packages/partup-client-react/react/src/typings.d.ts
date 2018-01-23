@@ -1,5 +1,6 @@
 declare module 'moment/locale/nl';
 
+declare module 'autolinker';
 declare module 'marked';
 
 declare module '*.json' {
