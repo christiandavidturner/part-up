@@ -485,7 +485,6 @@
 		_disableDelayedDrag: function (event) {
       var ownerDocument = this.el.ownerDocument;
 
-      console.log('triggered _disableDelayedDrag');
       /* EDIT */
       if (event && Partup.client.isMobile.Android()) {
         const offset = 10;
@@ -498,7 +497,6 @@
             !(event.x >= (this._previousPos.x + offset) || event.x <= (this._previousPos.x - offset)) &&
             !(event.y >= (this._previousPos.y + offset) || event.y <= (this._previousPos.y - offset))
             ) {
-            console.log('should not disable drag!');
             return;
         }
 

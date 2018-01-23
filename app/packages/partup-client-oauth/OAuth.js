@@ -21,7 +21,6 @@ Template.OAuth.onCreated(function() {
 Template.OAuth.events({
     'click #authButton': function() {
         var template = Template.instance();
-        console.log('client id: ' + template.data.clientId);
         template.submitting.set(true);
         Meteor.call('oauth.grant', template.data.clientId, template.data.state, function(error, url) {
             template.submitting.set(false);
