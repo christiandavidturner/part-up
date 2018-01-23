@@ -42,7 +42,7 @@ export class PopoverMenu extends React.Component<Props, State> {
                 {shown && (
                     <Portal onClick={this.closePopover}>
                         <div className={`pur-PopoverMenu__container`} style={{ top: `${topPosition}px`, left: `${leftPosition}px` }}>
-                            {items}
+                        {items}
                         </div>
                     </Portal>
                 )}
@@ -57,7 +57,7 @@ export class PopoverMenu extends React.Component<Props, State> {
 
         this.setState((state: State) => ({
             shown: !state.shown,
-            leftPosition: bcr.left - 200 + bcr.width,
+            leftPosition: bcr.left - 130 + bcr.width,
             topPosition: bcr.top + bcr.height,
         }));
     }
