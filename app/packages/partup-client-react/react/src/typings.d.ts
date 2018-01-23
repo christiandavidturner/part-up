@@ -1,5 +1,7 @@
 declare module 'moment/locale/nl';
 
+declare module 'marked';
+
 declare module '*.json' {
     type jsonImport = {
         [key: string]: any
@@ -9,3 +11,5 @@ declare module '*.json' {
 
     export default value;
 }
+
+declare var Router: any;

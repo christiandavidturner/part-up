@@ -33,7 +33,7 @@ export class SideBar extends React.Component<Props> {
     public render() {
         return (
             <MediaQuery
-                query={`(min-width: 650px)`}
+                query={`(min-width: 800px)`}
                 renderMatch={this.renderDesktopNavigation}
                 renderNoMatch={this.renderMobileNavigation}
             />

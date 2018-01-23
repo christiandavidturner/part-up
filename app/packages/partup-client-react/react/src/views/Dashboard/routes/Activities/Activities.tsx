@@ -137,7 +137,7 @@ export class ActivitiesView extends React.Component<Props> {
 
                             <Form onSubmit={(e: any, fields: any) => {
                                 // tslint:disable-next-line:no-console
-                                window.console.log(fields);
+                                debug.log(fields);
                             }}>
                                 <ModalWindow>
                                     <ModalHeader

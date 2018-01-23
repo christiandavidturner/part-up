@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as c from 'classnames';
 
 import { NavLink } from './NavLink';
-import { TargetType } from './Link';
+import { TargetType } from 'components/Router/BaseLink';
 
 interface Props {
     icon?: JSX.Element|Element|string;

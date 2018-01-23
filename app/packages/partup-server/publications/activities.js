@@ -58,6 +58,7 @@ Meteor.routeComposite('/activities/me', function(request, parameters) {
 
     const partupsCursor = Partups.find({
         _id: { $in: user.upperOf },
+        archived_at: null,
     }, {
         fields: { _id: 1, name: 1, image: 1, uppers: 1, slug: 1 },
     });

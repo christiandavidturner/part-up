@@ -4,7 +4,7 @@ declare global {
     interface Window {
         TAPi18n: any;
         i18next: any;
-        Meteor: any;
+        Router: any;
         RENDER_REACT: any;
         UNRENDER_REACT: any;
         REACT_USER_LOGIN: any;
@@ -19,13 +19,13 @@ import {
     MemoryRouter,
 } from 'react-router-dom';
 
-import { onStartup } from 'utils/Meteor';
 import { routes, getCurrentIndex } from 'utils/router';
 
 import { App, renderInstanceType } from './App';
 
 import './index.css';
 import { Dispatcher } from 'utils/Dispatcher';
+import { onStartup } from 'utils/MeteorStartup';
 
 const dev = process.env.REACT_APP_DEV;
 

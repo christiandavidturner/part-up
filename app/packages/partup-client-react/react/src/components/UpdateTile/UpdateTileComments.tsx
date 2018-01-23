@@ -113,7 +113,7 @@ export class UpdateTileComments extends React.Component<Props, State> {
                     {translate('pur-dashboard-update_tile-comment')}
                 </Clickable>
             </div>
-        )
+        );
     }
 
     private renderComments() {

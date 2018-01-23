@@ -24,7 +24,7 @@ export const routes = [
 ];
 
 export const activeRoutes: Array<string> = [
-    '/home',
+    // '/home',
 ];
 
 function update(route?: any) {

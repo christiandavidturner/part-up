@@ -20,12 +20,15 @@ export class ImageGallery extends React.Component<Props, State> {
             <ul className={this.getClassNames()}>
                 {images.map(imageId => {
 
-                    const image = Images.findOneStatic({ _id: imageId });
+                    const image = Images.findOneAny({ _id: imageId }, {}, true);
+
                     if (images.length === 1) {
                         const imageUrl = Images.getUrl(image, '1200x520');
                         return (
                             <li key={imageId} data-image={imageId}>
-                                <a href={imageUrl} rel="noopener" target="_blank"><figure style={{ backgroundImage: `url(${imageUrl})` }} /></a>
+                                <a href={imageUrl} rel="noopener" target="_blank">
+                                    <figure style={{ backgroundImage: `url(${imageUrl})` }} />
+                                </a>
                             </li>
                         );
                     }
@@ -33,7 +36,9 @@ export class ImageGallery extends React.Component<Props, State> {
                     const imageUrl = Images.getUrl(image, '360x360');
                     return (
                         <li key={imageId} data-image={imageId}>
-                            <a href={imageUrl} rel="noopener" target="_blank"><figure style={{ backgroundImage: `url(${imageUrl})` }} /></a>
+                            <a href={imageUrl} rel="noopener" target="_blank">
+                                <figure style={{ backgroundImage: `url(${imageUrl})` }} />
+                            </a>
                         </li>
                     );
                 })}

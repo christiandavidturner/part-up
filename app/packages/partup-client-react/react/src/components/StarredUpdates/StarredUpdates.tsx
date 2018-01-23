@@ -34,9 +34,7 @@ export class StarredUpdates extends React.Component<Props, State> {
                     ))
                 ) : (
                     <p>
-                        {translate(
-                            'pur-partup-start-starred-updates_no-starred'
-                        )}
+                        {translate('pur-partup-start-starred-updates_no-starred')}
                     </p>
                 )}
             </div>
@@ -51,7 +49,7 @@ export class StarredUpdates extends React.Component<Props, State> {
             {
                 // 'pur-StarredUpdates--modifier-class': boolean,
             },
-            className
+            className,
         );
     }
 }

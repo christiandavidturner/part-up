@@ -3,8 +3,7 @@ import './Link.css';
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import * as c from 'classnames';
-
-export type TargetType = '_blank' | '_self' | '_parent' | '_top' | '_partup';
+import { BaseLink, TargetType } from 'components/Router/BaseLink';
 
 interface Props {
     className?: string;
@@ -27,12 +26,12 @@ export class Link extends React.Component<Props, {}> {
             leftChild,
             children,
             rightChild,
+            ...passProps,
         } = this.props;
 
         return (
-            <a
-                target={this.getTarget()}
-                href={this.getHref()}
+            <BaseLink
+                {...passProps}
                 className={this.getClassNames()}
                 onClick={this.onClick}>
                 { leftChild && (
@@ -50,7 +49,7 @@ export class Link extends React.Component<Props, {}> {
                         { rightChild }
                     </span>
                 ) }
-            </a>
+            </BaseLink>
         );
     }
 
@@ -64,22 +63,6 @@ export class Link extends React.Component<Props, {}> {
         }
 
         if (onClick) onClick(event);
-    }
-
-    private getHref() {
-        const { to, target } = this.props;
-
-        if (target === '_partup') return to;
-
-        return '#';
-    }
-
-    private getTarget() {
-        const { target } = this.props;
-
-        if (target === '_partup') return undefined;
-
-        return target;
     }
 
     private getClassNames() {

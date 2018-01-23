@@ -4,7 +4,8 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import * as PropTypes from 'prop-types';
 import * as c from 'classnames';
-import { Link, TargetType } from './Link';
+import { Link } from './Link';
+import { TargetType } from 'components/Router/BaseLink';
 
 export interface NavLinkProps {
     className?: string;

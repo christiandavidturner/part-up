@@ -1,15 +1,16 @@
 .pur-ContentView {
+    @import "stylesheets/breakpoints";
     padding: 15px;
 
     > * + * {
         margin-top: 25px;
     }
 
-    @media screen and (min-width: 420px) {
+    @media screen and (min-width: $pur-breakpoint-mobile-small) {
         padding: 25px 35px;
     }
 
-    @media screen and (min-width: 925px) {
+    @media screen and (min-width: $pur-breakpoint-desktop) {
         padding: 25px 95px;
     }
 

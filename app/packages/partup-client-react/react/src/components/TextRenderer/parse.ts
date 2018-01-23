@@ -1,4 +1,4 @@
-import { Converter } from 'showdown';
+import * as marked from 'marked';
 const EmojiConvertor = require('emoji-js');
 
 export function parseMentions(text: string): string {
@@ -25,9 +25,8 @@ export function parseMentions(text: string): string {
 }
 
 export function parseMarkdown(text: string): string {
-    const converter = new Converter();
 
-    return converter.makeHtml(text);
+    return marked(text);
 }
 
 export function parseLinks(text: string): string {

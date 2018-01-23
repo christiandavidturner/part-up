@@ -200,7 +200,10 @@ Images.findForCursors = function(cursors, options) {
 
         return !!item;
     });
-    return Images.find({_id: { $in: imageIds}}, options)
+
+    const flatImageIDs = lodash.flattenDeep(imageIds);
+
+    return Images.find({_id: { $in: flatImageIDs}}, options);
 };
 
 Images.allow({

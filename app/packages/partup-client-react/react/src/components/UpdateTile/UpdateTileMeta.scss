@@ -16,9 +16,16 @@
         flex: 1;
     }
 
-    &__created-info {
+    &__created-info.pur-BaseLink {
         font-weight: 600;
         font-size: 15px;
+        color: #000;
+        display: block;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
     &__created-at {

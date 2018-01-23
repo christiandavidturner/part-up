@@ -1,11 +1,12 @@
 .pur-SideBarView {
+    @import "stylesheets/breakpoints";
     &__sidebar {
         font-size: 15px;
         background-color: #eeeeee;
         width: 100%;
     }
 
-    @media screen and (min-width: 650px) {
+    @media screen and (min-width: $pur-breakpoint-mobile) {
         $sideBarWidth: 282px;
 
         &__sidebar {
@@ -21,7 +22,7 @@
         }
     }
 
-    @media screen and (min-width: 800px) {
+    @media screen and (min-width: $pur-breakpoint-desktop) {
         $sideBarWidth: 372px;
 
         &__sidebar {

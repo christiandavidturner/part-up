@@ -167,8 +167,8 @@ Meteor.routeComposite('/partups/updates', function(request, parameters) {
         partupsCursor = Partups.guardedFind(userId, { _id: { $in: [parameters.query.partupId] }}, { fields: partupFields });
     } else {
         partupsCursor = Partups.findPartupsIdsForUser(user, {
-            upperOnly: parameters.query.upperOnly || false,
-            supporterOnly: parameters.query.supporterOnly || false,
+            upperOnly: (parameters.query.upperOnly === 'true') || false,
+            supporterOnly: (parameters.query.supporterOnly === 'true') || false,
             fields: partupFields,
         }, userId);
     }

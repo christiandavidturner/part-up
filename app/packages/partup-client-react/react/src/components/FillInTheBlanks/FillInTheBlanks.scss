@@ -1,5 +1,6 @@
 .pur-FillInTheBlanks {
     @import "stylesheets/spacings";
+    @import "stylesheets/breakpoints";
 
     display: flex;
     flex-wrap: wrap;
@@ -13,7 +14,7 @@
         justify-content: flex-end;
     }
 
-    @media screen and (min-width: 650px) {
+    @media screen and (min-width: $pur-breakpoint-mobile) {
         flex-direction: row;
 
         .pur-Blank + .pur-Blank {

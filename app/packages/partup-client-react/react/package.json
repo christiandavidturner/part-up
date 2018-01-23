@@ -9,6 +9,7 @@
     "i18next": "^10.0.7",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
+    "marked": "^0.3.12",
     "moment": "^2.19.1",
     "node-sass-chokidar": "^0.0.3",
     "npm-run-all": "^4.1.1",
@@ -16,8 +17,7 @@
     "react-dom": "^16.0.0",
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "2.8.0",
-    "react-web-meteor": "^0.2.3",
-    "showdown": "^1.8.4",
+    "react-web-meteor": "https://github.com/andreleon/react-web-meteor.git",
     "spin": "^0.0.1"
   },
   "scripts": {

@@ -1,5 +1,6 @@
 .pur-PartupDescriptionTile {
     @import "stylesheets/spacings";
+    @import "stylesheets/breakpoints";
 
     padding: getSpacing(3);
     background: #fff;
@@ -62,7 +63,7 @@
         color: #999;
     }
 
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: #{$pur-breakpoint-mobile - 1px}) {
         display: block;
 
         &__description {

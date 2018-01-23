@@ -1,5 +1,6 @@
 .pur-ActivityTile {
     @import "stylesheets/spacings";
+    @import "stylesheets/breakpoints";
 
     position: relative;
     padding: getSpacing(1.5);
@@ -60,7 +61,7 @@
         }
     }
 
-    @media screen and (min-width: 650px) {
+    @media screen and (min-width: $pur-breakpoint-mobile) {
         // padding: getSpacing(1.5);
         flex-direction: row;
 

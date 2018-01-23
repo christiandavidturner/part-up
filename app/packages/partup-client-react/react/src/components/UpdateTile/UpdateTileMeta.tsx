@@ -9,6 +9,7 @@ import { UserAvatar } from 'components/Avatar/UserAvatar';
 import { Users, UserDocument } from 'collections/Users';
 import { Partups, PartupDocument } from 'collections/Partups';
 import { PartupAvatar } from 'components/Avatar/PartupAvatar';
+import { BaseLink } from 'components/Router/BaseLink';
 
 interface Props {
     className?: string;
@@ -19,7 +20,8 @@ export class UpdateTileMeta extends React.Component<Props, {}> {
 
     public render() {
         const { update, children } = this.props;
-        const { created_at } = update;
+        const { created_at, partup_id } = update;
+        const partupSlug = Partups.getSlugById(partup_id);
 
         return (
             <div className={this.getClassNames()}>
@@ -27,9 +29,12 @@ export class UpdateTileMeta extends React.Component<Props, {}> {
                     {this.getAvatar()}
                 </div>
                 <div className={`pur-UpdateTileMeta__pur-UpdateTileMeta__info`}>
-                    <h4 className={`pur-UpdateTileMeta__created-info`}>
+                    <BaseLink
+                        target={'_partup'}
+                        to={`/partups/${partupSlug}/updates/${update._id}`}
+                        className={`pur-UpdateTileMeta__created-info`}>
                         { children }
-                    </h4>
+                    </BaseLink>
                     <time
                         className={`pur-UpdateTileMeta__created-at`}
                         dateTime={created_at.toString()}

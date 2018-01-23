@@ -38,16 +38,15 @@ Router.route('', {
 /** ***********************************************************/
 /* Dashboard */
 /** ***********************************************************/
-if (Meteor.settings.public.FEATURE_FLAG_HOME) {
-    Router.route('/home', {
-        name: 'dashboard',
-        where: 'client',
-        yieldRegions: {
-            app: { to: 'main' },
-            app_dashboard: { to: 'app' },
-        },
-    });
-}
+
+Router.route('/home', {
+    name: 'dashboard',
+    where: 'client',
+    yieldRegions: {
+        app: { to: 'main' },
+        app_dashboard: { to: 'app' },
+    },
+});
 
 /** ***********************************************************/
 /* Discover */
@@ -444,6 +443,14 @@ Router.route('/partups/:slug', {
     onBeforeAction: function() {
         let partupId = this.data().partupId;
         let accessToken = this.data().accessToken;
+
+        const lastRoute = localStorage.getItem('lastRoute');
+        const currentRoute = Router.current().route.getName();
+
+        if (currentRoute === lastRoute) {
+            this.next();
+            return;
+        }
 
         if (partupId && accessToken) {
             Session.set('partup_access_token', accessToken);

@@ -136,6 +136,7 @@ Meteor.startup(function() {
     /* Scroll to the top on every page */
     /*************************************************************/
     Router.onAfterAction(function() {
+        localStorage.setItem('lastRoute', Router.current().route.getName());
         Meteor.defer(function() {
             Partup.client.scroll.to(null, 0);
         });

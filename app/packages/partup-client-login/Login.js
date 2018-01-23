@@ -118,7 +118,7 @@ Template.Login.events({
 /*************************************************************/
 /* Widget functions */
 /*************************************************************/
-var continueLogin = function() {
+const continueLogin = function() {
     var user = Meteor.user();
     if (!user) return;
 
@@ -139,10 +139,10 @@ var continueLogin = function() {
         arguments: [user],
         fallback_action: function() {
             if (mout.object.get(user, 'profile.settings.optionalDetailsCompleted')) {
-                Router.go('discover');
+                Router.go('dashboard');
             } else {
                 Intent.go({route: 'register-details'}, function() {
-                    Router.go('discover');
+                    Router.go('dashboard');
                 });
             }
         }

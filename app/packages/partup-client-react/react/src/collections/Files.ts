@@ -17,5 +17,5 @@ class FilesCollection extends Collection<FileDocument> {
 }
 
 export const Files = new FilesCollection({
-    collection: 'cfs.files.filerecord'
+    collection: 'cfs.files.filerecord',
 });
