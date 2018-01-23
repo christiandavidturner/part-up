@@ -24,7 +24,7 @@ import { PartupAvatar } from 'components/Avatar/PartupAvatar';
 import { translate } from 'utils/translate';
 import { Tracker } from 'utils/Tracker';
 import { NewIndicator } from 'components/Indicator/NewIndicator';
-import { Counter } from 'components/Counter/Counter';
+// import { Counter } from 'components/Counter/Counter';
 
 interface FetcherResponse {
     'cfs.images.filerecord': ImageDocument[];
@@ -351,7 +351,7 @@ export class ConversationUpdates extends React.Component<Props, State> {
 
             return {
                 leftChild: <PartupAvatar partup={partup} />,
-                rightChild: <Counter highlighted count={amountOfUpdates} />,
+                // rightChild: <Counter highlighted count={amountOfUpdates} />,
                 label: partup.name,
                 isActive: false,
                 value: partup._id,
