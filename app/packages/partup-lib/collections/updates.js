@@ -34,10 +34,11 @@ Update.prototype.getLastComment = function() {
  * @return {Boolean}
  */
 Update.prototype.isActivityUpdate = function() {
-    return /^partups_activities/.test(this.type) || (
+    return (this.type !== 'partups_activities_invited') &&
+    (/^partups_activities/.test(this.type) || (
         this.type === 'partups_comments_added' &&
         !this.type_data.contribution_id
-    );
+    ));
 };
 
 /**

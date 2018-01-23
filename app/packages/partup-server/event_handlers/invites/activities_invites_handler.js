@@ -5,7 +5,7 @@ Event.on('invites.inserted.activity', function(inviter, partup, activity, invite
     if (!User(invitee).isActive()) return; // Ignore deactivated accounts
 
     // Check if there is already an invite update
-    var inviteUpdate = Updates.findOne({partup_id: partup._id, upper_id: inviter._id, type: 'partups_invited'}, {sort: {updated_at: -1}});
+    var inviteUpdate = Updates.findOne({partup_id: partup._id, upper_id: inviter._id, type: 'partups_activities_invited'}, {sort: {updated_at: -1}});
 
     if (inviteUpdate && inviteUpdate.isLatestUpdateOfItsPartup()) {
         // Update the update with new invitee name
@@ -17,7 +17,7 @@ Event.on('invites.inserted.activity', function(inviter, partup, activity, invite
         }});
     } else {
         // Create a new update
-        var updateType = 'partups_invited';
+        var updateType = 'partups_activities_invited';
         var updateTypeData = {
             invitee_names: [User(invitee).getFirstname()],
             invitee_ids: [invitee._id],
@@ -130,7 +130,7 @@ Event.on('invites.inserted.activity.by_email', function(inviter, partup, activit
     Partup.server.services.emails.send(emailOptions);
 
     // Create a new update
-    var updateType = 'partups_invited';
+    var updateType = 'partups_activities_invited';
     var updateTypeData = {
         invitee_names: [name]
     };
