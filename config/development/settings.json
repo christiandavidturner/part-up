@@ -16,6 +16,7 @@
     "intercom": {
       "id": "",
       "allowAnonymous": true
-    }
+		},
+		"FEATURE_FLAG_HOME": 1
   }
 }
