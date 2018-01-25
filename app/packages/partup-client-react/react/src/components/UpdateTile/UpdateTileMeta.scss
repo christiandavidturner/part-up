@@ -8,6 +8,16 @@
     align-items: center;
     padding: $padding $padding 0 $padding;
 
+    &__title {
+      font-size: 12px;
+      color: $pur-color-sunshade;
+      padding-left: 10px;
+
+      &:hover {
+        color: $pur-color-sunshade;
+      }
+    }
+
     &__author-avatar {
         margin-right: getSpacing();
     }

@@ -241,10 +241,8 @@ export class ConversationUpdates extends React.Component<Props, State> {
                     ) }
                     <InfiniteScroll loadMore={this.loadMore}>
                         { (conversationUpdates || []).map((update: ConversationUpdateDocument) => {
-                            const partup = Partups.findOneStatic({ _id: update.partup_id }) || { name: '' };
-
                             return (
-                                <Tile title={partup.name} key={update._id}>
+                                <Tile key={update._id}>
                                     <UpdateTile update={update} />
                                 </Tile>
                             );

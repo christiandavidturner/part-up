@@ -96,7 +96,7 @@ export class UpdateTile extends React.Component<Props, {}> {
             return (Users.findOneAny({ _id: update.upper_id }) as UserDocument).profile.name;
         }
 
-        return isStarred ? 'Part-up' : (Partups.findOneAny({ _id: update.partup_id }) as PartupDocument).name;
+        return isStarred || update.system ? 'Part-up' : (Partups.findOneAny({ _id: update.partup_id }) as PartupDocument).name;
     }
 
     private getClassNames() {
