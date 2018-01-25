@@ -462,7 +462,7 @@ Router.route('/partups/:slug', {
             `redirected_to_onboarding-${partupId}`
         );
 
-        if (user && User(user).isPartnerInPartup(partupId)) {
+        if (user && User(user).isPartnerOrSupporterInPartup(partupId)) {
             this.next();
             return;
         }
