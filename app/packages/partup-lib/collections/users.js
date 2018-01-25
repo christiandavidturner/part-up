@@ -50,6 +50,7 @@ var getPrivateUserFields = function() {
         'emails': 1,
         'profile.phonenumber': 1,
         'profile.settings': 1,
+        'profile.normalized_name': 1,
         'pending_networks': 1,
         'roles': 1,
         'chats': 1
