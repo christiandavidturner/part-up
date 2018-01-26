@@ -163,6 +163,8 @@ Package.onUse(function(api) {
     // Globals
     api.export('get');
     api.export('set');
+
+    api.export('features');
 });
 
 Package.onTest(function(api) {
