@@ -18,6 +18,19 @@
     }
 }
 
+.react-partup-start-root {
+    width: calc(100% + 5em);
+    position: relative;
+    top: -2.5em;
+    left: -2.5em;
+    background: #e6e6e6;
+}
+
+#react-dashboard-root {
+  height: 100%;
+  overflow-y: scroll;
+}
+
 .pur-React {
     background: #fff;
     min-height: calc(100vh - 60px);
