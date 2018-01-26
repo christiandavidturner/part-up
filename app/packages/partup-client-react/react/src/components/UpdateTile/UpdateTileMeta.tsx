@@ -41,6 +41,7 @@ export class UpdateTileMeta extends React.Component<Props, {}> {
                         className={`pur-UpdateTileMeta__created-info`}>
                         {children}
                     </BaseLink>
+                    <br/>
                     <time
                         className={`pur-UpdateTileMeta__created-at`}
                         dateTime={created_at.toString()}
