@@ -63,40 +63,33 @@ export class ActivityTile extends React.Component<Props, {}> {
         const partupSlug = Partups.getSlugById(activity.partup_id);
 
         const menuLinks = [
+          !activity.archived ? (
             <Link
-                key={1}
-                to={`/partups/${partupSlug}/updates/${activity.update_id}`}
-                target={`_partup`}
-                leftChild={<Icon name={'chat'} />}
+              key={1}
+              onClick={this.archiveActivity}>
+                {translate('pur-dashboard-activity_tile-link-archive')}
+            </Link>
+            ) : (
+            <Link
+              key={1}
+              onClick={this.unarchiveActivity}>
+                {translate('pur-dashboard-activity_tile-link-unarchive')}
+            </Link>
+            ),
+          <Link
+            key={2}
+            to={`/partups/${partupSlug}/invite-for-activity/${activity._id}`}
+            target={`_partup`}>
+              {translate('pur-dashboard-activity_tile-link-invite')}
+          </Link>,
+          <Link
+            key={3}
+            to={`/partups/${partupSlug}/updates/${activity.update_id}`}
+            target={`_partup`}
             >
                 {translate('pur-dashboard-activity_tile-link-comment')}
-            </Link>,
-            this.renderEditModalLink(),
-            <Link
-                key={3}
-                to={`/partups/${partupSlug}/invite-for-activity/${activity._id}`}
-                target={`_partup`}
-                leftChild={<Icon name={'person-plus'} />}
-            >
-                {translate('pur-dashboard-activity_tile-link-invite')}
-            </Link>,
-            !activity.archived ? (
-                <Link
-                    key={4}
-                    leftChild={<Icon name={'archive'} />}
-                    onClick={this.archiveActivity}
-                >
-                    {translate('pur-dashboard-activity_tile-link-archive')}
-                </Link>
-            ) : (
-                <Link
-                    key={5}
-                    leftChild={<Icon name={'archive'} />}
-                    onClick={this.unarchiveActivity}
-                >
-                    {translate('pur-dashboard-activity_tile-link-unarchive')}
-                </Link>
-            ),
+          </Link>,
+          this.renderEditModalLink(),
         ];
 
         return (
@@ -142,8 +135,8 @@ export class ActivityTile extends React.Component<Props, {}> {
             <PortalManager
                 renderHandler={(open) => (
                     <Link
-                        key={2}
-                        leftChild={<Icon name={'pencil'} />}
+                        key={5}
+                        // leftChild={<Icon name={'pencil'} />}
                         onClick={open}
                     >
                         {translate('pur-dashboard-activity_tile-link-edit')}
