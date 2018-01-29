@@ -1,3 +1,5 @@
+import features, { FEATURE_FLAGS } from './features';
+
 Router.isHomePage = new ReactiveVar(false);
 Router.onBeforeAction(function(req, res, next) {
     Router.isHomePage.set(/^\/$/.test(req.url));
@@ -38,16 +40,17 @@ Router.route('', {
 /** ***********************************************************/
 /* Dashboard */
 /** ***********************************************************/
-if (Meteor.settings.public.FEATURE_FLAG_HOME) {
-	Router.route('/home', {
-		name: 'dashboard',
-		where: 'client',
-		yieldRegions: {
-				app: { to: 'main' },
-				app_dashboard: { to: 'app' },
-		},
-	});
-}
+
+features.when(FEATURE_FLAGS.FEATURE_FLAG_HOME, () => {
+  Router.route('/home', {
+    name: 'dashboard',
+    where: 'client',
+    yieldRegions: {
+      app: { to: 'main' },
+      app_dashboard: { to: 'app' },
+    },
+  });
+});
 
 /** ***********************************************************/
 /* Discover */

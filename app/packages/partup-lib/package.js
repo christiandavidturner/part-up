@@ -163,6 +163,9 @@ Package.onUse(function(api) {
     // Globals
     api.export('get');
     api.export('set');
+
+    api.export('FEATURE_FLAGS');
+    api.export('features');
 });
 
 Package.onTest(function(api) {
