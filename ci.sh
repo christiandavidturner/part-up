@@ -7,6 +7,7 @@ git_branch=${GIT_BRANCH}
 
 image_tag=${git_branch#*/}
 image_name="partup/partup:${image_tag}"
+extended_image_name="partup/partup:${image_tag}.${GIT_COMMIT}"
 
 echo "{\"version\": \"`git describe`\"}" > app/public/VERSION
 
@@ -18,12 +19,14 @@ if [ $(docker version -f '{{.Server.Experimental}}') == "true" ]; then
 fi
 
 docker build ${docker_opts} --pull -t ${image_name} .
+docker tag ${image_name} ${extended_image_name}
 
 tag=$(git describe --exact-match 2>/dev/null || echo "")
 if [ $tag ]; then
-  echo "Creating a docker image for tag (version): $tag"
-  docker tag ${image_name} partup/partup:$tag
+  echo "Creating a docker image for tag (version): ${tag}"
+  docker tag ${image_name} partup/partup:${tag}
   docker push partup/partup:$tag
 fi
 
 docker push ${image_name}
+docker push ${extended_image_name}
