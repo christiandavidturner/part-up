@@ -12,9 +12,9 @@ import { MenuLink } from 'components/Router/MenuLink';
 import { Icon } from 'components/Icon/Icon';
 import { ListItem } from 'components/List/ListItem';
 import { translate } from 'utils/translate';
-import { ConversationsCount } from 'views/Dashboard/implementations/ConversationsCount';
-import { InvitesCount } from 'views/Dashboard/implementations/InvitesCount';
-import { ActivitiesCount } from 'views/Dashboard/implementations/ActivitiesCount';
+// import { ConversationsCount } from 'views/Dashboard/implementations/ConversationsCount';
+// import { InvitesCount } from 'views/Dashboard/implementations/InvitesCount';
+// import { ActivitiesCount } from 'views/Dashboard/implementations/ActivitiesCount';
 
 interface Props {
     className?: string;
@@ -52,7 +52,7 @@ export class SideBar extends React.Component<Props> {
             return {
                 isActive: (match && match.isExact) || false,
                 leftChild: link.icon,
-                rightChild: link.counter,
+                // rightChild: link.counter,
                 label: link.label,
                 value: link.to,
             };
@@ -95,7 +95,7 @@ export class SideBar extends React.Component<Props> {
                             key={index}
                             to={link.to}
                             icon={link.icon}
-                            counter={link.counter}
+                            // counter={link.counter}
                         >
                             {link.label}
                         </MenuLink>
@@ -115,19 +115,19 @@ export class SideBar extends React.Component<Props> {
             {
                 to: `${baseUrl}`,
                 icon: <Icon name={'message'} />,
-                counter: <ConversationsCount />,
+                // counter: <ConversationsCount />,
                 label: translate('pur-dashboard-side-bar-conversations'),
             },
             {
                 to: `${baseUrl}/activities`,
                 icon: <Icon name={'chart'} />,
-                counter: <ActivitiesCount />,
+                // counter: <ActivitiesCount />,
                 label: translate('pur-dashboard-side-bar-activities'),
             },
             {
                 to: `${baseUrl}/invites`,
                 icon: <Icon name={'person-plus'} />,
-                counter: <InvitesCount />,
+                // counter: <InvitesCount />,
                 label: translate('pur-dashboard-side-bar-invites'),
             },
         ];

@@ -8,7 +8,7 @@ import { TargetType } from 'components/Router/BaseLink';
 
 interface Props {
     icon?: JSX.Element|Element|string;
-    counter?: JSX.Element|string|number;
+    // counter?: JSX.Element|string|number;
     to: string;
     className?: string;
     target?: TargetType;
@@ -20,7 +20,7 @@ export class MenuLink extends React.Component<Props, {}> {
         const {
             icon,
             children,
-            counter,
+            // counter,
             to,
             ...rest,
         } = this.props;
@@ -32,7 +32,7 @@ export class MenuLink extends React.Component<Props, {}> {
                 activeClassName={'pur-MenuLink--is-active'}
                 exact
                 leftChild={icon}
-                rightChild={counter}
+                // rightChild={counter}
                 {...rest}>
                 { children }
             </NavLink>
