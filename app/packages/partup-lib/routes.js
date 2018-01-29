@@ -1,4 +1,4 @@
-import features from './features';
+import features, { FEATURE_FLAGS } from './features';
 
 Router.isHomePage = new ReactiveVar(false);
 Router.onBeforeAction(function(req, res, next) {
@@ -40,7 +40,8 @@ Router.route('', {
 /** ***********************************************************/
 /* Dashboard */
 /** ***********************************************************/
-features.when('FEATURE_FLAG_HOME', () => {
+
+features.when(FEATURE_FLAGS.FEATURE_FLAG_HOME, () => {
   Router.route('/home', {
     name: 'dashboard',
     where: 'client',

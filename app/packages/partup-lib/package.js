@@ -164,6 +164,7 @@ Package.onUse(function(api) {
     api.export('get');
     api.export('set');
 
+    api.export('FEATURE_FLAGS');
     api.export('features');
 });
 

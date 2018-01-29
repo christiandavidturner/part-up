@@ -1,25 +1,31 @@
 import Enum from 'enum';
+import { noop } from 'lodash';
 
-const enumObj = {};
 const flags = [
   'FEATURE_FLAG_HOME',
 ];
+const currentFlags = {};
 for (const k of Object.keys(Meteor.settings.public)) {
   if (flags.includes(k)) {
-    enumObj[k] = Meteor.settings.public[k];
+    if (Meteor.settings.public[k]) {
+      currentFlags[k] = k;
+    }
   }
 }
 
-const flagEnum = new Enum(enumObj);
-flagEnum.isFlaggable = false;
+const FEATURE_FLAGS = new Enum(currentFlags);
+FEATURE_FLAGS.isFlaggable = false;
 
 const features = {
-  when(val, cb) {
-    if (Meteor.isDevelopment || flagEnum.has(val)) {
+  when(val, cb = noop) {
+    if (Meteor.isDevelopment || val) {
       cb();
     }
   },
 };
-
 Object.freeze(features);
+
+export {
+  FEATURE_FLAGS,
+};
 export default features;
