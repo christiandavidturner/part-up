@@ -17,6 +17,12 @@ interface Props {
 }
 
 export class UpdateTileMeta extends React.Component<Props, {}> {
+    private partup: PartupDocument;
+
+    public componentWillMount() {
+      const { update } = this.props;
+      this.partup = Partups.findOneAny({ _id: update.partup_id }) as PartupDocument;
+    }
 
     public render() {
         const { update, children } = this.props;
@@ -33,14 +39,21 @@ export class UpdateTileMeta extends React.Component<Props, {}> {
                         target={'_partup'}
                         to={`/partups/${partupSlug}/updates/${update._id}`}
                         className={`pur-UpdateTileMeta__created-info`}>
-                        { children }
+                        {children}
                     </BaseLink>
+                    <br/>
                     <time
                         className={`pur-UpdateTileMeta__created-at`}
                         dateTime={created_at.toString()}
                     >
                         { moment(created_at).format('H:mm ddd MMMM YYYY') }
                     </time>
+                    <BaseLink
+                      target={'_partup'}
+                      to={`/partups/${partupSlug}`}
+                      className={'pur-UpdateTileMeta__title'}>
+                        {this.partup.name}
+                    </BaseLink>
                 </div>
             </div>
         );

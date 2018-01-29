@@ -3,11 +3,8 @@
     @import "stylesheets/spacings";
     @import "stylesheets/border-radius";
 
-    $padding: getSpacing(1.5);
+    $padding: getSpacing(1);
 
-    background-color: $pur-color-white;
-    border-radius: $pur-border-radius-controls;
-    border: 2px solid $pur-color-gallery;
     padding: 8px $padding $padding $padding;
 
     &__title {
