@@ -23,8 +23,8 @@ docker tag ${image_name} ${extended_image_name}
 
 tag=$(git describe --exact-match 2>/dev/null || echo "")
 if [ $tag ]; then
-  echo "Creating a docker image for tag (version): $tag"
-  docker tag ${image_name} partup/partup:$tag
+  echo "Creating a docker image for tag (version): ${tag}"
+  docker tag ${image_name} partup/partup:${tag}
   docker push partup/partup:$tag
 fi
 
