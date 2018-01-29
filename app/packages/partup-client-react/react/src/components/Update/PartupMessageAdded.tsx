@@ -34,12 +34,12 @@ export class PartupMessageAdded extends React.Component<Props, {}> {
         return (
             <React.Fragment>
                 <UpdateText text={get(type_data, 'new_value')} />
-                {type_data.images && type_data.images.length && (
+                {(type_data.images && type_data.images.length && (
                     <ImageGallery images={type_data.images} />
-                ) }
-                {type_data.documents && type_data.documents.length && (
+                )) || '' }
+                {(type_data.documents && type_data.documents.length && (
                     <Documents documents={type_data.documents} />
-                ) }
+                )) || '' }
             </React.Fragment>
         );
     }
