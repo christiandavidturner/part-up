@@ -18,7 +18,7 @@ FEATURE_FLAGS.isFlaggable = false;
 
 const features = {
   when(val, cb = noop) {
-    if (Meteor.isDevelopment || val) {
+    if (Meteor.isDevelopment || FEATURE_FLAGS.isDefined(val)) {
       cb();
     }
   },
