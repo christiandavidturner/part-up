@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "autolinker": "^1.6.0",
     "classnames": "^2.2.5",
     "emoji-js": "^3.4.0",
     "get-form-data": "^1.2.5",

@@ -1,4 +1,5 @@
 import * as marked from 'marked';
+import * as Autolinker from 'autolinker';
 const EmojiConvertor = require('emoji-js');
 
 export function parseMentions(text: string): string {
@@ -25,14 +26,19 @@ export function parseMentions(text: string): string {
 }
 
 export function parseMarkdown(text: string): string {
-
     return marked(text);
 }
 
 export function parseLinks(text: string): string {
-    const rexp = /(\b(http|ftp|https):\/\/([\w-]+\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?)/ig;
-
-    return text.replace(rexp, '<a href="$1" target="_blank">$3</a>');
+    return Autolinker.link(text, {
+      truncate: {
+        length: 32,
+        location: 'middle',
+      },
+      replaceFn(match: any) {
+        return match.buildTag().setAttr('rel', 'nofollow');
+      },
+    });
 }
 
 export function parseEmojis(text: string): string {
