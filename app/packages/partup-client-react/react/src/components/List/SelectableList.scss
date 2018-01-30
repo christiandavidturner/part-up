@@ -1,0 +1,10 @@
+
+.pur-SelectableList {
+  background-color: purple;
+
+  &__item {
+    &--highlight {
+      background-color: green;
+    }
+  }
+}

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "baconjs": "^1.0.1",
     "classnames": "^2.2.5",
     "emoji-js": "^3.4.0",
     "get-form-data": "^1.2.5",
@@ -18,7 +19,8 @@
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "2.8.0",
     "react-web-meteor": "https://github.com/andreleon/react-web-meteor.git",
-    "spin": "^0.0.1"
+    "spin": "^0.0.1",
+    "ts-keycode-enum": "^1.0.4"
   },
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
@@ -31,6 +33,7 @@
     "generate-icons": "node_modules/.bin/babel-node generate-icons.js"
   },
   "devDependencies": {
+    "@types/baconjs": "^0.7.33",
     "@types/classnames": "^2.2.3",
     "@types/i18next": "^8.4.2",
     "@types/jest": "^21.1.4",

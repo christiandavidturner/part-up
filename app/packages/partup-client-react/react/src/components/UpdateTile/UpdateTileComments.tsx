@@ -55,6 +55,7 @@ export class UpdateTileComments extends React.Component<Props, State> {
 
                 {canComment && (
                     <CommentBox
+                        update={update}
                         avatar={
                             <UserAvatar
                                 user={user}
@@ -126,7 +127,7 @@ export class UpdateTileComments extends React.Component<Props, State> {
             .filter(({ type }) => type !== 'system')
             .map((comment: any) => {
                 if (comment.type === 'motivation') {
-                    return <Comment prefix={translate('pur-dashboard-update_tile-motivation_prefix')} key={comment._id} comment={comment} />;
+                    return <Comment prefix={translate('pur-dashboard-update_tile-motivation_prefix')} key={comment._id} comment={comment} update={update} />;
                 }
 
                 return (
@@ -134,7 +135,8 @@ export class UpdateTileComments extends React.Component<Props, State> {
                         onRemove={this.removeComment}
                         onSubmit={this.submitEditComment}
                         key={comment._id}
-                        comment={comment} />
+                        comment={comment}
+                        update={update} />
                 );
             });
 

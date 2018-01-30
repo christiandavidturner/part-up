@@ -14,6 +14,7 @@ import { Fragment } from 'react';
 import { translate } from 'utils/translate';
 
 interface Props {
+    update?: any;
     comment: CommentType;
     className?: string;
     prefix?: string;
@@ -34,7 +35,7 @@ export class Comment extends React.Component<Props, State> {
     };
 
     public render() {
-        const { comment, prefix } = this.props;
+        const { comment, prefix, update } = this.props;
         const { editing } = this.state;
 
         return (
@@ -69,6 +70,7 @@ export class Comment extends React.Component<Props, State> {
                 { editing && (
                     <div className={`pur-Comment__content`}>
                         <CommentBox
+                            update={update}
                             autoFocus
                             onSubmit={this.onSubmit}
                             onBlur={this.onBlur}
@@ -120,7 +122,7 @@ export class Comment extends React.Component<Props, State> {
         if (onClick) onClick(event);
     }
 
-    private onSubmit = (event: React.SyntheticEvent<any>, fields: Object) => {
+    private onSubmit = (event: React.SyntheticEvent<any>, fields: { message: string }) => {
         const { onSubmit, comment } = this.props;
 
         this.setState({

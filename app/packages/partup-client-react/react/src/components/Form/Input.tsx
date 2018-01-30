@@ -4,18 +4,18 @@ import * as React from 'react';
 import * as c from 'classnames';
 import { defer } from 'lodash';
 
-interface Props {
-    className?: string;
-    type: string;
-    name: string;
-    placeholder?: string;
-    onFocus?: Function;
-    onBlur?: Function;
-    defaultValue?: string;
-    autoFocus?: boolean;
+export interface InputProps {
+  className?: string;
+  type: string;
+  name: string;
+  placeholder?: string;
+  onFocus?: Function;
+  onBlur?: Function;
+  defaultValue?: string;
+  autoFocus?: boolean;
 }
 
-export class Input extends React.Component<Props, {}> {
+export class Input extends React.Component<InputProps, {}> {
 
     private element: HTMLInputElement|null = null;
 

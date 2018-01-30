@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@types/baconjs@^0.7.33":
+  version "0.7.33"
+  resolved "https://registry.yarnpkg.com/@types/baconjs/-/baconjs-0.7.33.tgz#4f6d0afb702636d109768b6ebde2d71f8b2d9648"
+  dependencies:
+    "@types/jquery" "*"
+    "@types/node" "*"
+
 "@types/classnames":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.3.tgz#3f0ff6873da793870e20a260cada55982f38a9e5"
@@ -25,6 +32,10 @@
 "@types/jquery":
   version "3.2.15"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.2.15.tgz#3f620a9f5a0b296866f4bc729825226d0a35fba6"
+
+"@types/jquery@*":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.0.tgz#6316ac20a1a13c5d521a2dc661befc7184f73f5b"
 
 "@types/lodash":
   version "4.14.78"
@@ -573,6 +584,10 @@ babel-types@^6.18.0, babel-types@^6.24.1, babel-types@^6.26.0:
 babylon@^6.18.0:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.18.0.tgz#af2f3b88fa6f5c1e4c634d1a0f8eac4f55b395e3"
+
+baconjs@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/baconjs/-/baconjs-1.0.1.tgz#3bb3cc14426840c06fb0b62dd410a5e25fe13d5d"
 
 balanced-match@^0.4.2:
   version "0.4.2"
@@ -5831,6 +5846,10 @@ ts-jest@^20.0.7:
     pkg-dir "^2.0.0"
     source-map-support "^0.4.4"
     yargs "^8.0.1"
+
+ts-keycode-enum@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/ts-keycode-enum/-/ts-keycode-enum-1.0.4.tgz#b7e35bf73d669b561333d5de9a51861e4803ad3e"
 
 ts-loader@^2.3.7:
   version "2.3.7"

@@ -1,3 +1,36 @@
+import { MentionSuggestion, GroupSuggestion, UserSuggestion } from 'components/MentionsInput/MentionsInput';
+
+export function encode(message: string, mentions: Array<MentionSuggestion>): string {
+  let encodedMessage = message;
+
+  mentions.forEach((mention) => {
+    let encodedMention: string;
+
+    if ('users' in mention) {
+
+      const groupMention = <GroupSuggestion> mention;
+      const userIds: string = groupMention.users.map((user: any) => user._id).join(',');
+      encodedMention = `[${groupMention.name}:${userIds}]`;
+
+    } else if ('_id' in mention) {
+
+      const userMention = <UserSuggestion> mention;
+      encodedMention = `[user:${userMention._id}|${userMention.name}]`;
+
+    } else {
+
+      encodedMention = '';
+      // write very special log for front-end stuff that can never happen but do.
+      console.log('can or may never happen... ', mention);
+
+    }
+
+    encodedMessage = encodedMessage.replace(new RegExp(`@${mention.name}`, 'g'), encodedMention);
+  });
+
+  return encodedMessage;
+}
+
 /**
  * Replace mentions in a message with hyperlinks
  *
@@ -28,4 +61,26 @@ export function decode(message: string): string {
             name
         }</a>`;
     });
+}
+
+export function decodeForInput(mentions: Array<MentionSuggestion>, message: string): string {
+  if (!message.length) {
+    return message;
+  }
+  return message
+    .replace(/\[Supporters:(?:([^\]]+))?\]/g, (message, ids: string) => {
+      mentions.push({
+        name: 'Supporters',
+        users: ids.split(','),
+      });
+      return '@Supporters';
+    })
+    .replace(/\[Partners:(?:([^\]]+))?\]/g, (message, ids: string) => {
+      mentions.push({
+        name: 'Partners',
+        users: ids.split(','),
+      });
+      return '@Partners';
+    })
+    .replace(/\[user:([^\]|]+)(?:\|([^\]]+))?\]/g, (message, id, name) => `@${name}`);
 }
