@@ -1,5 +1,5 @@
 <template name="notification_partup_created_in_network">
-    <a href="{{pathFor route='partup' slug=notification.type_data.partup.slug}}">
+    <a href="{{pathFor route='partup-start' slug=notification.type_data.partup.slug}}">
         <figure class="pu-avatar pu-avatar-plain"
             style="background-image: url('{{ partupImageUrl id=notification.type_data.creator.image }}');"
             data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ notification.type_data.creator._id }}">
