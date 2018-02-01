@@ -451,7 +451,9 @@ User = function(user) {
          * @param {Integer} partupId
          * @return {Boolean}
          */
-        isPartnerOrSupporterInPartup: partupId => isPartnerInPartup(partupId) | isSupporterInPartup(partupId),
+        isPartnerOrSupporterInPartup(partupId) {
+          return this.isPartnerInPartup(partupId) | this.isSupporterInPartup(partupId);
+        },
 
         /**
          * Check if the user is member of any partup
