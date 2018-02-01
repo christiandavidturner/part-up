@@ -57,12 +57,16 @@ const successCallback = (controller) => async (data) => {
     Promise.all(uploadPromises)
         .then(() => controller.uploading.set(false))
         .catch((error) => {
-            Partup.client.notify.error(TAPi18n.__(`upload-error-100`));
+            Partup.client.notify.error(TAPi18n.__(`upload-error-1`));
+            console.log('promise.all.catch: ', error);
             controller.uploading.set(false);
         });
 };
 
-const errorCallback = async (error) => Partup.client.notify.error(TAPi18n.__('upload-error-100'));
+const errorCallback = async (error) => {
+  console.log('errorCallback: ', error);
+  Partup.client.notify.error(TAPi18n.__('upload-error-1'));
+};
 
 const open = (controller) => () => {
     OneDrive.open({
