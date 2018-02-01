@@ -216,6 +216,7 @@
 
 <template name="activityActionsDropdown">
     <ul class="pu-list-dropdown ignore-drag">
+      {{#unless CREATE_PARTUP}}
       {{#unless isContributing }}
       <li class="pu-dropdown-item">
         <a data-contribute>
@@ -248,6 +249,7 @@
       </li>
       {{/if}}
       {{/if }}
+      {{/unless }}
       {{#if mayEditActivity }}
       <li class="pu-dropdown-item">
         <a data-edit>{{_ 'edit' }}</a>
