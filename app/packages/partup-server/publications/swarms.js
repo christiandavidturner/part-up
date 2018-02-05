@@ -4,6 +4,15 @@
 Meteor.publishComposite('swarms.list', function() {
     this.unblock();
 
+    const self = this;
+    Slogger.write({
+      action: 'swarms.list',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
+
     return {
         find: function() {
             return Swarms.guardedFind(this.userId);
@@ -21,6 +30,15 @@ Meteor.publishComposite('swarms.list', function() {
  */
 Meteor.publishComposite('swarms.one', function(swarmSlug) {
     check(swarmSlug, String);
+
+    const self = this;
+    Slogger.write({
+      action: 'swarms.one',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     if (this.unblock) this.unblock();
 
@@ -62,6 +80,16 @@ Meteor.publishComposite('swarms.one.networks', function(swarmSlug, parameters) {
 
     if (this.unblock) this.unblock();
 
+    const self = this;
+    Slogger.write({
+      action: 'swams.one.networks',
+      type: 'composite publication',
+      data: {
+        self,
+        parameters
+      }
+    });
+
     return {
         find: function() {
             return Swarms.guardedMetaFind({slug: swarmSlug}, {limit: 1});
@@ -81,6 +109,15 @@ Meteor.publishComposite('swarms.one.networks', function(swarmSlug, parameters) {
  */
 Meteor.publishComposite('swarms.admin_all', function() {
     this.unblock();
+
+    const self = this;
+    Slogger.write({
+      action: 'swarms.admin_all',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     var user = Meteor.users.findOne(this.userId);
     if (!User(user).isAdmin()) return;

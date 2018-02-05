@@ -2,6 +2,16 @@ Meteor.publishComposite('notifications.for_upper', function(limit) {
     check(limit, Number);
     this.unblock();
 
+    const self = this;
+    Slogger.write({
+      action: 'notifications.for_upper',
+      type: 'composite publication',
+      data: {
+        self,
+        limit
+      }
+    });
+
     var user = Meteor.users.findOne(this.userId);
     if (!user) return;
 
@@ -18,6 +28,15 @@ Meteor.publishComposite('notifications.for_upper', function(limit) {
 Meteor.publishComposite('notifications.for_upper.by_id', function(notificationId) {
     check(notificationId, String);
     this.unblock();
+
+    const self = this;
+    Slogger.write({
+      action: 'notifications.for_upper.by_id',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     var user = Meteor.users.findOne(this.userId);
     if (!user) return;

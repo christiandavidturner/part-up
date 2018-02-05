@@ -6,7 +6,16 @@ import { _ } from 'lodash';
  * @param {String} userId
  */
 Meteor.publishComposite('users.one', function (userId) {
-	check(userId, String);
+  check(userId, String);
+
+  const self = this;
+    Slogger.write({
+      action: 'users.one',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
 	this.unblock();
 
@@ -22,7 +31,16 @@ Meteor.publishComposite('users.one', function (userId) {
 
 // We require the ID because we do not have access to this ID outside the return {} block (cursor);
 Meteor.routeComposite('/users/:id/menu', function (request, params) {
-	check(params.id, String);
+  check(params.id, String);
+
+    Slogger.write({
+      action: 'users/:id/menu',
+      type: 'composite route',
+      data: {
+        // request,
+        params
+      }
+    });
 
 	const options = parseDefaultOptions(params.query);
 	const user = Meteor.users.findOne(params.id, { fields: { _id: 1, upperOf: 1, supporterOf: 1, networks: 1 } });
@@ -64,7 +82,16 @@ Meteor.routeComposite('/users/:id/menu', function (request, params) {
 // Used to load individual part-ups by id's
 Meteor.routeComposite('/users/me/menu/partups', function (request, params) {
 
-	const options = parseDefaultOptions(params.query);
+  const options = parseDefaultOptions(params.query);
+
+  Slogger.write({
+    action: 'users/me/menu/partups',
+    type: 'composite route',
+    data: {
+      // request,
+      params
+    }
+  });
 
 	return {
 		find: function () {
@@ -89,7 +116,7 @@ Meteor.routeComposite('/users/me/menu/partups', function (request, params) {
 			return Partups.guardedFind(this.userId, { $and: [{ _id: { $in: partupsToGet } }, { archived_at: { $exists: false } }] }, options);
 		},
 		children: [
-			{ 
+			{
                 find(partup) {
                     return Images.find({ _id: partup.image }, { fields: { 'copies.80x80': 1 } });
                 }
@@ -101,6 +128,15 @@ Meteor.routeComposite('/users/me/menu/partups', function (request, params) {
 // OBSOLETE
 // Used to load individual networks by id's
 Meteor.routeComposite('/users/me/menu/networks', function (request, params) {
+
+    Slogger.write({
+      action: 'users/me/menu/networks',
+      type: 'composite route',
+      data: {
+        // request,
+        params,
+      }
+    });
 
 	const options = parseDefaultOptions(params.query);
 	options.fields = {
@@ -137,7 +173,17 @@ Meteor.routeComposite('/users/me/menu/networks', function (request, params) {
 Meteor.routeComposite('/users/:id/upperpartups', function (request, params) {
 	var options = {};
 	var skip = 0;
-	var limit = 100;
+  var limit = 100;
+
+
+    Slogger.write({
+      action: 'users/:id/upperpartups',
+      type: 'composite route',
+      data: {
+        // request,
+        params
+      }
+    });
 
 	if (request.query) {
 		if (request.query.limit) limit = parseInt(request.query.limit);
@@ -199,7 +245,16 @@ Meteor.routeComposite('/users/:id/upperpartups', function (request, params) {
 Meteor.routeComposite('/users/:id/supporterpartups', function (request, params) {
 	var options = {};
 	var skip = 0;
-	var limit = 100;
+  var limit = 100;
+
+    Slogger.write({
+      action: 'users/:id/supporterpartups',
+      type: 'composite route',
+      data: {
+        // request,
+        params
+      }
+    });
 
 	if (request.query) {
 		if (request.query.limit) limit = parseInt(request.query.limit);
@@ -266,7 +321,16 @@ Meteor.routeComposite('/users/:id/networks', function (request, params) {
 		sort: {
 			name: 1
 		}
-	};
+  };
+
+    Slogger.write({
+      action: 'users/:id/networks',
+      type: 'composite route',
+      data: {
+        // request,
+        params
+      }
+    });
 
 	if (request.query) {
 		if (request.query.limit) options.limit = parseInt(request.query.limit);
@@ -296,8 +360,16 @@ Meteor.routeComposite('/users/:id/networks', function (request, params) {
  * @param {Object} params
  */
 Meteor.routeComposite('/users/:id/partners', function (request, params) {
-	var options = {};
+  var options = {};
 
+  Slogger.write({
+    action: 'users/id/partners',
+    type: 'composite route',
+    data: {
+      // request,
+      params
+    }
+  });
 	if (request.query) {
 		if (request.query.limit) options.limit = parseInt(request.query.limit);
 		if (request.query.skip) options.skip = parseInt(request.query.skip);
@@ -316,6 +388,17 @@ Meteor.routeComposite('/users/:id/partners', function (request, params) {
  * Publish the loggedin user
  */
 Meteor.publishComposite('users.loggedin', function () {
+
+  const self = this;
+    Slogger.write({
+      action: 'users.loggedin',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
+
+
 	return {
 		find: function () {
 			if (this.userId) {
@@ -338,7 +421,16 @@ Meteor.publishComposite('users.loggedin', function () {
 Meteor.publishComposite('users.by_ids', function (userIds) {
 	check(userIds, [String]);
 
-	this.unblock();
+  this.unblock();
+
+  const self = this;
+    Slogger.write({
+      action: 'users.by_ids',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
 	return {
 		find: function () {
@@ -353,6 +445,15 @@ Meteor.publishComposite('users.by_ids', function (userIds) {
 
 Meteor.publishComposite('users.by_ids.for_online_status', function(userIds) {
     check(userIds, [String]);
+
+    const self = this;
+    Slogger.write({
+      action: 'users.by_ids.for_online_status',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     this.unblock();
 
@@ -369,7 +470,16 @@ Meteor.publishComposite('users.by_ids.for_online_status', function(userIds) {
  * @param {String} networkSlug
  */
 Meteor.publishComposite('admins.by_network_slug', function (networkSlug) {
-	check(networkSlug, String);
+  check(networkSlug, String);
+
+  const self = this;
+    Slogger.write({
+      action: 'admins.by_network_slug',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
 	this.unblock();
 

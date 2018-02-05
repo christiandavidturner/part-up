@@ -11,6 +11,15 @@ Meteor.publishComposite('activities.from_partup', function(partupId, accessToken
 
     this.unblock();
 
+    const self = this;
+    Slogger.write({
+      action: 'activities.from_partup',
+      type: 'composite publication',
+      data: {
+        self,
+      },
+    });
+
     return {
         find: function() {
             var partup = Partups.guardedFind(this.userId, {_id: partupId}, {limit: 1}, accessToken).fetch().pop();
@@ -47,6 +56,14 @@ Meteor.publishComposite('activities.from_partup', function(partupId, accessToken
  * @param {String} accessToken
  */
 Meteor.routeComposite('/activities/me', function(request, parameters) {
+  Slogger.write({
+    action: 'activities/me',
+    type: 'composite route',
+    data: {
+      // request,
+      parameters,
+    },
+  });
 
     const userId = parameters.query.userId || this.userId;
     const archived = parameters.query && parameters.query.filterByArchived === 'true';
@@ -107,6 +124,15 @@ Meteor.routeComposite('/activities/me', function(request, parameters) {
 
 Meteor.publishComposite('activities.updated_activities', function() {
     const user = Meteor.user();
+
+    const self = this;
+    Slogger.write({
+      action: 'activities.updated_activities',
+      type: 'composite publication',
+      data: {
+        self
+      },
+    });
 
     const selector = {
         upper_data: {

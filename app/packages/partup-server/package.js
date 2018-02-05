@@ -89,6 +89,7 @@ Package.onUse(function(api) {
     ], ['server'], { isAsset: true });
 
     api.addFiles([
+        'slogger/slogger.js',
         'logger.js',
         'api.js',
         's3.js',

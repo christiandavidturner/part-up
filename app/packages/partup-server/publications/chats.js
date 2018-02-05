@@ -34,6 +34,17 @@ var latestChatMessageOptions = {
 Meteor.publishComposite('chats.for_loggedin_user', function(parameters, options) {
     this.unblock();
 
+    const self = this;
+    Slogger.write({
+      action: 'chats.for_loggedin_user',
+      type: 'composite publication',
+      data: {
+        self,
+        parameters,
+        options
+      },
+    });
+
     // FIXME: hack is necessary for backwards compatibility. please remove after app 1.2.3 publication
     if (!options) {
         options = parameters;
@@ -143,6 +154,14 @@ Meteor.publishComposite('chats.for_loggedin_user', function(parameters, options)
 });
 
 Meteor.publishComposite('chats.one_on_one', function() {
+  const self = this;
+    Slogger.write({
+      action: 'chats.one_on_one',
+      type: 'composite publication',
+      data: {
+        self
+      },
+    });
     return {
         find: function() {
             return Meteor.users.find({_id: this.userId});
@@ -157,6 +176,14 @@ Meteor.publishComposite('chats.one_on_one', function() {
 });
 
 Meteor.publishComposite('chats.for_loggedin_user.unread_count', function(chatIds) {
+  const self = this;
+    Slogger.write({
+      action: 'chats.for_loggedin_user.unread_count',
+      type: 'composite publication',
+      data: {
+        self
+      },
+    });
     var chatIds = chatIds || [];
     return {
         find: function() {
@@ -171,6 +198,15 @@ Meteor.publishComposite('chats.for_loggedin_user.unread_count', function(chatIds
 });
 
 Meteor.routeComposite('/chats/userdata', function(request, parameters) {
+    Slogger.write({
+      action: 'chats/userdata',
+      type: 'composite route',
+      data: {
+        // request,
+        parameters
+      }
+    });
+
     var chatOptions = {};
     chatOptions.fields = {
         _id: 1,
@@ -219,6 +255,16 @@ Meteor.routeComposite('/chats/userdata', function(request, parameters) {
 
 Meteor.publishComposite('chats.for_loggedin_user.for_count', function(parameters, options) {
     this.unblock();
+    const self = this;
+    Slogger.write({
+      action: 'chats.for_loggedin_user.for_count',
+      type: 'composite publication',
+      data: {
+        self,
+        parameters,
+        options
+      },
+    });
 
     parameters = parameters || {};
     check(parameters, {
@@ -247,6 +293,15 @@ Meteor.publishComposite('chats.for_loggedin_user.for_count', function(parameters
 });
 
 Meteor.publishComposite('chats.by_id', function(chatId, chatMessagesOptions) {
+  const self = this;
+    Slogger.write({
+      action: 'chats.by_id',
+      type: 'composite publication',
+      data: {
+        self
+      },
+    });
+
     this.unblock();
     check(chatId, String);
     chatMessagesOptions = chatMessagesOptions || {};
@@ -297,6 +352,12 @@ Meteor.publishComposite('chats.by_id', function(chatId, chatMessagesOptions) {
 });
 
 Meteor.publishComposite('chats.by_id.for_web', function(chatId, chatMessagesOptions) {
+  const self = this;
+    Slogger.write({
+      action: 'chats.by_id.for_web',
+      type: 'composite publication',
+      data: [self],
+    });
     this.unblock();
     check(chatId, String);
     chatMessagesOptions = chatMessagesOptions || {};

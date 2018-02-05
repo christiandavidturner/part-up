@@ -1,6 +1,15 @@
 Meteor.publishComposite('invites.for_activity_id', function(activityId) {
     check(activityId, String);
 
+    const self = this;
+    Slogger.write({
+      action: 'invites.for_activity_id',
+      type: 'composite publication',
+      data: {
+        self
+      },
+    });
+
     this.unblock();
 
     return {
@@ -15,6 +24,15 @@ Meteor.publishComposite('invites.for_activity_id', function(activityId) {
 
 Meteor.routeComposite('invites/me', function(request, parameters) {
     const userId = parameters.query.userId || this.userId;
+
+    Slogger.write({
+      action: 'invites/me',
+      type: 'composite route',
+      data: {
+        // request,
+        parameters,
+      }
+    });
 
     const options = { sort: { created_at: -1 } };
     options.limit = parseInt(lodash.get(parameters, 'query.limit')) || 25;
@@ -91,6 +109,15 @@ Meteor.routeComposite('invites/me', function(request, parameters) {
 
 Meteor.publishComposite('invites.new_invites_count', function({dateFrom}) {
     const user = Meteor.user();
+
+    const self = this;
+    Slogger.write({
+      action: 'invites.new_invites_count',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     const selector = {
         invitee_id: user._id,

@@ -22,6 +22,15 @@ Meteor.routeComposite('/networks/discover', function(request, parameters) {
         userId: Match.Optional(String)
     });
 
+    Slogger.write({
+      action: 'networks/discover',
+      type: 'composite route',
+      data: {
+        // request,
+        parameters
+      },
+    });
+
     parameters = {
         textSearch: parameters.query.textSearch,
         locationId: parameters.query.locationId,
@@ -61,6 +70,15 @@ Meteor.routeComposite('/networks/discover', function(request, parameters) {
 Meteor.publishComposite('networks.list', function() {
     this.unblock();
 
+    const self = this;
+    Slogger.write({
+      action: 'networks.list',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
+
     return {
         find: function() {
             return Networks.guardedFind(this.userId);
@@ -76,6 +94,15 @@ Meteor.publishComposite('networks.list', function() {
  */
 Meteor.publishComposite('networks.discoverfilter', function(urlParams, parameters, user) {
     if (this.unblock) this.unblock();
+
+    const self = this;
+    Slogger.write({
+      action: 'networks.discoverfilter',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     var userId = user ? user._id : this.userId;
 
@@ -103,6 +130,15 @@ Meteor.publishComposite('networks.one', function(networkSlug) {
     check(networkSlug, String);
 
     if (this.unblock) this.unblock();
+
+    const self = this;
+    Slogger.write({
+      action: 'networks.one',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     return {
         find: function() {
@@ -132,6 +168,17 @@ Meteor.publishComposite('networks.one.partups', function(urlParams, parameters) 
     check(urlParams, {
         slug: Match.Optional(String)
     });
+
+    const self = this;
+    Slogger.write({
+      action: 'networks.one.partups',
+      type: 'composite publication',
+      data: {
+        self,
+        parameters
+      }
+    });
+
 
     parameters = parameters || {};
     if (parameters.limit) parameters.limit = parseInt(parameters.limit);
@@ -197,6 +244,16 @@ Meteor.publishComposite('networks.one.uppers', function(urlParams, parameters) {
         slug: Match.Optional(String)
     });
 
+    const self = this;
+    Slogger.write({
+      action: 'networks.one.uppers',
+      type: 'composite publication',
+      data: {
+        self,
+        parameters
+      }
+    });
+
     parameters = parameters || {};
     if (parameters.limit) parameters.limit = parseInt(parameters.limit);
     if (parameters.skip) parameters.skip = parseInt(parameters.skip);
@@ -243,6 +300,15 @@ Meteor.publishComposite('networks.one.uppers', function(urlParams, parameters) {
 Meteor.publishComposite('networks.one.pending_uppers', function(networkSlug) {
     this.unblock();
 
+    const self = this;
+    Slogger.write({
+      action: 'networks.one.pending_uppers',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
+
     return {
         find: function() {
             var network = Networks.guardedFind(this.userId, { slug: networkSlug }).fetch().pop();
@@ -268,6 +334,16 @@ Meteor.publishComposite('networks.one.chat', function(networkSlug, parameters) {
     if (this.unblock) this.unblock();
 
     check(networkSlug, String);
+
+    const self = this;
+    Slogger.write({
+      action: 'networks.one.chat',
+      type: 'composite publication',
+      data: {
+        self,
+        parameters,
+      }
+    });
 
     parameters = parameters || {};
     if (parameters.limit) parameters.limit = parseInt(parameters.limit);
@@ -321,6 +397,15 @@ Meteor.publishComposite('networks.one.chat.for_web', function(networkSlug, param
     if (this.unblock) this.unblock();
 
     check(networkSlug, String);
+
+    const self = this;
+    Slogger.write({
+      action: 'networks.one.chat.for_web',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     parameters = parameters || {};
     if (parameters.limit) parameters.limit = parseInt(parameters.limit);
@@ -401,6 +486,15 @@ Meteor.publishComposite('networks.one.chat.for_web', function(networkSlug, param
 Meteor.publishComposite('networks.admin_all', function() {
     this.unblock();
 
+    const self = this;
+    Slogger.write({
+      action: 'networks.admin_all',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
+
     var user = Meteor.users.findOne(this.userId);
     if (!User(user).isAdmin()) return;
 
@@ -429,6 +523,15 @@ Meteor.publishComposite('networks.admin_all', function() {
  */
 Meteor.publishComposite('networks.admin_one', function(networkId) {
     check(networkId, String);
+
+    const self = this;
+    Slogger.write({
+      action: 'networks.admin_one',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     if (this.unblock) this.unblock();
 

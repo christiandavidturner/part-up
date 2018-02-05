@@ -29,6 +29,15 @@ Meteor.publishComposite('updates.one', function(updateId) {
 
     this.unblock();
 
+    const self = this;
+    Slogger.write({
+      action: 'updates.one',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
+
     return {
         find: function() {
             var updateCursor = Updates.find({_id: updateId}, {limit: 1});
@@ -65,8 +74,18 @@ Meteor.publishComposite('updates.from_partup', function(partupId, parameters, ac
         filter: Match.Optional(String)
     });
 
+
     this.unblock();
     var self = this;
+
+    Slogger.write({
+      action: 'updates.from_partup',
+      type: 'composite publication',
+      data: {
+        self,
+        parameters
+      }
+    });
 
     return {
         find: function() {
@@ -84,6 +103,15 @@ Meteor.publishComposite('updates.comments_by_update_ids', function(updateIds) {
     check(updateIds, [String]);
 
     this.unblock();
+
+    const self = this;
+    Slogger.write({
+      action: 'updates.comments_by_update_ids',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     const selector = {
         _id: {$in: updateIds},
@@ -103,6 +131,16 @@ Meteor.publishComposite('updates.comments_by_update_ids', function(updateIds) {
 
 Meteor.publishComposite('updates.new_conversations', function({dateFrom}) {
     const user = Meteor.user();
+
+    const self = this;
+    Slogger.write({
+      action: 'updates.new_conversations',
+      type: 'composite publication',
+      data: {
+        self,
+        dateFrom
+      }
+    });
 
     const partupIds = [
         ...(user.upperOf || []),
@@ -133,6 +171,17 @@ Meteor.publishComposite('updates.new_conversations', function({dateFrom}) {
 
 Meteor.publishComposite('updates.new_conversations_count', function({dateFrom}) {
     const user = Meteor.user();
+
+    const self = this;
+    Slogger.write({
+      action: 'updates.new_conversation_count',
+      type: 'composite publication',
+      data: {
+        self,
+        dateFrom
+      }
+    });
+
 
     const selector = {
         upper_data: {

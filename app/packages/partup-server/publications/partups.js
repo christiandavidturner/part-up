@@ -4,6 +4,15 @@
 Meteor.routeComposite('/partups/me', function(request, parameters) {
     const userId = parameters.query.userId || this.userId;
 
+    Slogger.write({
+      action: 'partups/me',
+      type: 'composite route',
+      data: {
+        // request,
+        parameters
+      }
+    });
+
     const user = Meteor.users.findOne(userId, { fields: { _id: 1, upperOf: 1, supporterOf: 1 } });
 
     const partupsCursor = Partups.guardedFind(user, { _id: { $in: [
@@ -20,6 +29,15 @@ Meteor.routeComposite('/partups/me', function(request, parameters) {
 Meteor.routeComposite('/partups/start', function(request, parameters) {
     const userId = parameters.query.userId || this.userId;
     const partupId = parameters.query.partupId;
+
+    Slogger.write({
+      action: 'partups/start',
+      type: 'composite route',
+      data: {
+        request,
+        parameters
+      }
+    });
 
     const user = Meteor.users.findOne(userId, { fields: { _id: 1, upperOf: 1, supporterOf: 1 } });
 
@@ -152,6 +170,15 @@ Meteor.routeComposite('/partups/updates', function(request, parameters) {
         partupId: Match.Optional(String),
     });
 
+    Slogger.write({
+      action: 'partups/updates',
+      type: 'composite route',
+      data: {
+        // request,
+        parameters
+      }
+    });
+
     const options = {};
 
     options.limit = parseInt(lodash.get(parameters, 'query.limit')) || 25;
@@ -260,6 +287,15 @@ Meteor.routeComposite('/partups/discover', function(request, parameters) {
         userId: Match.Optional(String)
     });
 
+    Slogger.write({
+      action: 'partups/discover',
+      type: 'composite route',
+      data: {
+        // request,
+        parameters
+      }
+    });
+
     parameters = {
         networkId: parameters.query.networkId,
         locationId: parameters.query.locationId,
@@ -300,6 +336,15 @@ Meteor.routeComposite('/partups/discover', function(request, parameters) {
 });
 
 Meteor.routeComposite('/partups/recommendations', function(request, parameters) {
+
+    Slogger.write({
+      action: 'partups/recommendations',
+      type: 'composite route',
+      data: {
+        // request,
+        parameters
+      }
+    });
 
     var userId = parameters.query.userId;
     var partupIds = [];
@@ -360,8 +405,16 @@ Meteor.routeComposite('/partups/recommendations', function(request, parameters) 
  */
 Meteor.publishComposite('partups.by_ids', function(partupIds) {
     if (_.isString(partupIds)) partupIds = _.uniq(partupIds.split(','));
-
     check(partupIds, [String]);
+
+    const self = this;
+    Slogger.write({
+      action: 'partups.by_ids',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     if (this.unblock) this.unblock();
 
@@ -396,6 +449,16 @@ Meteor.publishComposite('partups.by_ids', function(partupIds) {
  */
 Meteor.publishComposite('partups.by_network_id', function(networkId, options) {
     check(networkId, String);
+
+    const self = this;
+    Slogger.write({
+      action: 'partups.by_network_id',
+      type: 'composite publication',
+      data: {
+        self,
+        options
+      }
+    });
 
     var parameters = {};
     parameters.limit = options.limit || 10;
@@ -432,6 +495,15 @@ Meteor.publishComposite('partups.by_network_id', function(networkId, options) {
 Meteor.publish('partups.list', function() {
     this.unblock();
 
+    const self = this;
+    Slogger.write({
+      action: 'partups.list',
+      type: 'publication',
+      data: {
+        self,
+      }
+    });
+
     return Partups.guardedFind(this.userId, {}, { _id: 1, name: 1 });
 });
 
@@ -440,6 +512,16 @@ Meteor.publish('partups.list', function() {
  */
 Meteor.publishComposite('partups.home', function(language) {
     if (this.unblock) this.unblock();
+
+    const self = this;
+    Slogger.write({
+      action: 'partups.one',
+      type: 'composite publication',
+      data: {
+        self,
+        language
+      }
+    });
 
     return {
         find: function() {
@@ -474,6 +556,15 @@ Meteor.publishComposite('partups.home', function(language) {
 Meteor.publishComposite('partups.one', function(partupId, accessToken) {
     check(partupId, String);
     if (accessToken) check(accessToken, String);
+
+    const self = this;
+    Slogger.write({
+      action: 'partups.one',
+      type: 'composite publication',
+      data: {
+        self,
+      }
+    });
 
     this.unblock();
 
