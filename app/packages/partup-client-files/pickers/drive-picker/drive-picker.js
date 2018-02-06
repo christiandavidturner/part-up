@@ -82,16 +82,22 @@ Template.drivePicker.onRendered(function() {
 
     function createPicker(accessToken) {
         if (accessToken) {
-            const docksView = new google.picker.DocsView();
-            docksView.setIncludeFolders(true);
+            const personalView = new google.picker.DocsView();
+            personalView.setIncludeFolders(true);
+
+            const teamView = new google.picker.DocsView();
+            teamView.setIncludeFolders(true);
+            teamView.setEnableTeamDrives(true);
 
             const pickerBuilder = new google.picker.PickerBuilder();
 
-            pickerBuilder.enableFeature(
-                google.picker.Feature.MULTISELECT_ENABLED
-            );
-            pickerBuilder.addView(docksView);
+            pickerBuilder.enableFeature(google.picker.Feature.MULTISELECT_ENABLED);
+            pickerBuilder.enableFeature(google.picker.Feature.SUPPORT_TEAM_DRIVES);
+
+            pickerBuilder.addView(personalView);
+            pickerBuilder.addView(teamView);
             pickerBuilder.addView(new google.picker.DocsUploadView());
+
             pickerBuilder.setOAuthToken(accessToken);
             pickerBuilder.setCallback(pickerCallback);
 
