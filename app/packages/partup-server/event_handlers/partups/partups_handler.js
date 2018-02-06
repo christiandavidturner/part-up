@@ -85,7 +85,7 @@ Event.on('partups.inserted', function(userId, partup) {
                     creatorName: creator.profile.name,
                     partupName: partup.name,
                     networkName: network.name,
-                    url: Meteor.absoluteUrl() + 'partups/' + partup.slug,
+                    url: Meteor.absoluteUrl() + 'partups/' + partup.slug + '/start',
                     unsubscribeOneUrl: Meteor.absoluteUrl() + 'unsubscribe-email-one/partup_created_in_network/' + upper.profile.settings.unsubscribe_email_token,
                     unsubscribeAllUrl: Meteor.absoluteUrl() + 'unsubscribe-email-all/' + upper.profile.settings.unsubscribe_email_token
                 },
