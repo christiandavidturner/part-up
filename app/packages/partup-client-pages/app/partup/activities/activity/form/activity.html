@@ -86,6 +86,7 @@
 
         <footer class="pu-form-footer">
             <!-- {{#unless isExistingActivity}}pu-clear{{/unless }} -->
+          {{#unless CREATE }}
           <ul class="left">
               {{#if isExistingActivity }}
                   <li>
@@ -119,31 +120,34 @@
                   </li>
               {{/if }}
           </ul>
-            <ul>
-                <li>
-                    <button class="pu-button pu-button-text pu-button-text-subtle" data-dismiss>
-                        {{_ 'activity-form-close' }}
-                    </button>
-                </li>
-                <li>
-                    <button class="pu-button {{#if isSubmitting}}pu-state-loading{{/if}} {{#if fileController.uploading.get }}disabled{{/if}}" data-submit>
-                        <span>
-                            {{#if isExistingActivity }}
-                                {{_ 'activity-form-save' }}
+          {{/unless }}
+          <ul>
+              {{#unless CREATE }}
+              <li>
+                  <button class="pu-button pu-button-text pu-button-text-subtle" data-dismiss>
+                      {{_ 'activity-form-close' }}
+                  </button>
+              </li>
+              {{/unless }}
+              <li>
+                  <button class="pu-button {{#if isSubmitting}}pu-state-loading{{/if}} {{#if fileController.uploading.get }}disabled{{/if}}" data-submit>
+                      <span>
+                          {{#if isExistingActivity }}
+                              {{_ 'activity-form-save' }}
+                          {{ else }}
+                            {{#if screenWidthEqualOrAbove '465' }}
+                              {{_ 'activity-form-submit' }}
                             {{ else }}
-                              {{#if screenWidthEqualOrAbove '465' }}
-                                {{_ 'activity-form-submit' }}
-                              {{ else }}
-                                {{_ 'activity-form-submit-short' }}
-                              {{/if }}
+                              {{_ 'activity-form-submit-short' }}
                             {{/if }}
-                            {{#if isSubmitting }}
-                                {{> Spinner type='small' }}
-                            {{/if }}
-                        </span>
-                    </button>
-                </li>
-            </ul>
+                          {{/if }}
+                          {{#if isSubmitting }}
+                              {{> Spinner type='small' }}
+                          {{/if }}
+                      </span>
+                  </button>
+              </li>
+          </ul>
         </footer>
     {{/ autoForm }}
 </template>
