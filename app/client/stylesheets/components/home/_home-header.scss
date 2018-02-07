@@ -1,6 +1,6 @@
 .pu-home-header {
     position: relative;
-    height: 100vh;
+    height: 50vh;
     width: 100vw;
     background-image: url("/images/home-cover.jpg");
     background-size: cover;
@@ -81,9 +81,5 @@
         &__button {
             margin-top: 18vh;
         }
-    }
-
-    &--is-collapsed {
-        height: 50vh;
     }
 }
