@@ -1,6 +1,6 @@
 Template.app_home.onCreated(function() {
     var template = this;
-    template.intro = new ReactiveVar(false);
+    template.intro = new ReactiveVar(true);
     template.segments = new ReactiveVar(false);
     template.carousel = new ReactiveVar(false);
     template.products = new ReactiveVar(false);
