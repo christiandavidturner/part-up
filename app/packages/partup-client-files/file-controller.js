@@ -78,8 +78,8 @@ class _FileController {
 
                     const collection = Partup.helpers.files.isImage(file) ? 'images' : 'files';
 
-                    Meteor.call(`${collection}.insert`, file, function (error, { _id }) {
-                        if (!_id) {
+                    Meteor.call(`${collection}.insert`, file, function (error, result) {
+                        if (!result || !result._id) {
                             reject(error || {
                                 ...baseError,
                                 code: 1,
@@ -87,7 +87,7 @@ class _FileController {
                             });
                         }
                         if (collection === 'images') {
-                            Meteor.call(`${collection}.get`, _id, function (err, res) {
+                            Meteor.call(`${collection}.get`, result._id, function (err, res) {
                                 if (res && res.length) {
                                     resolve(...res);
                                 } else {
@@ -96,7 +96,7 @@ class _FileController {
                             });
                         } else {
                             resolve(Object.assign({
-                                _id,
+                                _id: result._id,
                             }, file));
                         }
                     });
