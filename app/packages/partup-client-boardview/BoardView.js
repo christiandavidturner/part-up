@@ -277,28 +277,7 @@ Template.BoardView.events({
           if (error) {
             return Partup.client.notify.error(error.message);
           }
-          // Need to w8 until the DOM is updated..
-          // Meteor.defer(() => {
-          //   let interValHandle;
-          //   let tries = 0;
-          //   const makeNewLaneSortable = () => {
-          //     const el = template.find(`[data-sortable-lane=${result}]`);
-          //     if (el) {
-          //       template.sortableLanes.push(
-          //         createSortableLane(el, template.sortableLaneHandlers),
-          //       );
-          //       clearInterval(interValHandle);
-          //     }
-          //     tries++;
-
-          //     if (tries > 9) {
-          //       clearInterval(interValHandle);
-          //       template.resetSortable();
-          //     }
-          //   };
-          //   interValHandle = setInterval(makeNewLaneSortable, 300); // longer than all used debounces;
-          // });
-        })
+        });
     },
     'click [data-add-button]': function(event, template) {
         event.preventDefault();
@@ -316,7 +295,7 @@ Template.BoardView.events({
 
         Partup.client.prompt.confirm({
             title: TAPi18n.__('prompt-lane-remove-title'),
-            message: TAPi18n.__('prompt-lane-remove-message', { fromlane: laneId.name, tolane: newLane.name }),
+            message: TAPi18n.__('prompt-lane-remove-message', { fromlane: lane.name, tolane: newLane.name }),
             onConfirm: function() {
               Meteor.call('lanes.remove', laneId, (error) => {
                 if (error) {
