@@ -126,7 +126,7 @@
 
     .pu-boardview-card {
         margin-bottom: 10px;
-        
+
     }
 
     &--is-ghost {
@@ -139,12 +139,6 @@
         .pu-boardview-lane__footer,
         .pu-boardview-lane__content {
             visibility: hidden;
-        }
-    }
-
-    &--is-dragging {
-        .pu-boardview-lane__content {
-            display: none;
         }
     }
 }

@@ -23,7 +23,7 @@ Meteor.methods({
 
         try {
             var activity = Partup.transformers.activity.fromForm(fields, upper._id, partupId);
-            
+
             // Insert activity
             activity._id = Activities.insert(activity);
 
@@ -66,7 +66,7 @@ Meteor.methods({
         if (fields && fields.end_date && typeof fields.end_date === "string") {
            fields.end_date = moment(fields.end_date).toDate()
         }
-        
+
         check(activityId, String);
         check(fields, Partup.schemas.forms.startActivities);
         var upper = Meteor.users.findOneOrFail(this.userId);
@@ -97,6 +97,40 @@ Meteor.methods({
             Log.error(error);
             throw new Meteor.Error(500, 'activity_could_not_be_updated');
         }
+    },
+
+    'activities.move_lane': function(activityId, opts) {
+      const {
+        fromLaneId,
+        fromLaneActivityIds,
+        toLaneId,
+        toLaneActivityIds,
+      } = opts;
+      check(activityId, String);
+      check(opts, {
+        fromLaneId: String,
+        fromLaneActivityIds: [String],
+        toLaneId: String,
+        toLaneActivityIds: [String],
+      });
+
+      const user = Meteor.user();
+      const activity = Activities.findOneOrFail(activityId);
+
+      if (!User(user).isPartnerInPartup(activity.partup_id)) {
+        throw new Error(401, 'unauthorized');
+      }
+
+      try {
+        Activities.update(activityId, { $set: { lane_id: toLaneId, updated_at: new Date() } });
+        Lanes.update(fromLaneId, { $set: { activities: fromLaneActivityIds, update_at: new Date() } });
+        Lanes.update(toLaneId, { $set: { activities: toLaneActivityIds, update_at: new Date() } });
+
+        return true;
+      } catch(error) {
+        Log.error(error);
+        throw new Error(500, 'activity_could_not_be_updated');
+      }
     },
 
     /**
