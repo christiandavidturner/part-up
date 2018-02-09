@@ -1,3 +1,25 @@
+<a name="3.7.0"></a>
+# [3.7.0](https://github.com/part-up/part-up/compare/3.6.1...3.7.0) (2018-01-30)
+
+
+### Bug Fixes
+
+* **client:** Add line break title -> subtitle ([c43349e](https://github.com/part-up/part-up/commit/c43349e))
+* **client:** Add normalized_name to private user fields ([f3a9e9e](https://github.com/part-up/part-up/commit/f3a9e9e))
+* **client:** Allow partners to edit activities ([280e23e](https://github.com/part-up/part-up/commit/280e23e))
+* **client:** Apply styles to dashboard root ([0aab4d5](https://github.com/part-up/part-up/commit/0aab4d5))
+* **client:** Check flag enum of enum is defined instead of value ([85c10e2](https://github.com/part-up/part-up/commit/85c10e2))
+* **client:** Don't redirect supporters to /start ([b79b64a](https://github.com/part-up/part-up/commit/b79b64a))
+* **client:** Update feature flags enum ([bd778d6](https://github.com/part-up/part-up/commit/bd778d6))
+
+
+### Features
+
+* **client:** Add feature flag to development config ([751ba16](https://github.com/part-up/part-up/commit/751ba16))
+* **client:** Move update title to subtitle position ([6c28914](https://github.com/part-up/part-up/commit/6c28914))
+
+
+
 <a name="3.6.1"></a>
 ## [3.6.1](https://github.com/part-up/part-up/compare/3.6.0...3.6.1) (2018-01-24)
 
