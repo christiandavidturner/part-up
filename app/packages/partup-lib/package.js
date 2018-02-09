@@ -27,7 +27,8 @@ Package.onUse(function(api) {
     ]);
 
     api.use([
-        'templating'
+        'templating',
+        'meteorhacks:subs-manager',
     ], 'client');
 
     api.addFiles([
@@ -112,6 +113,10 @@ Package.onUse(function(api) {
     ]);
 
     api.addFiles([
+      'submanager.js',
+    ], ['client']);
+
+    api.addFiles([
         'startup/default_profile_pictures.js',
         'startup/default_partup_pictures.js'
     ], ['server']);
@@ -166,6 +171,7 @@ Package.onUse(function(api) {
 
     api.export('FEATURE_FLAGS');
     api.export('features');
+    api.export('subManager', 'client');
 });
 
 Package.onTest(function(api) {
