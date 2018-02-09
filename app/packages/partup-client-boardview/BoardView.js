@@ -1,4 +1,4 @@
-import { debounce, defer, each, get, throttle, findIndex, sortBy } from 'lodash';
+import { debounce, defer, each, get, throttle, findIndex } from 'lodash';
 import Sortable from './Sortable';
 
 Template.BoardView.onCreated(function() {
@@ -13,9 +13,18 @@ Template.BoardView.onCreated(function() {
     this.board = {};
     this.lanes = [];
 
+    let shouldResetSortableLanes;
+
     const updateChanges = debounce(() => {
       this.shouldUpdate.changed();
-    }, 200);
+
+      if (shouldResetSortableLanes) {
+        setTimeout(() => {
+          resetLanes();
+          shouldResetSortableLanes = false;
+        }, 0);
+      }
+    }, 100);
 
     this.autorun(() => {
       const dragging = this.dragging.get();
@@ -53,6 +62,10 @@ Template.BoardView.onCreated(function() {
           }
         });
 
+        if (this.lanes.length !== lanes.length) {
+          shouldResetSortableLanes = true;
+        }
+
         this.lanes = lanes;
         updateChanges();
       }
@@ -73,6 +86,24 @@ Template.BoardView.onCreated(function() {
       onSort: laneSort,
     };
     this.sortableLanes = [];
+
+    const createSortableLanes = () => {
+      this.$('[data-sortable-lane]')
+        .each((index, laneEl) => {
+          this.sortableLanes.push(createSortableLane(laneEl, this.sortableLaneHandlers));
+        });
+    };
+
+    const destroyLanes = () => {
+      while (this.sortableLanes.length) {
+        this.sortableLanes.shift().destroy();
+      }
+    }
+
+    const resetLanes = () => {
+      destroyLanes();
+      createSortableLanes();
+    }
 
     this.createSortable = () => {
       if (!this.boardEl) {
@@ -97,16 +128,11 @@ Template.BoardView.onCreated(function() {
         }
       });
 
-      this.$('[data-sortable-lane]')
-        .each((index, laneEl) => {
-          this.sortableLanes.push(createSortableLane(laneEl, this.sortableLaneHandlers));
-        });
+      createSortableLanes();
     }
 
     this.destroySortable = () => {
-      while(this.sortableLanes.length) {
-        this.sortableLanes.shift().destroy();
-      }
+      destroyLanes();
       if (this.sortableBoard) {
         this.sortableBoard.destroy();
       }
@@ -252,26 +278,26 @@ Template.BoardView.events({
             return Partup.client.notify.error(error.message);
           }
           // Need to w8 until the DOM is updated..
-          Meteor.defer(() => {
-            let interValHandle;
-            let tries = 0;
-            const makeNewLaneSortable = () => {
-              const el = template.find(`[data-sortable-lane=${result}]`);
-              if (el) {
-                template.sortableLanes.push(
-                  createSortableLane(el, template.sortableLaneHandlers),
-                );
-                clearInterval(interValHandle);
-              }
-              tries++;
+          // Meteor.defer(() => {
+          //   let interValHandle;
+          //   let tries = 0;
+          //   const makeNewLaneSortable = () => {
+          //     const el = template.find(`[data-sortable-lane=${result}]`);
+          //     if (el) {
+          //       template.sortableLanes.push(
+          //         createSortableLane(el, template.sortableLaneHandlers),
+          //       );
+          //       clearInterval(interValHandle);
+          //     }
+          //     tries++;
 
-              if (tries > 9) {
-                clearInterval(interValHandle);
-                template.resetSortable();
-              }
-            };
-            interValHandle = setInterval(makeNewLaneSortable, 300); // longer than all used debounces;
-          });
+          //     if (tries > 9) {
+          //       clearInterval(interValHandle);
+          //       template.resetSortable();
+          //     }
+          //   };
+          //   interValHandle = setInterval(makeNewLaneSortable, 300); // longer than all used debounces;
+          // });
         })
     },
     'click [data-add-button]': function(event, template) {
