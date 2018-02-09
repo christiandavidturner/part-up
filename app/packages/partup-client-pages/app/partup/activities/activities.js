@@ -35,15 +35,16 @@ Template.app_partup_activities.onCreated(function() {
         }
     };
 
-    template.createNewActivity = function(laneId) {
+    template.createNewActivity = function(laneId, callback) {
         var userId = Meteor.userId();
         var proceed = function() {
             Partup.client.popup.open({
                 id: 'new-activity',
                 parameters: {
-                    laneId: laneId
-                }
-            });
+                  laneId: laneId
+                },
+            },
+            callback);
         };
 
         if (!userId) {
@@ -119,6 +120,15 @@ Template.app_partup_activities.events({
     'click [data-new-activity]': function(event, template) {
         event.preventDefault();
 
-        template.createNewActivity();
+        template.createNewActivity(null, () => {
+          const board = Boards.findOne({ partup_id: template.data.partupId });
+          if (board && board.lanes) {
+            const firstlane = board.lanes[0];
+            const $lane = $(`[data-sortable-lane=${firstlane}]`);
+            setTimeout(() => {
+              $lane.animate({ scrollTop: $lane[0].scrollHeight }, '300');
+            }, 250);
+          }
+        });
     }
 });

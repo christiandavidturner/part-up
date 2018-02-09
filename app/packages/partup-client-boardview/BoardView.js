@@ -282,7 +282,12 @@ Template.BoardView.events({
     'click [data-add-button]': function(event, template) {
         event.preventDefault();
         let laneId = $(event.currentTarget).data('add-button');
-        template.data.onAdd(laneId);
+        template.data.onAdd(laneId, () => {
+          const $lane = $(`[data-sortable-lane=${laneId}]`);
+          setTimeout(() => {
+            $lane.animate({ scrollTop: $lane[0].scrollHeight }, '300');
+          }, 250);
+        });
     },
     'click [data-remove-button]': function(event, template) {
         event.preventDefault();
