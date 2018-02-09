@@ -1,3 +1,30 @@
+<a name="3.8.0"></a>
+# [3.8.0](https://github.com/part-up/part-up/compare/3.7.0...3.8.0) (2018-02-09)
+
+
+### Bug Fixes
+
+* **client:** Add language selector for logged out users ([34266fa](https://github.com/part-up/part-up/commit/34266fa))
+* **client:** Add subs to subsmanager ([dcbe57a](https://github.com/part-up/part-up/commit/dcbe57a))
+* **client:** Change route to partup-home for partup_created notificaion ([d83d0ce](https://github.com/part-up/part-up/commit/d83d0ce))
+* **client:** Disable activty actions in partup create flow ([64fcb63](https://github.com/part-up/part-up/commit/64fcb63))
+* **client:** Fix users methods to check for partner or supporter ([5a18d42](https://github.com/part-up/part-up/commit/5a18d42))
+* **client:** Hide more menu below 485px ([747ca01](https://github.com/part-up/part-up/commit/747ca01))
+* **client:** No longer destrucure _id from result when uploading files ([28a6bc3](https://github.com/part-up/part-up/commit/28a6bc3))
+* **client:** Partup_created email directs to /start ([1d82504](https://github.com/part-up/part-up/commit/1d82504))
+* **client:** Remove VWO script ([dafb6c4](https://github.com/part-up/part-up/commit/dafb6c4))
+* **client:** Set correct this reference for IsPartnerOrSupporterInPartup ([135f2c8](https://github.com/part-up/part-up/commit/135f2c8))
+
+
+### Features
+
+* **client:** Change home cover image ([64abb0e](https://github.com/part-up/part-up/commit/64abb0e))
+* **client:** Enable TeamDrives ([f729123](https://github.com/part-up/part-up/commit/f729123))
+* **client:** Reduce homepage-image filter to from .5 to .4 ([f954899](https://github.com/part-up/part-up/commit/f954899))
+* **client:** Remove state from homepage header ([22325d2](https://github.com/part-up/part-up/commit/22325d2))
+
+
+
 <a name="3.7.0"></a>
 # [3.7.0](https://github.com/part-up/part-up/compare/3.6.1...3.7.0) (2018-01-30)
 
