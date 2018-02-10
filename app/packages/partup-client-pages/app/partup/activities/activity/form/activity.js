@@ -185,7 +185,7 @@ Template.activityForm.events({
             function(error, result) {
                 templateInstance.destroy();
                 if (Partup.client.popup.current.get()) {
-                    Partup.client.popup.close();
+                    Partup.client.popup.close(null);
                 }
             }
         );
@@ -229,11 +229,10 @@ AutoForm.hooks({
                 activityForm.partupId,
                 formData,
                 function(error, result) {
-                    if (Partup.client.popup.current.get()) {
-                        Partup.client.popup.close();
-                    }
-
                     if (result && result._id) {
+                        if (Partup.client.popup.current.get()) {
+                            Partup.client.popup.close(result._id);
+                        }
                         try {
                             analytics.track('activity inserted', {
                                 partupId: activityForm.partupId,
@@ -266,6 +265,9 @@ AutoForm.hooks({
                     } else if (error) {
                         AutoForm.validateForm('newActivityForm');
                         self.done(new Error(error.message));
+                        if (Partup.client.popup.current.get()) {
+                            Partup.client.popup.close(null);
+                        }
                         return;
                     }
 
@@ -308,10 +310,10 @@ AutoForm.hooks({
                 activityForm.activity._id,
                 formData,
                 function(error, result) {
-                    if (Partup.client.popup.current.get().length) {
-                        Partup.client.popup.close();
-                    }
                     if (result && result._id) {
+                        if (Partup.client.popup.current.get().length) {
+                            Partup.client.popup.close(result._id);
+                        }
                         try {
                             AutoForm.resetForm('editActivityForm');
                         } catch (err) {
@@ -319,6 +321,9 @@ AutoForm.hooks({
                         }
                         self.done();
                     } else if (error) {
+                        if (Partup.client.popup.current.get().length) {
+                            Partup.client.popup.close(null);
+                        }
                         Partup.client.notify.error(error.message);
                         AutoForm.validateForm('editActivityForm');
                         self.done(new Error(error.message));
