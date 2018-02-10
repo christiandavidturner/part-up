@@ -33,7 +33,7 @@ Template.BoardView.onCreated(function() {
           shouldResetSortableLanes = false;
         }, 50);
       }
-    }, 150);
+    }, 100);
 
     this.autorun(() => {
       debug.log('autorun triggered');
@@ -44,7 +44,7 @@ Template.BoardView.onCreated(function() {
         debug.log('discontinue autorun: ', { dragging, loading, waitingForUpdateResult });
         return;
       }
-      console.log('continue autorun: ', { dragging, loading, waitingForUpdateResult });
+      debug.log('continue autorun: ', { dragging, loading, waitingForUpdateResult });
 
       const board = Boards.findOne({ partup_id: partupId });
       if (board) {
@@ -88,8 +88,8 @@ Template.BoardView.onCreated(function() {
 
         this.lanes = lanes;
 
-        // For the very first render we don't want to wait 150ms for the debounced update.
-        // this means that after 150ms it will get re-rendered but the user get's to see the content 150ms faster.
+        // For the very first render we don't want to wait for the debounced update
+        // this means that after 150ms it will get re-rendered but the user get's to see the content faster
         if (initialLoad) {
           this.shouldUpdate.changed();
           initialLoad = false;
@@ -436,6 +436,11 @@ const createSortableLane = (DOMNode, handlers) => {
 }
 
 const sortLaneHandle = (template) => ({ from, to, oldIndex, newIndex }) => {
+  if (template.waitingForUpdateResult.curValue) {
+    debug.log('sortLaneHandle: still waiting on previous request to server');
+    return true;
+  }
+
   const fromLaneId = $(from).data('sortable-lane');
   const toLaneId = $(to).data('sortable-lane');
 
@@ -478,8 +483,6 @@ const sortLaneHandle = (template) => ({ from, to, oldIndex, newIndex }) => {
     debug.log('call to \'activities.move_lane\' finished', { error, result });
     if (error) {
       Partup.client.notify.error(error.message);
-      // reset local state.
-      template.shouldUpdate.changed();
     }
   });
 };
