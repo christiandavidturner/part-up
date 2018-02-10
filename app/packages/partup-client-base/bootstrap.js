@@ -1,3 +1,5 @@
+import { get } from 'lodash';
+
 /**
  * This component contains all of the generic shared front-end functionality
  *
@@ -180,5 +182,18 @@ Meteor.startup(function() {
     Intent.configure({
         debug: false,
         default_route_name: 'home'
+    });
+
+    /*************************************************************/
+    /* Always clear the cached subscriptions when logging out */
+    /*************************************************************/
+    Partup.client.user.onAfterLogout(() => {
+      if (subManager) {
+        Object.keys(subManager).forEach((key) => {
+          if (get(subManager, `${key}.clear`)) {
+            subManager[key].clear();
+          }
+        })
+      }
     });
 });
