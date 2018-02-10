@@ -101,17 +101,13 @@ Meteor.methods({
 
     'activities.move_lane': function(activityId, opts) {
       const {
-        fromLaneId,
-        fromLaneActivityIds,
         toLaneId,
-        toLaneActivityIds,
+        newIndex,
       } = opts;
       check(activityId, String);
       check(opts, {
-        fromLaneId: String,
-        fromLaneActivityIds: [String],
         toLaneId: String,
-        toLaneActivityIds: [String],
+        newIndex: Number,
       });
 
       const user = Meteor.user();
@@ -122,12 +118,28 @@ Meteor.methods({
       }
 
       try {
+        const toLane = Lanes.findOneOrFail(toLaneId);
+        const activityIds = _.uniq(toLane.activities);
+        _.remove(activityIds, activityId);
+        activityIds.splice(newIndex, 0, activityId);
+
         Activities.update(activityId, { $set: { lane_id: toLaneId, updated_at: new Date() } });
-        Lanes.update(fromLaneId, { $set: { activities: fromLaneActivityIds, update_at: new Date() } });
-        Lanes.update(toLaneId, { $set: { activities: toLaneActivityIds, update_at: new Date() } });
+        Lanes.update(toLane._id, { $set: { activities: activityIds, update_at: new Date() } });
+
+        // Remove activity from other lanes;
+        Lanes.find({ _id: { $ne: toLaneId }, activities: activityId }).forEach((lane) => {
+          Lanes.update(lane._id, { $set: { activities: _.pull(lane.activities, activityId), updated_at: new Date() } });
+        });
 
         return true;
-      } catch(error) {
+      } catch (error) {
+        const originalLane = Lanes.findOneOrFail(activity.lane_id);
+        const hasActivity = originalLane.activities.indexOf(activity._id);
+        if (!hasActivity) {
+          Log.error('Something went wrong with moving an activity, inserting activity back to original lane');
+          Lanes.update(originalLane._id, { $push: { activities: activity._id } });
+        };
+
         Log.error(error);
         throw new Error(500, 'activity_could_not_be_updated');
       }
