@@ -1,3 +1,16 @@
+<a name="3.8.1"></a>
+## [3.8.1](https://github.com/part-up/part-up/compare/3.8.0...3.8.1) (2018-02-09)
+
+
+### Bug Fixes
+
+* **client:** Add lane name to prompt remove lane message ([5ccd769](https://github.com/part-up/part-up/commit/5ccd769))
+* **client:** Auto scroll bottom lane after create activity ([44e5ec7](https://github.com/part-up/part-up/commit/44e5ec7))
+* **client:** re-initiate sortable on lane change ([626d876](https://github.com/part-up/part-up/commit/626d876))
+* **client:** Rewrite boardview ([5ae4dfa](https://github.com/part-up/part-up/commit/5ae4dfa))
+
+
+
 <a name="3.8.0"></a>
 # [3.8.0](https://github.com/part-up/part-up/compare/3.7.0...3.8.0) (2018-02-09)
 
