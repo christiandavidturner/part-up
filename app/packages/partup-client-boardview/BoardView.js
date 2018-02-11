@@ -1,4 +1,4 @@
-import { debounce, defer, each, get, throttle, find, findIndex } from 'lodash';
+import { debounce, defer, includes, remove, each, get, throttle, find, findIndex } from 'lodash';
 import Sortable from './Sortable';
 
 const { debug } = Partup.client;
@@ -14,7 +14,6 @@ Template.BoardView.onCreated(function() {
     this.addLane = new ReactiveVar(false);
 
     this.shouldUpdate = new Tracker.Dependency();
-    this.waitingForUpdateResult = new ReactiveVar(false);
     this.board = {};
     this.lanes = [];
 
@@ -25,7 +24,6 @@ Template.BoardView.onCreated(function() {
     // Autorun get's triggered many times. deboucing the update makes sure the UI only get's updated once.
     const updateChanges = debounce(() => {
       debug.log('updateChanges invoked');
-
       if (this.dragging.curValue) {
         return;
       }
@@ -36,25 +34,42 @@ Template.BoardView.onCreated(function() {
         sortableResetTimer = setTimeout(() => {
           resetLanes();
           shouldResetSortableLanes = false;
-        }, 40);
+        }, 10);
       }
-    }, 50);
+      // // See autorun
+      // setTimeout(() => {
+      //   this.sortableLanes.forEach((sl) => {
+      //     sl.option('disabled', false);
+      //   });
+      // }, 80);
+    }, 100);
 
+    // This will run many times for 1 sync cycle.
+    // The dragging state ultimately ends the cycle and enables a DOM update given by the server.
     this.autorun(() => {
       debug.log('autorun triggered');
+
       const dragging = this.dragging.get();
       const loading = this.loading.get();
-      const waitingForUpdateResult = this.waitingForUpdateResult.get();
-      if (dragging || loading || waitingForUpdateResult) {
-        debug.log('discontinue autorun: ', { dragging, loading, waitingForUpdateResult });
+      if (dragging || loading) {
+        debug.log('discontinue autorun: ', { dragging, loading });
         return;
       }
-      debug.log('continue autorun: ', { dragging, loading, waitingForUpdateResult });
+      debug.log('continue autorun: ', { dragging, loading });
+
+      // // If necessary sortable can be disabled while updating the DOM.
+      // // This removed the posibility of duplicate cards being created altogether but has a negative impact on the UX.
+      // // Since the case is so edgy it's commented out for now.
+      // this.sortableLanes.forEach((sl) => {
+      //   sl.option('disabled', true);
+      // });
 
       const board = Boards.findOne({ partup_id: partupId });
       if (board) {
         this.board = board;
 
+        // The order of activity ids within lanes is the order presented in the UI,
+        // therefore sorting is required after every sync.
         const lanes = Lanes.find({ _id: { $in: board.lanes } })
           .map((lane) => {
             const order = [...lane.activities];
@@ -86,17 +101,13 @@ Template.BoardView.onCreated(function() {
           }
         });
 
+        // In the event of a new lane added or removed we need to re-instantiate sortable
         if (this.lanes.length !== lanes.length) {
           clearTimeout(sortableResetTimer);
           shouldResetSortableLanes = true;
         }
 
         this.lanes = lanes;
-
-        const dragging = this.dragging.get();
-        if (dragging) {
-          return;
-        }
 
         // For the very first render we don't want to wait for the debounced update
         // this means that after 150ms it will get re-rendered but the user get's to see the content faster
@@ -114,19 +125,38 @@ Template.BoardView.onCreated(function() {
      */
 
     const laneSort = debounce(sortLaneHandle(template), 50);
+
+    let disabledDrag;
+    let delayedDragTimer;
+
+    // The delay for setting dragging to false is required to stop autorun from updating the UI too soon.
+    // A user might pick up a card right in the middle of the UI update and duplicate cards appear on the board.
+    // if a user picks up a card within 190ms setting draggin to false will never run and a sync cycle is skipped until the user is done dragging.
     const setDelayedDragging = (val) => () => {
-      setTimeout(() => {
+      delayedDragTimer = setTimeout(() => {
         debug.log('set dragging state: ', val);
         template.dragging.set(val);
-      }, 70);
+        disabledDrag = false;
+      }, 190);
     };
 
     this.sortableLaneHandlers = {
+      onChoose(evt) {
+        if (template.dragging.curValue) {
+          disabledDrag = true;
+        }
+      },
       onStart() {
+        clearTimeout(delayedDragTimer);
         template.dragging.set(true);
       },
       onEnd: setDelayedDragging(false),
       onSort: laneSort,
+      onMove: () => {
+        if (disabledDrag) {
+          return false;
+        }
+      }
     };
     this.sortableLanes = [];
 
@@ -451,42 +481,26 @@ const createSortableLane = (DOMNode, handlers) => {
   });
 }
 
-const sortLaneHandle = (template) => ({ from, to, oldIndex, newIndex }) => {
+const sortLaneHandle = (template) => ({ from, to, item, oldIndex, newIndex }) => {
   debug.log('sortLaneHandle invoked');
 
   try {
     const fromLaneId = $(from).data('sortable-lane');
     const toLaneId = $(to).data('sortable-lane');
-    const fromLane = find(template.lanes, (l) => l._id === fromLaneId);
-    const activity = fromLane.activities.slice(oldIndex, 1)[0];
-
-    if (!activity) {
-      return true;
-    }
-
-    // This might not be necessary anymore because the server makes sure the activity is alawys unique within the lanes
-    // For now this safeguard makes sure there can be no duplications made when the server is still processing the previous move of the same activity
-    // if (template.waitingForUpdateResult.curValue === activity._id) {
-    //   Partup.client.notify.info(TAPi18n.__('activity-being-processed', { name: activity.name }));
-    //   return true;
-    // }
+    const activityId = $(item).data('activity');
 
     debug.log('calling activities.move_lane', {
-      activity: activity,
-      fromLaneId,
-      oldIndex,
+      activityId,
       toLaneId,
       newIndex,
     });
 
-    template.waitingForUpdateResult.set(true);
-    Meteor.call('activities.move_lane', activity._id, {
+    Meteor.call('activities.move_lane', activityId, {
       toLaneId,
       newIndex,
     }, (error, result) => {
-      template.waitingForUpdateResult.set(false);
-      debug.log('call to \'activities.move_lane\' finished', { error, result });
       if (error) {
+        template.updateChanges();
         Partup.client.notify.error(error.message);
       }
     });
