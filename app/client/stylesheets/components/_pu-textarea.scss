@@ -1,7 +1,6 @@
 .pu-textarea {
     @extend .pu-input;
 
-    height: auto;
     max-width: 100%;
     min-width: 100%;
     min-height: 132px;
@@ -10,8 +9,8 @@
     overflow-x: hidden; // Required for firefox!
 
     &-grow {
-        height: auto;
         min-height: 46px;
+        max-height: 200px;
         line-height: normal;
     }
 

@@ -1,4 +1,5 @@
 import {strings} from 'meteor/partup-client-base';
+import autosize from 'autosize';
 
 // jscs:disable
 /**
@@ -70,6 +71,17 @@ Template.Comments.onRendered(function() {
     template.mentionsInput = Partup.client.forms.MentionsInput(template.input, {partupId: partupId});
     Partup.client.elements.onClickOutside([template.list], template.resetEditCommentForm);
 
+    autosize(template.$('.pu-textarea-grow'));
+});
+
+Template.Comments.onDestroyed(function() {
+  var template = this;
+  // destroy all evil memory leaks
+  if (template.mentionsInput) template.mentionsInput.destroy();
+  if (template.mentionsEditInput) template.mentionsEditInput.destroy();
+  Partup.client.elements.offClickOutside(template.resetEditCommentForm);
+
+  autosize.destroy(template.$('.pu-textarea-grow'));
 });
 
 Template.afFieldInput.onRendered(function() {
@@ -92,13 +104,7 @@ Template.afFieldInput.onRendered(function() {
     });
 });
 
-Template.Comments.onDestroyed(function() {
-    var template = this;
-    // destroy all evil memory leaks
-    if (template.mentionsInput) template.mentionsInput.destroy();
-    if (template.mentionsEditInput) template.mentionsEditInput.destroy();
-    Partup.client.elements.offClickOutside(template.resetEditCommentForm);
-});
+
 
 Template.Comments.helpers({
     // state helpers
@@ -367,6 +373,7 @@ AutoForm.addHooks(null, {
         var self = this;
         var formNameParts = self.formId.split('-');
         var template = self.template.parent();
+
         // abort if it's the wrong form
         if (formNameParts.length !== 2 || (formNameParts[0] !== 'updateCommentForm' && formNameParts[0] !== (template.uniqueId + 'commentForm'))) return false;
         self.event.preventDefault();
@@ -401,6 +408,7 @@ AutoForm.addHooks(null, {
                 template.currentEditCommentId.set(false);
                 template.tooManyUpdateCharacters.set(false);
                 template.submittingForm.set(false);
+                autosize.update(template.$('.pu-textarea-grow'));
                 self.done();
             });
         } else {
@@ -436,6 +444,7 @@ AutoForm.addHooks(null, {
                 template.messageRows.set(1);
                 template.tooManyCharacters.set(false);
                 template.tooManyUpdateCharacters.set(false);
+                autosize.update(template.$('.pu-textarea-grow'));
 
                 template.submitButtonActive.set(false);
                 self.done();

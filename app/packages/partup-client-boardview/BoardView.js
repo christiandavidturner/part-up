@@ -1,10 +1,14 @@
-import { debounce, defer, each, get, throttle, findIndex } from 'lodash';
+import { debounce, defer, includes, remove, each, get, throttle, find, findIndex } from 'lodash';
 import Sortable from './Sortable';
+
+const { debug } = Partup.client;
+// debug.enable(true); // false by default;
 
 Template.BoardView.onCreated(function() {
     const template = this;
     const partupId = this.data.partupId;
 
+    this.loading = new ReactiveVar(true);
     this.dragging = new ReactiveVar(false);
     this.editLane = new ReactiveVar(undefined);
     this.addLane = new ReactiveVar(false);
@@ -14,28 +18,58 @@ Template.BoardView.onCreated(function() {
     this.lanes = [];
 
     let shouldResetSortableLanes;
+    let sortableResetTimer;
+    let initialLoad = true;
 
+    // Autorun get's triggered many times. deboucing the update makes sure the UI only get's updated once.
     const updateChanges = debounce(() => {
+      debug.log('updateChanges invoked');
+      if (this.dragging.curValue) {
+        return;
+      }
+
       this.shouldUpdate.changed();
 
       if (shouldResetSortableLanes) {
-        setTimeout(() => {
+        sortableResetTimer = setTimeout(() => {
           resetLanes();
           shouldResetSortableLanes = false;
-        }, 0);
+        }, 10);
       }
+      // // See autorun
+      // setTimeout(() => {
+      //   this.sortableLanes.forEach((sl) => {
+      //     sl.option('disabled', false);
+      //   });
+      // }, 80);
     }, 100);
 
+    // This will run many times for 1 sync cycle.
+    // The dragging state ultimately ends the cycle and enables a DOM update given by the server.
     this.autorun(() => {
+      debug.log('autorun triggered');
+
       const dragging = this.dragging.get();
-      if (dragging) {
+      const loading = this.loading.get();
+      if (dragging || loading) {
+        debug.log('discontinue autorun: ', { dragging, loading });
         return;
       }
+      debug.log('continue autorun: ', { dragging, loading });
+
+      // // If necessary sortable can be disabled while updating the DOM.
+      // // This removed the posibility of duplicate cards being created altogether but has a negative impact on the UX.
+      // // Since the case is so edgy it's commented out for now.
+      // this.sortableLanes.forEach((sl) => {
+      //   sl.option('disabled', true);
+      // });
 
       const board = Boards.findOne({ partup_id: partupId });
       if (board) {
         this.board = board;
 
+        // The order of activity ids within lanes is the order presented in the UI,
+        // therefore sorting is required after every sync.
         const lanes = Lanes.find({ _id: { $in: board.lanes } })
           .map((lane) => {
             const order = [...lane.activities];
@@ -54,6 +88,11 @@ Template.BoardView.onCreated(function() {
             return lane;
           });
 
+        debug.log('mapped lanes', {
+          previous: template.lanes,
+          new: lanes,
+        });
+
         each(board.lanes, (bl, i) => {
           const ui = findIndex(lanes, (l) => l._id === bl);
           if (i !== ui) {
@@ -62,12 +101,22 @@ Template.BoardView.onCreated(function() {
           }
         });
 
+        // In the event of a new lane added or removed we need to re-instantiate sortable
         if (this.lanes.length !== lanes.length) {
+          clearTimeout(sortableResetTimer);
           shouldResetSortableLanes = true;
         }
 
         this.lanes = lanes;
-        updateChanges();
+
+        // For the very first render we don't want to wait for the debounced update
+        // this means that after 150ms it will get re-rendered but the user get's to see the content faster
+        if (initialLoad) {
+          this.shouldUpdate.changed();
+          initialLoad = false;
+        } else {
+          updateChanges();
+        }
       }
     });
 
@@ -76,34 +125,60 @@ Template.BoardView.onCreated(function() {
      */
 
     const laneSort = debounce(sortLaneHandle(template), 50);
-    const setDragging = (val) => () => {
-      setTimeout(() => template.dragging.set(val), 200);
+
+    let disabledDrag;
+    let delayedDragTimer;
+
+    // The delay for setting dragging to false is required to stop autorun from updating the UI too soon.
+    // A user might pick up a card right in the middle of the UI update and duplicate cards appear on the board.
+    // if a user picks up a card within 190ms setting draggin to false will never run and a sync cycle is skipped until the user is done dragging.
+    const setDelayedDragging = (val) => () => {
+      delayedDragTimer = setTimeout(() => {
+        debug.log('set dragging state: ', val);
+        template.dragging.set(val);
+        disabledDrag = false;
+      }, 190);
     };
 
     this.sortableLaneHandlers = {
-      onStart: setDragging(true),
-      onEnd: setDragging(false),
+      onChoose(evt) {
+        if (template.dragging.curValue) {
+          disabledDrag = true;
+        }
+      },
+      onStart() {
+        clearTimeout(delayedDragTimer);
+        template.dragging.set(true);
+      },
+      onEnd: setDelayedDragging(false),
       onSort: laneSort,
+      onMove: () => {
+        if (disabledDrag) {
+          return false;
+        }
+      }
     };
     this.sortableLanes = [];
 
     const createSortableLanes = () => {
-      this.$('[data-sortable-lane]')
-        .each((index, laneEl) => {
-          this.sortableLanes.push(createSortableLane(laneEl, this.sortableLaneHandlers));
-        });
+      if (User(Meteor.user()).isPartnerInPartup(this.data.partupId)) {
+        this.$('[data-sortable-lane]')
+          .each((index, laneEl) => {
+            this.sortableLanes.push(createSortableLane(laneEl, this.sortableLaneHandlers));
+          });
+      }
     };
 
     const destroyLanes = () => {
       while (this.sortableLanes.length) {
         this.sortableLanes.shift().destroy();
       }
-    }
+    };
 
     const resetLanes = () => {
       destroyLanes();
       createSortableLanes();
-    }
+    };
 
     this.createSortable = () => {
       if (!this.boardEl) {
@@ -111,13 +186,15 @@ Template.BoardView.onCreated(function() {
       }
 
       this.sortableBoard = createSortableBoard(this.boardEl, {
-        onStart: setDragging(true),
-        onEnd: setDragging(false),
+        onStart() {
+          template.dragging.set(true);
+        },
+        onEnd: setDelayedDragging(false),
         onUpdate({ oldIndex, newIndex }) {
           const boardId = get(template.board, '_id');
           if (boardId) {
             template.lanes.splice(newIndex, 0, template.lanes.splice(oldIndex, 1)[0]);
-            const lanes = (template.lanes || []).map(lane => lane._id);
+            const lanes = template.lanes.map(lane => lane._id);
 
             Meteor.call('boards.update', boardId, { lanes }, (error) => {
               if (error) {
@@ -129,64 +206,75 @@ Template.BoardView.onCreated(function() {
       });
 
       createSortableLanes();
-    }
+    };
 
     this.destroySortable = () => {
       destroyLanes();
       if (this.sortableBoard) {
         this.sortableBoard.destroy();
       }
-    }
+    };
 
     this.resetSortable = () => {
       this.destroySortable();
       this.createSortable();
-    }
+    };
+
+    // A timeout is used to wait with the autorun and sortable until the navigation is done to improve UX
+    setTimeout(() => {
+      this.loading.set(false);
+    }, 0);
 });
 
 Template.BoardView.onRendered(function() {
-  const template = this;
-  Meteor.defer(() => {
-    this.boardEl = this.find('[data-sortable-board]');
-    // Only make the board sortable when the user is an upper, else do some magic to tell the user they can't drag
-    if (User(Meteor.user()).isPartnerInPartup(this.data.partupId)) {
-      this.createSortable();
-    } else {
-      let mouseAction = false;
-      let isDragging = false;
-      let recentlyNotified = false;
-      let lastX;
-      let lastY;
-      const offset = 15;
+  this.autorun((computation) => {
+    if (!this.loading.get()) {
+      Meteor.defer(() => {
+        this.boardEl = this.find('[data-sortable-board]');
+        // Only make the board sortable when the user is an upper, else do some magic to tell the user they can't drag
+        if (User(Meteor.user()).isPartnerInPartup(this.data.partupId)) {
+          this.createSortable();
+        } else {
+          let mouseAction = false;
+          let isDragging = false;
+          let recentlyNotified = false;
+          let lastX;
+          let lastY;
+          const offset = 15;
 
-      $(this.boardEl)
-        .mousedown((event) => {
-          mouseAction = true;
-          lastX = event.screenX;
-          lastY = event.screenY;
-        })
-        .mousemove(throttle((event) => {
-          if (mouseAction) {
-            if ((event.screenX > (lastX + offset) || (event.screenX < lastX - offset))
-              || (event.screenY > (lastY + offset) || event.screenY < lastY - offset)) {
-                isDragging = true;
+          $(this.boardEl)
+            .mousedown((event) => {
+              mouseAction = true;
+              lastX = event.screenX;
+              lastY = event.screenY;
+            })
+            .mousemove(throttle((event) => {
+              if (mouseAction) {
+                if ((event.screenX > (lastX + offset) || (event.screenX < lastX - offset))
+                  || (event.screenY > (lastY + offset) || event.screenY < lastY - offset)) {
+                    isDragging = true;
+                  } else {
+                    isDragging = false;
+                  }
+              } else {
+                isDragging = false;
               }
-          } else {
-            isDragging = false;
-          }
-        }, 500))
-        .mouseup(() => {
-          if (isDragging && !recentlyNotified) {
-            Partup.client.notify.info(TAPi18n.__('activity-dragging-disabled'));
-            recentlyNotified = true;
+            }, 500))
+            .mouseup(() => {
+              if (isDragging && !recentlyNotified) {
+                Partup.client.notify.info(TAPi18n.__('activity-dragging-disabled'));
+                recentlyNotified = true;
 
-            setTimeout(() => {
-              recentlyNotified = false;
-            }, 10000);
-          }
-          mouseAction = false;
-          isDragging = false;
-        });
+                setTimeout(() => {
+                  recentlyNotified = false;
+                }, 10000);
+              }
+              mouseAction = false;
+              isDragging = false;
+            });
+        }
+      });
+      computation.stop();
     }
   });
 });
@@ -197,6 +285,7 @@ Template.BoardView.onDestroyed(function() {
     if (User(Meteor.user()).isPartnerInPartup(template.data.partupId)) {
       template.destroySortable();
     } else {
+      // unbind all events used to let user know they can't drag
       $(template.boardEl).unbind();
     }
 });
@@ -236,8 +325,6 @@ Template.BoardView.events({
               $('[data-lane-name-input]').focus();
               $('[data-lane-name-input]')[0].select();
           });
-        } else {
-          // Post message to user that only uppers can edit lane names
         }
     },
     'keyup [data-lane-name-input]': function(event, template) {
@@ -394,42 +481,30 @@ const createSortableLane = (DOMNode, handlers) => {
   });
 }
 
-const sortLaneHandle = (template) => ({ from, to, oldIndex, newIndex }) => {
-  const fromLaneId = $(from).data('sortable-lane');
-  const toLaneId = $(to).data('sortable-lane');
-  let fromLane;
-  let toLane;
-  each(template.lanes, (lane) => {
-    if (lane._id === fromLaneId) {
-      fromLane = lane;
-      if (fromLaneId === toLaneId) {
-        toLane = lane;
-        return false;
+const sortLaneHandle = (template) => ({ from, to, item, oldIndex, newIndex }) => {
+  debug.log('sortLaneHandle invoked');
+
+  try {
+    const fromLaneId = $(from).data('sortable-lane');
+    const toLaneId = $(to).data('sortable-lane');
+    const activityId = $(item).data('activity');
+
+    debug.log('calling activities.move_lane', {
+      activityId,
+      toLaneId,
+      newIndex,
+    });
+
+    Meteor.call('activities.move_lane', activityId, {
+      toLaneId,
+      newIndex,
+    }, (error, result) => {
+      if (error) {
+        template.updateChanges();
+        Partup.client.notify.error(error.message);
       }
-    }
-    if (lane._id === toLaneId) {
-      toLane = lane;
-    }
-  });
-
-  const activity = fromLane.activities.splice(oldIndex, 1)[0];
-  toLane.activities.splice(newIndex, 0, activity);
-
-  const fromLaneActivityIds = fromLane.activities.map((activity) => activity._id);
-  const toLaneActivityIds = toLane.activities.map((activity) => activity._id);
-
-  Meteor.call('activities.move_lane', activity._id, {
-    fromLaneId,
-    fromLaneActivityIds,
-    toLaneId,
-    toLaneActivityIds,
-  }, (error, result) => {
-    if (error) {
-      Partup.client.notify.error(error.message);
-
-      // reset local state.
-      fromLane.activities.splice(oldIndex, 0, toLane.activities.splice(newIndex, 1)[0]);
-      template.shouldUpdate.changed();
-    }
-  });
+    });
+  } catch (error) {
+    Partup.client.notify.error(TAPi18n.__('activity-move-lane-failed'));
+  }
 };

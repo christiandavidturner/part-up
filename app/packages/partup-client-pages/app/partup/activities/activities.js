@@ -1,3 +1,5 @@
+import { isString } from 'lodash';
+
 Template.app_partup_activities.onCreated(function() {
     var template = this;
     template.partup = Partups.findOne(template.data.partupId);
@@ -120,15 +122,17 @@ Template.app_partup_activities.events({
     'click [data-new-activity]': function(event, template) {
         event.preventDefault();
 
-        template.createNewActivity(null, () => {
-          const board = Boards.findOne({ partup_id: template.data.partupId });
-          if (board && board.lanes) {
-            const firstlane = board.lanes[0];
-            const $lane = $(`[data-sortable-lane=${firstlane}]`);
-            setTimeout(() => {
-              $lane.animate({ scrollTop: $lane[0].scrollHeight }, '300');
-            }, 250);
+        template.createNewActivity(null, (id) => {
+          if (isString(id)) {
+            const board = Boards.findOne({ partup_id: template.data.partupId });
+            if (board && board.lanes) {
+              const firstlane = board.lanes[0];
+              const $lane = $(`[data-sortable-lane=${firstlane}]`);
+              setTimeout(() => {
+                $lane.animate({ scrollTop: $lane[0].scrollHeight }, '300');
+              }, 250);
+            }
           }
         });
-    }
+    },
 });

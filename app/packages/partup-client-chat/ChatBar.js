@@ -1,3 +1,5 @@
+import autosize from 'autosize';
+
 var continueOnCreated = function(chatId) {
     var template = this;
     template.chatId = chatId;
@@ -70,11 +72,18 @@ Template.ChatBar.onRendered(function() {
     var input = template.find('[data-mentionsinput]');
     if (template.mentionsInput) template.mentionsInput.destroy();
     template.mentionsInput = Partup.client.forms.MentionsInput(input);
+
+    autosize(input);
 });
 
 Template.ChatBar.onDestroyed(function() {
     var template = this;
-    if (template.mentionsInput) template.mentionsInput.destroy();
+    const input = template.find('[data-mentionsinput]');
+    autosize.destroy(input);
+
+    if (template.mentionsInput) {
+      template.mentionsInput.destroy();
+    }
 });
 
 Template.ChatBar.helpers({

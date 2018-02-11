@@ -11,7 +11,15 @@
 
     .pu-title {
         margin-bottom: 20px;
-        white-space: nowrap;
+
+        @include goingLarge(357) {
+          width: 80%;
+        }
+
+        @include goingLarge(400) {
+          width: auto;
+          white-space: nowrap;
+        }
     }
 
     .pu-centerview {

@@ -1,4 +1,5 @@
 <template name="BoardView">
+  {{#unless loading }}
     <div class="pu-boardview" data-sortable-board id="board">
         {{#each lanes}}
             <div class="pu-boardview-lane pu-js-sortable-lane" data-lane="{{ _id }}">
@@ -38,4 +39,7 @@
             {{/if}}
         {{/if}}
     </div>
+    {{ else }}
+      {{> Loader ALIGNMENT='center' }}
+    {{/unless }}
 </template>
