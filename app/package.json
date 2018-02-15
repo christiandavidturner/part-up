@@ -33,6 +33,7 @@
     "sanitize-html": "^1.14.1"
   },
   "devDependencies": {
+    "@meteorjs/eslint-config-meteor": "^1.0.5",
     "babel-eslint": "^7.2.3",
     "concurrently": "^3.5.0",
     "eslint": "^4.2.0",
@@ -43,8 +44,7 @@
     "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-meteor": "^4.1.4",
-    "eslint-plugin-react": "^7.1.0",
-    "prettier": "^1.9.2"
+    "eslint-plugin-react": "^7.1.0"
   },
   "eslintConfig": {
     "extends": "@meteorjs/eslint-config-meteor",
@@ -66,11 +66,5 @@
         }
       ]
     }
-  },
-  "prettier": {
-    "arrowParens": "always",
-    "eslintIntegration": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
   }
 }
