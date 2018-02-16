@@ -93,6 +93,7 @@ meteorspark:util@0.2.0
 minifier-css@1.2.16
 minifier-js@2.2.2
 minimongo@1.4.3
+mixmax:smart-disconnect@0.0.4
 mizzao:timesync@0.3.4
 mizzao:user-status@0.6.7
 mobile-experience@1.0.5
