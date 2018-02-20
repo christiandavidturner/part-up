@@ -161,8 +161,8 @@ Template.ActivityView.helpers({
     lane: function() {
         const laneId = get(this.activity, 'lane_id');
         if (laneId) {
-            const partupId = get(this.activity, 'partup_id') || this.partupId;
-            if (get(Partups.findOne({ _id: partupId }), 'board_view')) {
+            const partupId = _.get(this.activity, 'partup_id') || this.partupId;
+            if (_.get(Partups.findOne({ _id: partupId }), 'board_view')) {
                 return Lanes.findOne({ _id: laneId });
             }
         }
