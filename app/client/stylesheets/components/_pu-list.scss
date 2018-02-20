@@ -136,6 +136,7 @@
         li {
             // overflow: hidden;
             white-space: normal;
+            padding: 5px 0px;
         }
 
         li + li {
@@ -143,13 +144,12 @@
         }
 
         li:first-child {
-            margin-top: 15px;
+            margin-top: 5px;
         }
 
         li:last-child {
-            margin-bottom: -8px;
+          padding-bottom: 0;
         }
-
         p {
             font-size: 14px;
 
@@ -549,11 +549,6 @@
         padding-left: 60px;
         padding-right: 60px;
         position: relative;
-
-        li:last-child {
-            //margin-right: 0
-
-        }
 
         @media screen and (min-width: $breakpoint-desktop) and (min-height: $breakpoint-tablet + 1px) {
             padding-left: 80px;

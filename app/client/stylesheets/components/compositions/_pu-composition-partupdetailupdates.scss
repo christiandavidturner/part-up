@@ -1,3 +1,9 @@
+.pu-commentform {
+  .pu-list {
+    margin-top: 10px;
+  }
+}
+
 .pu-composition-partupdetailupdates {
     $dotted-line-color: #ccc;
 
@@ -75,6 +81,7 @@
         .pu-textline {
             font-size: 14px;
             color: $color-primary;
+            margin-top: 0;
 
             &:after {
                 border-top: 2px solid $color-primary;
@@ -108,6 +115,7 @@
         }
     }
 
+
     .pu-sub-revealupdatesbutton {
         aside {
             height: 1px;
@@ -126,6 +134,9 @@
 
     .pu-update:last-of-type {
         margin-bottom: 200px;
+    }
+    .pu-update.pu-sub-revealupdatesbutton {
+      margin: 15px 0px 15px 80px;
     }
 
     .pu-update + .pu-temporary-loadmore {

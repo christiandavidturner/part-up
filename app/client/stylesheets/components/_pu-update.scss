@@ -1,210 +1,61 @@
 .pu-update {
     @extend %clearfix;
+    display: flex;
 
-    .pu-star-update {
-        display: inline-block;
-        margin-right: 5px;
+    > aside, > article {
+      display: inline-block;
+      position: relative;
+      vertical-align: top;
     }
 
-    .extra-margin {
-        margin-top: 16px;
+    > aside {
+      width: 80px;
+
+      .pu-sub-time {
+        color: $color-text;
+        font-size: 12px;
+        font-family: $font-primary;
+        letter-spacing: 0.6px;
+      }
     }
 
-    .pu-commentfield {
-        padding: em(5) em(10) em(10) em(10);
+    > article {
+      flex: 1 1;
+
+      > header > h3 {
+        font-size: 15px;
+        color: $color-secondary;
+        font-weight: 600;
+        margin: 8px 0px;
+
+        a {
+          color: $color-secondary;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      > section > article {
+        padding: 20px 10px;
+      }
+
+      > footer {
+        padding: 10px;
         border: 2px solid #eee;
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
         margin-top: -3px;
-        background-color: #ffffff;
-    }
+        background: #fff;
 
-
-    > aside, > section {
-        position: relative;
-        float: none;
-        width: 100%;
-    }
-
-    > aside {
-        @extend %clearfix;
-
-        .pu-avatar {
-            float: left;
-            background-color: transparent;
+        span.pu-sub-seperator {
+          &:after {
+            content: "•";
+            margin: 0px 5px;
+          }
         }
-
-        .pu-sub-time {
-            display: inline-block;
-            margin-left: 15px;
-            color: #7f7f7f;
-            font-size: 12px;
-            font-family: $font-primary;
-            line-height: 39px;
-            letter-spacing: 0.6px;
-        }
-    }
-
-    > section {
-        > header {
-            margin-left: 115px;
-            margin-top: -42px;
-
-            @extend %clearfix;
-
-            h3 {
-                float: left;
-                font-size: 15px;
-                color: $color-secondary;
-                font-weight: 600;
-                margin-top: 8px;
-
-                a {
-                    color: $color-secondary;
-                    text-decoration: none;
-
-                    &:hover {
-                        text-decoration: underline;
-                    }
-                }
-            }
-
-            .pu-button-text {
-                float: right;
-                color: #999;
-                opacity: 0;
-                pointer-events: none;
-                margin-bottom: -18px;
-                transform: translateY(8px);
-
-                &:hover {
-                    color: #595959;
-                }
-            }
-        }
-
-        > section {
-            margin-top: 16px;
-
-            // Type-specific
-            .pu-title-large {
-                margin-top: -9px;
-                margin-bottom: -5px;
-            }
-
-            .pu-paragraph-large {
-                margin-top: -7px;
-                margin-bottom: -9px;
-            }
-        }
-
-        footer {
-            .pu-sub-view-all-comments-button {
-                font-size: 14px;
-                color: $color-text-subtle;
-                margin-top: 5px;
-                // margin-bottom: -10px;
-
-                a {
-                    color: $color-text-subtle;
-
-                    &.pu-sub-action,
-                    &:hover,
-                    &:active,
-                    &:focus {
-                        color: $color-secondary;
-                    }
-                }
-
-                span.pu-sub-seperator {
-                    &:after {
-                        content: "•";
-                        margin-left: 5px;
-                        margin-right: 5px;
-                    }
-                }
-            }
-
-            .pu-list-fieldwithbutton {
-                margin-top: 15px;
-            }
-
-            form {
-                display: none;
-
-                &.pu-state-expanded {
-                    display: block;
-                }
-            }
-        }
-    }
-
-    > section > header .pu-button-text {
-        opacity: 1;
-        transform: none;
-        pointer-events: visible;
-    }
-
-    &-placeholder {
-        margin-top: 80px;
-
-        > section {
-            width: 100%;
-            float: none;
-
-            p {
-                width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-                color: #999;
-                font-weight: bold;
-                font-size: 20px;
-                text-align: center;
-            }
-        }
-    }
-
-    @media screen and (min-width: $breakpoint-partup-medium) {
-        > aside, > section {
-            float: left;
-        }
-
-        > aside {
-            width: 130px;
-            margin-top: -8px;
-
-            .pu-sub-time {
-                margin-left: 29px;
-            }
-        }
-
-        > section {
-            width: calc(100% - 130px);
-
-            > header {
-                position: relative;
-                margin: 0;
-                margin-bottom: 16px;
-                width: auto;
-
-                h3 {
-                    margin-top: 0px;
-                }
-            }
-        }
-    }
-
-    @media screen and (min-width: $breakpoint-tablet + 1px) {
-        > section > header .pu-button-text {
-            opacity: 0;
-            transform: translateY(8px);
-            pointer-events: none;
-        }
-
-        &:hover > section > header .pu-button-text {
-            opacity: 1;
-            transform: none;
-            pointer-events: visible;
-        }
+      }
     }
 }
