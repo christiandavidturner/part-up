@@ -1,6 +1,5 @@
 <template name="app_partup_activities">
     <div class="pu-composition pu-composition-partupdetailactivities{{#if boardViewEnabled }} pu-composition-partupdetailactivities-board{{/if}}">
-
         {{#if partupIsPopupActive 'new-activity' }}
             {{#contentFor "PopupTitle" }}
                 {{_ "activity-form-title-new"}}
@@ -14,7 +13,6 @@
             {{/contentFor }}
         {{/if}}
 
-        <!-- Header buttons -->
         <header class="pu-row">
             <div class="cell stretch">
                 <a class="pu-button pu-button-icon" href="#" data-new-activity>
@@ -22,15 +20,15 @@
                     {{_ "pages-app-partup-activities-newactivity_button"}}
                 </a>
             </div>
-            {{#unless boardViewEnabled }}
+            {{#unless boardview }}
                 <div class="cell last">
                     <div class="pu-row">
                         <div class="cell">
                             {{#if screenSizeIsMinimalWidth 'tablet'}}
-                                {{> PartialDropdownActivitiesActions reactiveVar=filterReactiveVar}}
+                                {{> PartialDropdownActivitiesActions reactiveVar=filter}}
                             {{else}}
                                 {{#PartupExpander label='Filter'}}
-                                    {{> PartialDropdownActivitiesActions reactiveVar=filterReactiveVar}}
+                                    {{> PartialDropdownActivitiesActions reactiveVar=filter}}
                                 {{/PartupExpander}}
                             {{/if}}
                         </div>
@@ -39,29 +37,27 @@
             {{/unless}}
         </header>
 
-        <!-- Loading/rendering state -->
-        {{# if activitiesLoading }}
+        {{# if loading }}
             {{> Loader ALIGNMENT='center' }}
         {{ else }}
-            {{#if boardViewEnabled}}
-                {{> BoardView partupId=partupId activities=allActivities onAdd=onAddHook }}
+            {{#if boardview}}
+                {{> BoardView partupId=partupId onAdd=onAddHook }}
             {{ else}}
-                {{# each activities }}
-                    {{> Activity activity=. EXPANDABLE=true COMMENTS_LINK=true isUpper=isUpper LIST_VIEW=true }}
-                {{/ each }}
+                {{#each activities }}
+                    {{> Activity activity=. }}
+                {{/each }}
 
-                {{# if archivedActivities }}
+                {{#if archivedActivities }}
                     <p class="pu-textline">
                         <span>
                             {{_ "pages-app-partup-activities-archivedactivities_heading" }}
                             <span class="picon-arrow-down"></span>
                         </span>
                     </p>
-                {{/ if }}
-
-                {{# each archivedActivities }}
-                    {{> Activity activity=. EXPANDABLE=true isUpper=isUpper LIST_VIEW=true }}
-                {{/ each }}
+                    {{#each archivedActivities }}
+                        {{> Activity activity=. EXPANDABLE=true isUpper=isUpper LIST_VIEW=true }}
+                    {{/each }}
+                {{/if }}
 
                 {{#unless activities }}
                     {{#unless archivedActivities }}
@@ -73,9 +69,6 @@
                     {{/unless }}
                 {{/unless }}
             {{/if}}
-
-
-        {{/ if }}
-
+        {{/if }}
     </div>
 </template>

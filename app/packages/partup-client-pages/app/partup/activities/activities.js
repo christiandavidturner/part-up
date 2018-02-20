@@ -1,128 +1,92 @@
-import { isString } from 'lodash';
+import { assign, get, isString, isFunction, noop } from 'lodash';
+
+const activityFilters = {
+  default: 'default',
+  my: 'my-activities',
+  open: 'open-activities',
+};
+
+const openPopup = (laneId, callback) => {
+  Partup.client.popup.open({
+    id: 'new-activity',
+    parameters: {
+      laneId,
+    }
+  }, callback);
+};
+const createActivity = (laneId, callback) => {
+  if (Meteor.userId()) {
+    openPopup(laneId, callback);
+  } else {
+    Intent.go({ route: 'login' }, (user) => {
+      if (user) {
+        openPopup(laneId, callback);
+      }
+    });
+  }
+};
+
+const findActivities = (partupId, filter, options = {}) => {
+  const selector = assign({
+    partup_id: partupId,
+    archived: { $ne: true }
+  }, options);
+
+  if (filter === activityFilters.my) {
+    selector.creator_id = Meteor.userId();
+  }
+
+  return Activities.find(selector).fetch()
+    .filter((activity) => {
+      if (filter === activityFilters.open) {
+        return Contributions.find({ activity_id: activity._id }).count() === 0;
+      }
+      return true;
+    })
+    .sort(Partup.client.sort.dateASC.bind(null, 'created_at'))
+    .sort(Partup.client.sort.dateASC.bind(null, 'end_date'));
+}
 
 Template.app_partup_activities.onCreated(function() {
-    var template = this;
-    template.partup = Partups.findOne(template.data.partupId);
+  const template = this;
+  const partup = Partups.findOne(this.data.partupId);
 
-    template.activities = {
-
-        // States
-        loading: new ReactiveVar(false),
-
-        // Filter
-        filter: new ReactiveVar('default'),
-
-        // All activities
-        all: function(options) {
-            var options = options || {};
-
-            var filter = template.activities.filter.get();
-
-            var activities = Activities
-                .findForPartup(template.partup, {}, {archived: !!options.archived})
-                .fetch()
-            .filter(function(activity, idx) {
-                    if (filter === 'my-activities')
-                        return activity.creator_id && activity.creator_id === Meteor.user()._id;
-
-                    if (filter === 'open-activities')
-                        return Contributions.findForActivity(activity).count() === 0;
-
-                    return true;
-                })
-                .sort(Partup.client.sort.dateASC.bind(null, 'created_at'))
-                .sort(Partup.client.sort.dateASC.bind(null, 'end_date'));
-
-            return activities;
-        }
-    };
-
-    template.createNewActivity = function(laneId, callback) {
-        var userId = Meteor.userId();
-        var proceed = function() {
-            Partup.client.popup.open({
-                id: 'new-activity',
-                parameters: {
-                  laneId: laneId
-                },
-            },
-            callback);
-        };
-
-        if (!userId) {
-            Intent.go({route: 'login'}, function(user) {
-                if (user) proceed();
-            });
-        } else {
-            proceed();
-        }
-    };
+  this.loading = new ReactiveVar(false);
+  this.filter = new ReactiveVar(activityFilters.default);
 });
 
 Template.app_partup_activities.helpers({
-    activities: function() {
-        return Template.instance().activities.all({archived: false});
-    },
-    allActivities: function() {
-        return Template.instance().activities.all();
-    },
-    archivedActivities: function() {
-        return Template.instance().activities.all({archived: true});
-    },
-    isUpper: function() {
-        var partupId = Template.instance().data.partupId;
-        var partup = Partups.findOne({_id: partupId});
-
-        if (!partup || !partup.uppers) return false;
-
-        var user = Meteor.user();
-        if (!user) return false;
-
-        return partup.uppers.indexOf(user._id) > -1;
-    },
-    filterReactiveVar: function() {
-        return Template.instance().activities.filter;
-    },
-
-    // Loading state
-    activitiesLoading: function() {
-        return Template.instance().activities.loading.get();
-    },
-
-    createCallback: function() {
-        var template = Template.instance();
-        return function(activityId) {
-            Meteor.defer(function() {
-
-                Partup.client.scroll.to(template.find('[data-activity-id=' + activityId + ']'), 0, {
-                    duration: 250,
-                    callback: function() {
-                        template.$('[data-activity-id=' + activityId + ']').addClass('pu-state-highlight');
-                    }
-                });
-
-            });
-        };
-    },
-    boardViewEnabled: function() {
-        var template = Template.instance();
-        var partup = Partups.findOne(template.data.partupId);
-        if (!partup) return false;
-        return partup.board_view;
-    },
-    partupId: function() {
-        return Template.instance().data.partupId;
-    },
-    onAddHook: function() {
-        return Template.instance().createNewActivity;
-    }
+  activities() {
+    const activeFilter = Template.instance().filter.get();
+    return findActivities(this.partupId, activeFilter);
+  },
+  archivedActivities: function() {
+    const activeFilter = Template.instance().filter.get();
+    return findActivities(this.partupId, activeFilter, { archived: true });
+  },
+  isUpper() {
+    return User(Meteor.user()).isPartnerInPartup(this.partupId);
+  },
+  filter() {
+    return Template.instance().filter;
+  },
+  loading() {
+    return Template.instance().loading.get();
+  },
+  boardview() {
+    const partup = Partups.findOne(this.partupId);
+    return partup ? partup.board_view : false;
+  },
+  onAddHook: function() {
+    return createActivity;
+  }
 });
 
 Template.app_partup_activities.events({
     'click [data-new-activity]': function(event, template) {
         event.preventDefault();
 
-        template.createNewActivity(null, (id) => {
+        createActivity(null, (id) => {
           if (isString(id)) {
             const board = Boards.findOne({ partup_id: template.data.partupId });
             if (board && board.lanes) {
