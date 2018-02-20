@@ -1,95 +1,47 @@
 <template name="Update">
-    <section class="pu-update">
-        <aside>
+  <section class="pu-update">
+    <aside>
+      {{#if update.system }}
+        <figure class="pu-avatar pu-avatar-update pu-avatar-system">
+            <span class="pu-sub-image"></span>
+        </figure>
+      {{ else }}
+        <figure class="pu-avatar pu-avatar-update">
+            <a href="{{ pathFor route='profile' _id=update.upper_id }}" rel="author" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ update.upper_id }}" class="pu-sub-image" style="{{#with metadata.updateUpper.profile.image }}background-image: url('{{ partupImageUrl id=. store='80x80' }}');{{/with}}"></a>
+        </figure>
+      {{/if }}
 
-            <!-- User -->
-            {{# if metadata.is_system }}
-                <figure class="pu-avatar pu-avatar-update pu-avatar-system">
-                    <span class="pu-sub-image"></span>
-                </figure>
-            {{ else }}
-                <figure class="pu-avatar pu-avatar-update">
-                    <a href="{{ pathFor route='profile' _id=metadata.updateUpper._id }}" rel="author" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ metadata.updateUpper._id }}" class="pu-sub-image" style="{{#with metadata.updateUpper.profile.image }}background-image: url('{{ partupImageUrl id=. store='80x80' }}');{{/with}}"></a>
-                </figure>
-            {{/ if }}
+      <p class="pu-sub-time">
+        <time datetime="{{ update.updated_at.toISOString }}" title="{{ partupDateFull update.updated_at }}">{{ partupDatePartupActivity update.updated_at }}</time>
+      </p>
+    </aside>
+    <article>
+      <header>
+        <h3>
+          {{#if LINK }}
+            <a href="{{ updateMeta.titlePath }}">{{ updateMeta.title }}</a>
+          {{else}}
+            {{ updateMeta.title }}
+          {{/if }}
+        </h3>
+      </header>
 
-            <!-- Time -->
-            <p class="pu-sub-time">
-                <time datetime="{{ metadata.updated_at.toISOString }}" title="{{ partupDateFull metadata.updated_at }}">{{ partupDatePartupActivity metadata.updated_at }}</time>
-            </p>
+      {{#if update.system }}
+        <p class="pu-paragraph">{{{ systemMessageContent }}}</p>
+      {{ else }}
+        {{> Template.dynamic template=updateMeta.templateName data=update }}
+      {{/if }}
 
-        </aside>
-        <section>
-            <!-- Title & first comment button -->
-            <header>
-                <h3>
-                    {{#if LINK }}
-                        <a href="{{ metadata.path }}">{{ update.title }}</a>
-                    {{else}}
-                        {{ update.title }}
-                    {{/if }}
-                </h3>
+      {{#if update.isActivityUpdate }}
+        {{> Activity activity=updateMeta.activity READONLY=NOT_DETAIL EXPANDABLE=DETAIL EXPANDED=DETAIL UPDATE_LINK=NOT_DETAIL }}
+      {{/if }}
+      {{#if update.isContributionUpdate }}
+        {{> Activity activity=updateMeta.activity contribution_id=update.type_data.contribution_id READONLY=true COMPACT=true EXPANDED=true }}
+      {{/if }}
 
-                <!-- Top comment button -->
-
-                {{# if update.mayComment }}
-                    {{# if metadata.is_contribution }}
-                        <!-- When the update is a contribution-update, link to the activity -->
-                        <a class="pu-button pu-button-text" href="{{ metadata.path }}">{{_ 'update-comment-button' }}</a>
-                    {{ else }}
-
-                        <!-- Only show the comment button when the update is commentable -->
-                        <!-- {{# if update.showCommentButton }}
-                                <a class="pu-button pu-button-text" data-expand-comment-field>{{_ 'update-comment-button' }}</a>
-                        {{/ if }} -->
-
-                    {{/ if }}
-                {{/ if }}
-
-
-            </header>
-
-            <!-- - - - - - - - - - - TYPES START - - - - - - - - - - -->
-            {{# if metadata.is_system }}
-                {{# with update.data.type_data }}
-                    <section>
-                        <article class="pu-block pu-block-message">
-                            <p class="pu-paragraph">{{{ update.systemMessageContent }}}</p>
-                        </article>
-                    </section>
-                {{/ with}}
-            {{ else }}
-
-                {{> Template.dynamic template=update.templateName data=update.data }}
-            {{/if}}
-
-            <!-- activity related updates -->
-            {{# if update.data.isActivityUpdate }}
-                {{#with update.data.type_data }}
-                    <section>
-                        {{> Activity activity=update.activityData EXPANDABLE=update.isDetail EXPANDED=update.isDetail UPDATE_LINK=update.isNotDetail READONLY=update.isNotDetail isUpper=update.isUpper FILES_EXPANDED=update.FILES_EXPANDED COMMENTS_EXPANDED=commentsExpanded }}
-                    </section>
-                {{/with}}
-            {{/if }}
-
-            <!-- contribution related updates -->
-            {{#if update.data.isContributionUpdate }}
-                {{#with update.data.type_data }}
-                    <section>
-                        {{> Activity activity=update.activityData contribution_id=contribution_id COMPACT=true EXPANDED=true READONLY=true FILES_EXPANDED=FILES_EXPANDED COMMENTS_EXPANDED=commentsExpanded }}
-                    </section>
-                {{/with}}
-            {{/if }}
-
-            <!-- - - - - - - - - - - TYPES END - - - - - - - - - - -->
-
-            <!-- Comments -->
-            {{#if update.commentable }}
-            {{#unless update.data.isActivityUpdate }}
-                {{> Comments update=update.data showCommentClicked=update.showCommentClicked FULLVIEW=update.isDetail SHOW_COMMENTS=SHOW_COMMENTS LIMIT=COMMENT_LIMIT FROM_UPDATE=true }}
-            {{/unless }}
-            {{/if }}
-        </section>
-    </section>
-
+      {{#if commentable }}
+        {{> Comments update=update LIMIT=commentLimit }}
+      {{/if }}
+      </article>
+  </section>
 </template>
