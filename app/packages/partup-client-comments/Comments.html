@@ -7,8 +7,8 @@
                     {{else}}
                         {{pathFor route='partup-update' slug=partup.slug update_id=update._id }}
                     {{/if}}">{{_ 'widgetcommentfield-comment-totalcomments' count=state.commentCount}}</a>
-                <span class="pu-sub-seperator"></span>
             {{#if state.showAddCommentButton }}
+              <span class="pu-sub-seperator"></span>
               <a href="#" data-expand-comments class="pu-sub-action">{{_ 'widgetcommentfield-comment-button'}}</a>
             {{/if }}
             {{# if FULLVIEW }}
@@ -87,7 +87,7 @@
         </ul>
         {{/if }}
         {{/unless}}
-        {{#autoForm schema=formSchema id=state.commentFormId class='pu-state-expanded' }}
+        {{#autoForm schema=formSchema id=state.commentFormId class='pu-state-expanded pu-commentform' }}
             <ul class="pu-list
                 {{# unless state.showCommentBox }}
                     pu-state-hidden
