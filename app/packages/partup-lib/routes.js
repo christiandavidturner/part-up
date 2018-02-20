@@ -454,10 +454,12 @@ Router.route('/partups/:slug', {
             Session.set('partup_access_token_for_partup', partupId);
         }
 
-        if (User(Meteor.user()).isPartnerOrSupporterInPartup(partupId)) {
-          this.next();
-        } else {
+        const seenStartpage = Session.get(`redirected-_to_onboarding-${partupId}`);
+        if (!User(Meteor.user()).isPartnerOrSupporterInPartup(partupId) && !seenStartpage) {
+          Session.set(`redirected-_to_onboarding-${partupId}`, true);
           this.redirect(`/partups/${this.params.slug}/start`);
+        } else {
+          this.next();
         }
     },
 });
@@ -824,8 +826,6 @@ Router.route('/tribes/:slug/partups/create', {
 /** ***********************************************************/
 /* Networks Create Partup END END END */
 /** ***********************************************************/
-
-
 
 Router.route('/tribes/:slug/uppers', {
     name: 'network-uppers',
