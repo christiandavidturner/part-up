@@ -8,9 +8,7 @@ var updateChildren = [
     {find: Images.findForUpdate},
     {find: Images.findForUpdateComments},
     {find: Files.findForUpdate},
-    {find: Activities.findForUpdate},
     {find: Contributions.findForUpdate, children: [
-        {find: Activities.findForContribution},
         {find: Ratings.findForContribution, children: [
             {find: Meteor.users.findForRating, children: [
                 {find: Images.findForUser}
@@ -25,24 +23,26 @@ var updateChildren = [
  * @param {String} updateId
  */
 Meteor.publishComposite('updates.one', function(updateId) {
-    check(updateId, String);
+  check(updateId, String);
+  this.unblock();
 
-    this.unblock();
+  // TODO: what happens when one of these change?
 
+  const cursor = Updates.find({ _id: updateId }, { limit: 1 });
+  // This crappy implementation should be replaced so it can be checked without actually fetching anything..
+  const update = cursor.fetch().pop();
+  const partup = Partups.guardedFind(this.userId, { _id: update.partup_id }, { limit: 1 }).fetch().pop();
+
+  if (partup) {
     return {
-        find: function() {
-            var updateCursor = Updates.find({_id: updateId}, {limit: 1});
-
-            var update = updateCursor.fetch().pop();
-            if (!update) return;
-
-            var partup = Partups.guardedFind(this.userId, {_id: update.partup_id}, {limit:1}).fetch().pop();
-            if (!partup) return;
-
-            return updateCursor;
-        },
-        children: updateChildren
-    };
+      find() {
+        return cursor;
+      },
+      children: updateChildren,
+    }
+  } else {
+    return this.ready();
+  }
 });
 
 /**
@@ -62,6 +62,7 @@ Meteor.publishComposite('updates.from_partup', function(partupId, parameters, ac
     parameters = parameters || {};
     check(parameters, {
         limit: Match.Optional(Number),
+        skip: Match.Optional(Number),
         filter: Match.Optional(String)
     });
 
@@ -71,7 +72,6 @@ Meteor.publishComposite('updates.from_partup', function(partupId, parameters, ac
     return {
         find: function() {
             var partup = Partups.guardedFind(self.userId, {_id: partupId}, {limit: 1}, accessToken).fetch().pop();
-
             if (!partup) return;
 
             return Updates.findForPartup(partup, parameters, self.userId);
