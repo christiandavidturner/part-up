@@ -1,53 +1,18 @@
-/**
- * Publish all activities in a partup
- *
- *
- * @param {String} partupId
- * @param {String} accessToken
- */
-Meteor.publishComposite('activities.from_partup', function(partupId, accessToken) {
-    check(partupId, String);
-    if (accessToken) check(accessToken, String);
 
-    this.unblock();
+Meteor.publish('activities.partup_create', function(partupId) {
+  check(partupId, String);
+  this.unblock();
 
-    return {
-        find: function() {
-            var partup = Partups.guardedFind(this.userId, {_id: partupId}, {limit: 1}, accessToken).fetch().pop();
-            if (!partup) return;
-
-            return Activities.findForPartup(partup);
-        },
-        children: [
-            {find: Updates.findForActivity},
-            {find: Contributions.findForActivity, children: [
-                {
-                    find: Meteor.users.findForContribution, children: [
-                        {find: Images.findForUser}
-                    ]
-                },
-                {find: Ratings.findForContribution, children: [
-                    {find: Meteor.users.findForRating, children: [
-                        {find: Images.findForUser}
-                    ]},
-                ]}
-            ]},
-            { find: Images.findForActivity },
-            { find: Files.findForActivity },
-
-        ]
-    };
+  const partup = Partups.findOne(partupId);
+  if (!partup.isViewableByUser(this.userId)) {
+    return this.ready();
+  }
+  return Activities.find({ partup_id: partupId, archived: { $ne: true } }, { sort: { created_at: -1 } });
 });
 
-/**
- * Publish all activities in a partup
- *
- *
- * @param {String} partupId
- * @param {String} accessToken
- */
 Meteor.routeComposite('/activities/me', function(request, parameters) {
 
+  // TODO: NEVER TRUST THE CLIENT GIVES THE RIGHT USERID FOR /ME... WTF!!!
     const userId = parameters.query.userId || this.userId;
     const archived = parameters.query && parameters.query.filterByArchived === 'true';
     const user = Meteor.users.findOne(userId, { fields: { _id: 1, upperOf: 1 } });
