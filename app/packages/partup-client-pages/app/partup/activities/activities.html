@@ -1,5 +1,5 @@
 <template name="app_partup_activities">
-    <div class="pu-composition pu-composition-partupdetailactivities{{#if boardViewEnabled }} pu-composition-partupdetailactivities-board{{/if}}">
+    <div class="pu-composition pu-composition-partupdetailactivities{{#if boardview }} pu-composition-partupdetailactivities-board{{/if}}">
         {{#if partupIsPopupActive 'new-activity' }}
             {{#contentFor "PopupTitle" }}
                 {{_ "activity-form-title-new"}}
@@ -44,7 +44,7 @@
                 {{> BoardView partupId=partupId onAdd=onAddHook }}
             {{ else}}
                 {{#each activities }}
-                    {{> Activity activity=. }}
+                    {{> Activity activity=. LIST_VIEW=true EXPANDABLE=true }}
                 {{/each }}
 
                 {{#if archivedActivities }}
@@ -55,7 +55,7 @@
                         </span>
                     </p>
                     {{#each archivedActivities }}
-                        {{> Activity activity=. EXPANDABLE=true isUpper=isUpper LIST_VIEW=true }}
+                        {{> Activity activity=. EXPANDABLE=true LIST_VIEW=true }}
                     {{/each }}
                 {{/if }}
 

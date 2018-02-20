@@ -85,11 +85,12 @@ Template.Update.helpers({
   systemMessageContent() {
     return Partup.client.strings.newlineToBreak(
       TAPi18n.__(
-        `update-type-partups_message_added-system-${this.update.type}-content`
+        `update-type-partups_message_added-system-${get(this.update, 'type_data.type')}-content`
       )
     );
   },
   commentable() {
+    console.log(this.update);
     return !this.update.isContributionUpdate() && !this.update.isActivityUpdate() && !!!this.update.system;
   },
   commentLimit() {

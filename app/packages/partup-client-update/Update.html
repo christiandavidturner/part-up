@@ -1,21 +1,17 @@
 <template name="Update">
-  <section class="pu-update">
-    <aside>
-      {{#if update.system }}
-        <figure class="pu-avatar pu-avatar-update pu-avatar-system">
-            <span class="pu-sub-image"></span>
-        </figure>
-      {{ else }}
-        <figure class="pu-avatar pu-avatar-update">
-            <a href="{{ pathFor route='profile' _id=update.upper_id }}" rel="author" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ update.upper_id }}" class="pu-sub-image" style="{{#with metadata.updateUpper.profile.image }}background-image: url('{{ partupImageUrl id=. store='80x80' }}');{{/with}}"></a>
-        </figure>
-      {{/if }}
-
-      <p class="pu-sub-time">
-        <time datetime="{{ update.updated_at.toISOString }}" title="{{ partupDateFull update.updated_at }}">{{ partupDatePartupActivity update.updated_at }}</time>
-      </p>
-    </aside>
-    <article>
+  <article class="pu-update">
+      <aside>
+        {{#if update.system }}
+          <figure class="pu-avatar pu-avatar-update pu-avatar-system">
+              <span class="pu-sub-image"></span>
+          </figure>
+        {{ else }}
+          <figure class="pu-avatar pu-avatar-update">
+              <a href="{{ pathFor route='profile' _id=update.upper_id }}" rel="author" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ update.upper_id }}" class="pu-sub-image" style="{{#with metadata.updateUpper.profile.image }}background-image: url('{{ partupImageUrl id=. store='80x80' }}');{{/with}}"></a>
+          </figure>
+        {{/if }}
+        <time class="pu-sub-time" datetime="{{ update.updated_at.toISOString }}" title="{{ partupDateFull update.updated_at }}">{{ partupDatePartupActivity update.updated_at }}</time>
+      </aside>
       <header>
         <h3>
           {{#if LINK }}
@@ -26,22 +22,23 @@
         </h3>
       </header>
 
-      {{#if update.system }}
-        <p class="pu-paragraph">{{{ systemMessageContent }}}</p>
-      {{ else }}
-        {{> Template.dynamic template=updateMeta.templateName data=update }}
-      {{/if }}
+      <section>
+        {{#if update.system }}
+          <p class="pu-paragraph">{{{ systemMessageContent }}}</p>
+        {{ else }}
+          {{> Template.dynamic template=updateMeta.templateName data=update }}
+        {{/if }}
 
-      {{#if update.isActivityUpdate }}
-        {{> Activity activity=updateMeta.activity READONLY=NOT_DETAIL EXPANDABLE=DETAIL EXPANDED=DETAIL UPDATE_LINK=NOT_DETAIL }}
-      {{/if }}
-      {{#if update.isContributionUpdate }}
-        {{> Activity activity=updateMeta.activity contribution_id=update.type_data.contribution_id READONLY=true COMPACT=true EXPANDED=true }}
-      {{/if }}
+        {{#if update.isActivityUpdate }}
+          {{> Activity activity=updateMeta.activity READONLY=NOT_DETAIL EXPANDABLE=DETAIL EXPANDED=DETAIL UPDATE_LINK=NOT_DETAIL }}
+        {{/if }}
+        {{#if update.isContributionUpdate }}
+          {{> Activity activity=updateMeta.activity contribution_id=update.type_data.contribution_id READONLY=true COMPACT=true EXPANDED=true }}
+        {{/if }}
 
-      {{#if commentable }}
-        {{> Comments update=update LIMIT=commentLimit }}
-      {{/if }}
-      </article>
-  </section>
+        {{#if commentable }}
+          {{> Comments update=update LIMIT=commentLimit }}
+        {{/if }}
+      </section>
+    </article>
 </template>

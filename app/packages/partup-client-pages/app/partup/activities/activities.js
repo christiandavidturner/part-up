@@ -58,6 +58,7 @@ Template.app_partup_activities.onCreated(function() {
 Template.app_partup_activities.helpers({
   activities() {
     const activeFilter = Template.instance().filter.get();
+    console.log(activeFilter);
     return findActivities(this.partupId, activeFilter);
   },
   archivedActivities: function() {
@@ -92,9 +93,11 @@ Template.app_partup_activities.events({
             if (board && board.lanes) {
               const firstlane = board.lanes[0];
               const $lane = $(`[data-sortable-lane=${firstlane}]`);
-              setTimeout(() => {
-                $lane.animate({ scrollTop: $lane[0].scrollHeight }, '300');
-              }, 250);
+              if ($lane) {
+                setTimeout(() => {
+                  $lane.animate({ scrollTop: $lane[0].scrollHeight }, '300');
+                }, 250);
+              }
             }
           }
         });

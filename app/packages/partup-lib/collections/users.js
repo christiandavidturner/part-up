@@ -439,16 +439,16 @@ User = function(user) {
          * Check if the user is a supporter in a partup
          * @name isSupporterInPartup
          * @member {Function}
-         * @param {Integer} partupId
+         * @param {String} partupId
          * @return {Boolean}
          */
-        isSupporterInPartup: partupId => (user.supporterOf || []).indexOf(partupId) > -1,
+        isSupporterInPartup: partupId => (get(user, 'supporterOf', [])).indexOf(partupId) > -1,
 
         /**
          * Check if the user is partner or supporter in a partup
          * @name isPartnerOrSupporterInPartup
          * @member {Function}
-         * @param {Integer} partupId
+         * @param {String} partupId
          * @return {Boolean}
          */
         isPartnerOrSupporterInPartup(partupId) {

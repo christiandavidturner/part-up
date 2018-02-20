@@ -277,22 +277,21 @@
                 padding: em(0);
 
                 .pu-sub-view-all-comments-button {
+                  > a {
                     padding: em(5) em(0) em(0) em(0);
-                    > a {
-                        display: inline-block;
-                        padding-right: em(8);
+                    display: inline-block;
+                    padding-right: em(8);
 
-                        &:first-child {
-                            display: none;
-                        }
-                        &:last-child {
-                            padding-right: em(0);
-                        }
-
-                    }
-                    .pu-sub-seperator {
+                    &:first-child {
                         display: none;
                     }
+                    &:last-child {
+                        padding-right: em(0);
+                    }
+                  }
+                  .pu-sub-seperator {
+                      display: none;
+                  }
                 }
 
                 .pu-list-comments {

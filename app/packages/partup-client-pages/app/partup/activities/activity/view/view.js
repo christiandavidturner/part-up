@@ -103,7 +103,7 @@ Template.ActivityView.helpers({
         return this.EXPANDABLE && !Template.instance().expanded.get() && !this.contribution_id;
     },
     showEditButton: function() {
-        return !this.READONLY && this.isUpper;
+        return !this.READONLY && User(Meteor.user()).isPartnerInPartup(get(this.activity, 'partup_id', this.partupId));
     },
     showMetaData: function() {
         return (this.activity && this.activity.end_date) || this.COMMENTS_LINK;
@@ -141,7 +141,7 @@ Template.ActivityView.helpers({
         return Template.instance().data.READONLY;
     },
     update: function() {
-        return Updates.findOne({_id: this.updateId || get(Template.instance(), 'data.activity.update_id')});
+      return Updates.findOne({_id: this.updateId || get(Template.instance(), 'data.activity.update_id')});
     },
     popupId: function() {
         return 'popup.motivation.' + (this.updateId || get(Template.instance(), 'data.activity.update_id'));
@@ -189,7 +189,7 @@ Template.ActivityView.helpers({
                 return Contributions.find({ activity_id: instance.activityId, upper_id: Meteor.userId(), archived: { $ne: true } }).count();
             },
             isUpper() {
-                return User(Meteor.user()).isPartnerInPartup(get(self.activity, 'partup_id') || self.partupId);
+                return User(Meteor.user()).isPartnerInPartup(get(self.activity, 'partup_id', self.partupId));
             },
             updateIsStarred() {
                 return instance.updateIsStarred.get();

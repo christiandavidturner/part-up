@@ -1,32 +1,53 @@
 .pu-update {
     @extend %clearfix;
-    display: flex;
+    display: grid;
+    display: -ms-grid;
 
-    > aside, > article {
-      display: inline-block;
-      position: relative;
-      vertical-align: top;
-    }
+    grid-template-columns: 42px 65px auto;
+    grid-template-rows: auto auto;
+
+    grid-column-gap: 5px;
+    grid-row-gap: 12px;
 
     > aside {
-      width: 80px;
+      grid-row: 1;
+      grid-column: span 2;
+      align-self: center;
+
+      display: grid;
+      display: -ms-grid;
+
+      grid-template-columns: 42px 65px;
+
+      > figure, .pu-sub-time {
+        vertical-align: middle;
+      }
+
+      > figure {
+        grid-column: 1;
+      }
 
       .pu-sub-time {
-        color: $color-text;
+        grid-column: 2;
+        align-self: center;
+        justify-self: center;
+        color: #7f7f7f;
         font-size: 12px;
         font-family: $font-primary;
         letter-spacing: 0.6px;
+        margin-left: 9px;
       }
     }
 
-    > article {
-      flex: 1 1;
+    > header {
+      grid-row: 1;
+      grid-column: 3;
+      align-self: center;
 
-      > header > h3 {
+      > h3 {
         font-size: 15px;
         color: $color-secondary;
         font-weight: 600;
-        margin: 8px 0px;
 
         a {
           color: $color-secondary;
@@ -37,18 +58,34 @@
           }
         }
       }
+    }
 
-      > section > article {
-        padding: 20px 10px;
+    > section {
+      grid-column: span 3;
+
+      @include goingLarge(700) {
+        grid-column-start: 2;
+        grid-column-end: span 2;
+      }
+
+      > p {
+        background: white;
+        padding: 12px;
+        border: 2px solid #eee;
+        border-radius: 5px;
       }
 
       > footer {
         padding: 10px;
+        margin-top: -3px;
         border: 2px solid #eee;
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
-        margin-top: -3px;
         background: #fff;
+
+        .pu-sub-view-all-comments-button {
+          font-size: 14px;
+        }
 
         span.pu-sub-seperator {
           &:after {

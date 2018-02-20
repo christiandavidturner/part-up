@@ -1,3 +1,4 @@
+import { get, isString } from 'lodash';
 import {strings} from 'meteor/partup-client-base';
 import autosize from 'autosize';
 
@@ -18,6 +19,10 @@ import autosize from 'autosize';
 /*************************************************************/
 Template.Comments.onCreated(function() {
     var template = this;
+
+    if (!isString(get(this.data, 'update._id'))) {
+      return;
+    }
 
     // template states
     template.submittingForm = new ReactiveVar(false);
