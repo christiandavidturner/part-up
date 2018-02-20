@@ -32,7 +32,7 @@ Template.modal_invite_to_activity.onCreated(function () {
     template.submitFilterForm = submitFilterForm;
 
     template.partupSubscription = template.subscribe('partups.one', partupId, preselectNetwork);
-    template.activitiesSubscription = template.subscribe('activities.from_partup', partupId);
+    template.activitiesSubscription = template.subscribe('activities.partup_create', partupId);
     template.invitesSubsciption = template.subscribe('invites.for_activity_id', activityId);
 
     /* Initializing the template */
