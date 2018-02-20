@@ -48,6 +48,7 @@ Template.BoardView.onCreated(function() {
     // The dragging state ultimately ends the cycle and enables a DOM update given by the server.
     this.autorun(() => {
       debug.log('autorun triggered');
+      updateChanges.cancel();
 
       const dragging = this.dragging.get();
       const loading = this.loading.get();
