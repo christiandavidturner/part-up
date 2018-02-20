@@ -1,7 +1,7 @@
 <template name="app_partup">
     <article class="pu-page pu-page-partup pu-partuplayout">
         <section class="pu-partuplayout-navigation {{#if sidebarExpanded}}pu-partuplayout-navigation-behind{{/if }}">
-            {{> app_partup_navigation network=network partup=partup sidebarExpanded=sidebarExpanded }}
+            {{> app_partup_navigation network=network partup=partup renderIconText=renderIconText sidebarExpanded=sidebarExpanded }}
         </section>
         <section class="pu-partuplayout-content {{#if sidebarExpanded}}pu-partuplayout-content-reduced{{/if }}">
             <div class="{{#if scrollHorizontal}}content-horizontal{{else}}content-vertical{{/if}} {{partupStartClassName}}" data-infinitescroll-container>
@@ -9,7 +9,7 @@
                     {{> yield region='app_partup' }}
                 {{ else }}
                     {{> Loader ALIGNMENT='center' }}
-                {{/if }} 
+                {{/if }}
             </div>
         </section>
         <section class="pu-partuplayout-sidebar {{#if sidebarExpanded}}pu-partuplayout-sidebar-expanded{{/if }}">
