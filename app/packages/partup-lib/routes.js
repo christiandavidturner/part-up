@@ -434,50 +434,31 @@ Router.route('/partups/:slug', {
         app_partup_updates: { to: 'app_partup' },
     },
     data: function() {
-        return {
-            partupId: Partup.client.strings.partupSlugToId(this.params.slug),
-            accessToken: this.params.query.token,
-            defaultFilter: 'conversations',
-        };
+      const partupId = Partup.client.strings.partupSlugToId(this.params.slug);
+      return {
+          partupId,
+          accessToken: this.params.query.token,
+          defaultFilter: 'conversations',
+          renderIconText: !User(Meteor.user()).isPartnerOrSupporterInPartup(partupId),
+      };
     },
-    onRun: function() {
+    onRun() {
         Meteor.call('partups.analytics.click', this.data().partupId);
         this.next();
     },
-    onBeforeAction: function() {
+    onBeforeAction() {
         let partupId = this.data().partupId;
         let accessToken = this.data().accessToken;
-
-        const lastRoute = localStorage.getItem('lastRoute');
-        const currentRoute = Router.current().route.getName();
-
-        if (currentRoute === lastRoute) {
-            this.next();
-            return;
-        }
-
         if (partupId && accessToken) {
             Session.set('partup_access_token', accessToken);
             Session.set('partup_access_token_for_partup', partupId);
         }
 
-        const user = Meteor.user();
-        const redirectedBefore = Session.get(
-            `redirected_to_onboarding-${partupId}`
-        );
-
-        if (user && User(user).isPartnerOrSupporterInPartup(partupId)) {
-            this.next();
-            return;
+        if (User(Meteor.user()).isPartnerOrSupporterInPartup(partupId)) {
+          this.next();
+        } else {
+          this.redirect(`/partups/${this.params.slug}/start`);
         }
-
-        if (!redirectedBefore) {
-            Session.set(`redirected_to_onboarding-${partupId}`, true);
-            this.redirect(`/partups/${this.params.slug}/start`);
-            return;
-        }
-
-        this.next();
     },
 });
 
@@ -510,6 +491,7 @@ Router.route('/partups/:slug/updates/:update_id', {
     data: function() {
         return {
             partupId: Partup.client.strings.partupSlugToId(this.params.slug),
+            partupSlug: this.params.slug,
             updateId: this.params.update_id,
             state: {
                 fe: this.params.query.fe && this.params.query.fe.toBool(),
@@ -734,13 +716,10 @@ Router.route('/tribes/:slug', {
             );
         }
         if (showStartpage === 'true') {
-            // console.log('showing startpage');
             route.next();
         } else if (showStartpage === 'false') {
-            // console.log('redirecting to network-detail');
             route.renderRoute('network-detail');
         } else {
-            // console.log('checking if user is a member');
             Meteor.call(
                 'users.member_of_network',
                 userId,
@@ -774,24 +753,10 @@ Router.route('/tribes/:slug/partups', {
     },
 });
 
+
 /** ***********************************************************/
 /* Networks. Create Partup */
 /** ***********************************************************/
-Router.route('/tribes/:slug/partups/create', {
-    name: 'create-details',
-    where: 'client',
-    yieldRegions: {
-        modal: { to: 'main' },
-        modal_create: { to: 'modal' },
-        modal_create_details: { to: 'modal_create' },
-    },
-    data: function() {
-        return {
-            networkSlug: this.params.slug,
-        };
-    },
-});
-
 Router.route('/tribes/:slug/partups/create/:_id/activities', {
     name: 'create-activities',
     where: 'client',
@@ -802,8 +767,8 @@ Router.route('/tribes/:slug/partups/create/:_id/activities', {
     },
     data: function() {
         return {
-            networkSlug: this.params.slug,
-            partupId: this.params._id,
+          partupId: this.params._id,
+          networkSlug: this.params.slug,
         };
     },
     action: function() {
@@ -841,6 +806,26 @@ Router.route('/tribes/:slug/partups/create/:_id/promote', {
         this.render();
     },
 });
+
+Router.route('/tribes/:slug/partups/create', {
+  name: 'create-details',
+  where: 'client',
+  yieldRegions: {
+      modal: { to: 'main' },
+      modal_create: { to: 'modal' },
+      modal_create_details: { to: 'modal_create' },
+  },
+  data: function() {
+      return {
+          networkSlug: this.params.slug,
+      };
+  },
+});
+/** ***********************************************************/
+/* Networks Create Partup END END END */
+/** ***********************************************************/
+
+
 
 Router.route('/tribes/:slug/uppers', {
     name: 'network-uppers',
