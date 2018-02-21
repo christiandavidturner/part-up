@@ -12,8 +12,11 @@ Meteor.publish('activities.partup_create', function(partupId) {
 
 Meteor.routeComposite('/activities/me', function(request, parameters) {
 
-  // TODO: NEVER TRUST THE CLIENT GIVES THE RIGHT USERID FOR /ME... WTF!!!
-    const userId = parameters.query.userId || this.userId;
+    const userId = this.userId;
+    if (!userId) {
+      return;
+    }
+
     const archived = parameters.query && parameters.query.filterByArchived === 'true';
     const user = Meteor.users.findOne(userId, { fields: { _id: 1, upperOf: 1 } });
 

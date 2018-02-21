@@ -3,8 +3,12 @@
     display: grid;
     display: -ms-grid;
 
-    grid-template-columns: 42px 65px auto;
+    grid-template-columns: 42px 65px calc(100% - 107px);
+    -ms-grid-columns: 42px 65px calc(100% - 107px);
+
     grid-template-rows: auto auto;
+    -ms-grid-rows: auto auto;
+
 
     grid-column-gap: 5px;
     grid-row-gap: 12px;
@@ -14,9 +18,10 @@
       grid-column: span 2;
       align-self: center;
 
-      display: grid;
-      display: -ms-grid;
+      -ms-grid-row: 1;
+      -ms-grid-column-span: 2;
 
+      display: grid;
       grid-template-columns: 42px 65px;
 
       > figure, .pu-sub-time {
@@ -41,8 +46,12 @@
 
     > header {
       grid-row: 1;
+      -ms-grid-row: 1;
       grid-column: 3;
+      -ms-grid-column: 3;
       align-self: center;
+      -ms-grid-row-align: center;
+      margin-top: -2px;
 
       > h3 {
         font-size: 15px;
@@ -62,10 +71,15 @@
 
     > section {
       grid-column: span 3;
+      -ms-grid-row: 2;
+      -ms-grid-column: 1;
+      -ms-grid-column-span: 3;
 
       @include goingLarge(700) {
         grid-column-start: 2;
         grid-column-end: span 2;
+        -ms-grid-column: 2;
+        -ms-grid-column-span: 2;
       }
 
       > p {

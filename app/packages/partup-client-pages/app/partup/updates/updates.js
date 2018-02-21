@@ -66,7 +66,7 @@ Template.app_partup_updates.helpers({
         moment(updates[currentIndex][key]),
       );
     },
-    filter() {
+    filterHandle() {
       return Template.instance().updatesController.filter;
     },
     showNewMessageButton: function () {

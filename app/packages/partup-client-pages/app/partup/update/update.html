@@ -1,26 +1,24 @@
 <template name="app_partup_update">
     <div class="pu-composition pu-composition-partupdetailupdateitem">
         <header class="pu-pageheader">
-            <section>
-                {{#if update.isActivityUpdate}}
-                    <a class="pu-button" href="{{ pathFor 'partup-activities' slug=partupSlug }}">
-                        {{_ 'pages-app-partup-update-back_to_overview-activities' }}
-                    </a>
-                {{ else }}
-                    <a class="pu-button" href="{{ pathFor 'partup' slug=partupSlug }}">
-                        {{_ 'pages-app-partup-update-back_to_overview' }}
-                    </a>
-                {{/if }}
-            </section>
+          {{#if update.isActivityUpdate}}
+              <a class="pu-button" href="{{ pathFor 'partup-activities' slug=partupSlug }}">
+                  {{_ 'pages-app-partup-update-back_to_overview-activities' }}
+              </a>
+          {{ else }}
+              <a class="pu-button" href="{{ pathFor 'partup' slug=partupSlug }}">
+                  {{_ 'pages-app-partup-update-back_to_overview' }}
+              </a>
+          {{/if }}
         </header>
 
         <div class="pu-sub-timeline {{# if isAnotherDay update.updated_at }}pu-sub-makespaceforthedayheader{{/ if }}">
-            {{#if isAnotherDay update.updated_at }}
-                <section class="pu-sub-dayheader">
-                    {{ partupDatePartupTimeline update.updated_at }}
-                    <i class="picon-arrow-down"></i>
-                </section>
-            {{/if }}
+          {{#if isAnotherDay update.updated_at }}
+              <section class="pu-sub-dayheader">
+                  {{ partupDatePartupTimeline update.updated_at }}
+                  <i class="picon-arrow-down"></i>
+              </section>
+          {{/if }}
         </div>
 
         {{#if update }}

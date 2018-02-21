@@ -33,10 +33,10 @@
               <div class="pu-row">
                   <div class="cell">
                       {{#if screenSizeIsMinimalWidth 'tablet'}}
-                          {{> PartialDropdownUpdatesActions reactiveVar=filterReactiveVar}}
+                          {{> PartialDropdownUpdatesActions reactiveVar=filterHandle}}
                       {{else}}
                           {{#PartupExpander label='Filter'}}
-                              {{> PartialDropdownUpdatesActions reactiveVar=filterReactiveVar}}
+                            {{> PartialDropdownUpdatesActions reactiveVar=filterHandle}}
                           {{/PartupExpander}}
                       {{/if}}
                   </div>
@@ -81,7 +81,7 @@
       {{/each }}
 
       {{#unless endReached}}
-        <button class="pu-temporary-loadmore pu-button pu-button-secondary {{#if partupOneIsTrue updatesLoadingMore updatesLoading}}pu-state-disabled pu-state-loading{{/if}}" data-trigger-load>
+        <button class="pu-temporary-loadmore pu-button pu-button-secondary {{#if partupOneIsTrue loading loadingMore}}pu-state-disabled pu-state-loading{{/if}}" data-trigger-load>
           {{_ 'pages-app-partup-updates-load_more_updates' }}
         </button>
       {{/unless}}

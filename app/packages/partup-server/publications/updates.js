@@ -27,9 +27,7 @@ Meteor.publishComposite('updates.one', function(updateId) {
   this.unblock();
 
   // TODO: what happens when one of these change?
-
   const cursor = Updates.find({ _id: updateId }, { limit: 1 });
-  // This crappy implementation should be replaced so it can be checked without actually fetching anything..
   const update = cursor.fetch().pop();
   const partup = Partups.guardedFind(this.userId, { _id: update.partup_id }, { limit: 1 }).fetch().pop();
 

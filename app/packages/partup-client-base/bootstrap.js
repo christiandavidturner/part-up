@@ -138,11 +138,6 @@ Meteor.startup(function() {
     /* Scroll to the top on every page */
     /*************************************************************/
     Router.onAfterAction(function() {
-
-      // This causes routes to be activated twice..
-      // I have no clue why the lastRoute is set to localStorage here..
-      // localStorage.setItem('lastRoute', Router.current().route.getName());
-
       // TODO: figure out which pages need scrolling and only apply to those pages.
       Meteor.defer(function() {
           Partup.client.scroll.to(null, 0);

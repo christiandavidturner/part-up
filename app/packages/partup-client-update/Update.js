@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, each } from 'lodash';
 
 // jscs:disable
 /**
@@ -37,7 +37,7 @@ Template.Update.helpers({
           let parsed = '';
           each(inviteeNames, (current, index) => {
             if (index === inviteeNames.length - 1) {
-              parsed = `${parsed} ${TAPi18n.__('update-general-and')} ${name}`;
+              parsed = `${parsed} ${TAPi18n.__('update-general-and')} ${current}`;
             } else {
               parsed = `${parsed} ${current}`;
             }
@@ -60,11 +60,12 @@ Template.Update.helpers({
         return TAPi18n.__(titleKey, params);
       },
       titlePath() {
+        const slug = this.partupSlug;
         let path;
         if (update.type.indexOf('partups_new_user') > -1) {
           path = Router.path('profile', { _id: update.upper_id });
         } else {
-          path = Router.path('partup-update', { slug: partup.slug, update_id: update._id });
+          path = Router.path('partup-update', { slug, update_id: update._id });
         }
         return path;
       },
@@ -75,7 +76,7 @@ Template.Update.helpers({
         return 'update_' + update.type;
       },
       activity() {
-        return Activities.findOne(get(update.type_data, 'activity_id'));
+        return Activities.findOne(get(update, 'type_data.activity_id'));
       },
       isStarred() {
         return get(partup, 'starred_updates', []).includes(update._id);
@@ -90,7 +91,6 @@ Template.Update.helpers({
     );
   },
   commentable() {
-    console.log(this.update);
     return !this.update.isContributionUpdate() && !this.update.isActivityUpdate() && !!!this.update.system;
   },
   commentLimit() {
