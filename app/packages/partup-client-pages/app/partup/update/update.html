@@ -21,11 +21,13 @@
           {{/if }}
         </div>
 
-        {{#if update }}
-          {{> Update update=update LINK=false DETAIL=true }}
-        {{ else }}
-          {{> _app_partup_update_placeholder}}
-        {{/if }}
+        {{#unless loading }}
+          {{#if update }}
+            {{> Update update=update LINK=false DETAIL=true }}
+          {{ else }}
+            {{> _app_partup_update_placeholder}}
+          {{/if }}
+        {{/unless }}
     </div>
 </template>
 
