@@ -1,14 +1,19 @@
-Meteor.publishComposite('board.for_partup_id', function(partupId) {
-    check(partupId, String);
-    this.unblock();
-    var partup = Partups.findOne(partupId);
+import { get } from 'lodash';
 
-    return {
-        find() {
-            return Boards.findForPartup(partup, this.userId);
-        }, children: [
-            {find: Lanes.findForBoard},
-            {find: () => Activities.find({ partup_id: partupId, deleted_at: { $ne: true } })},
-        ]
-    };
+Meteor.publish('board.for_partup_id', function(partupId) {
+  check(partupId, String);
+  this.unblock();
+
+  var partup = Partups.guardedFind(this.userId, { _id: partupId }).fetch().pop();
+  if (get(partup, 'board_id')) {
+
+    const boardCursor = Boards.find({ partup_id: partupId }, { limit: 1 });
+    const laneCursor = Lanes.find({ board_id: partup.board_id });
+    const activityCursor = Activities.find({ partup_id: partupId });
+    const contributionCursor = Contributions.find({ partup_id: partupId });
+
+    return [boardCursor, laneCursor, activityCursor, contributionCursor];
+  } else {
+    return this.ready();
+  }
 });
