@@ -7,7 +7,7 @@
           </figure>
         {{ else }}
           <figure class="pu-avatar pu-avatar-update">
-              <a href="{{ pathFor route='profile' _id=update.upper_id }}" rel="author" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ update.upper_id }}" class="pu-sub-image" style="{{#with metadata.updateUpper.profile.image }}background-image: url('{{ partupImageUrl id=. store='80x80' }}');{{/with}}"></a>
+              <a href="{{ pathFor route='profile' _id=update.upper_id }}" rel="author" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ update.upper_id }}" class="pu-sub-image" style="background-image: url('{{ partupImageUrl id=updateMeta.upperImageId store='80x80' }}');"></a>
           </figure>
         {{/if }}
         <time class="pu-sub-time" datetime="{{ update.updated_at.toISOString }}" title="{{ partupDateFull update.updated_at }}">{{ partupDatePartupActivity update.updated_at }}</time>

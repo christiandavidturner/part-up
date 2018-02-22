@@ -7,7 +7,11 @@ Template.app_partup_update.onCreated(function() {
     // This will be the case when a user comes from a different route.
     // This will not be the case when a user directs here via a notification
     if (!Updates.findOne(this.data.updateId)) {
-      this.subscribe('updates.one', this.data.updateId);
+      this.subscribe('updates.single', this.data.updateId, this.data.partupId, {
+        onReady: () => {
+          console.log(Images.find().fetch())
+        }
+      });
     }
 
     // Reset new comments for current user

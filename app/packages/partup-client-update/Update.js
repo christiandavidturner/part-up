@@ -69,6 +69,9 @@ Template.Update.helpers({
         }
         return path;
       },
+      upperImageId() {
+        return Meteor.users.findSinglePublicProfile(update.upper_id).fetch().pop().profile.image
+      },
       templateName() {
         if (update.type === 'partups_activities_invited') {
           return 'update_partups_invited';
