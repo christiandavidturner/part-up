@@ -80,7 +80,7 @@ class UpdatesController {
         const limit = (this.subCount + 1) * this.subLimitStep;
 
         subHandle = subManager.updates.subscribe(
-          'updates.from_partup',
+          'updates.partup',
           partupId,
           {
             skip,

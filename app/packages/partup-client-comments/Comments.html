@@ -47,7 +47,7 @@
                 {{ else }}
                     <li class="pu-comment" {{ isUserComment }}>
                         <a href="{{ pathFor 'profile' _id=creator._id }}">
-                            <figure foo="bar" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ creator._id }}" class="pu-avatar pu-avatar-small pu-avatar-square" style="background-image:url('{{ partupImageUrl id=imageForComment store='360x360'}}');"></figure>
+                            <figure foo="bar" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ creator._id }}" class="pu-avatar pu-avatar-small pu-avatar-square" style="background-image:url('{{ partupImageUrl id=imageForComment store='80x80'}}');"></figure>
                         </a>
                         <div>
                             {{#if partupEquals _id state.editCommentId}}
