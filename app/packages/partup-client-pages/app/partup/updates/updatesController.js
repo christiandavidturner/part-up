@@ -44,8 +44,14 @@ class UpdatesController {
     this.cursor.observeChanges({
       addedBefore(id, doc, before) {
         if (self.initialized) {
+          // Before will be null when an update is removed, in that case the new update is placed at the bottom of the list to fill up the limit
           if (before === null) {
             self.fetch();
+          // Check if the new document is a brand new message caused by the current increase the limit by 1 which will immediatly display the new update
+          } else if (
+            (doc.upper_id === Meteor.userId() && moment(doc.created_at).diff(self.refreshDate))
+          ) {
+            self.increaseLimit(1);
           } else {
             self.newUpdateCount.set(self.newUpdateCount.curValue + 1);
           }
