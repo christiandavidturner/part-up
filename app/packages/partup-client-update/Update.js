@@ -115,8 +115,10 @@ Template.Update.helpers({
 Template.Update.events({
     'click [data-edit-message]': function(event, template) {
         event.preventDefault();
+        const updateId = get(template.data, 'update._id') 
+        if (!updateId) return
         Partup.client.popup.open({
-            id: 'edit-message-' + template.data.updateId,
+            id: 'edit-message-' + updateId,
         });
     },
     'click [data-remove-message]': function(event, template) {
