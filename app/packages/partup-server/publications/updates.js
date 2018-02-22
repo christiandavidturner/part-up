@@ -1,3 +1,5 @@
+import { _ } from 'lodash';
+
 /**
  * Children of an update
  */
@@ -42,6 +44,37 @@ Meteor.publishComposite('updates.one', function(updateId) {
     return this.ready();
   }
 });
+
+Meteor.publish('updates.single', function(updateId, partupId) {
+  check(updateId, String);
+  check(partupId, String);
+
+  const partup = Partups.guardedFind(this.userId, { _id: partupId }, { limit: 1 }).fetch().pop();
+
+  if (partup) {
+    // Update 
+    const cursor = Updates.find({ _id: updateId }, { limit: 1 });
+    const update = cursor.fetch().pop();
+    const creator_image = Meteor.users.findSinglePublicProfile(update.upper_id).fetch().pop().profile.image
+
+    // Uppers
+    const commentUpperIds = _.get(update, 'comments', []).map((comment) => comment.creator._id)
+    const upperIds = _.uniq([update.upper_id, ...commentUpperIds])
+
+    // Images
+    const commentImagesIds = _.get(update, 'comments', []).map((comment) => comment.creator.image)
+    const imageIds = _.uniq([creator_image, ...commentImagesIds])
+
+    const cursors = [
+      cursor,
+      Images.find({"_id": {"$in": imageIds}}),
+      Files.findForUpdate(update),
+      ...(Images.findForUpdate(update) || [])
+    ] 
+
+    return cursors
+  }
+})
 
 /**
  * Publish all required data for updates in a part-up
