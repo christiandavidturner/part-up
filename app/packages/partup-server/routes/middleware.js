@@ -1,5 +1,5 @@
 var url = Npm.require('url');
-var userApiAccessToken = process.env.USER_API_ACCESS_TOKEN; 
+var userApiAccessToken = process.env.USER_API_ACCESS_TOKEN;
 
 // Disable all default response headers (we want to control them manually)
 JsonRoutes.setResponseHeaders({});
@@ -15,16 +15,6 @@ JsonRoutes.Middleware.use(function(request, response, next) {
         /\/users\/count$/, // /users/count
     ];
 
-    var imagesAndFonts = [
-        /^.*\.woff(2)*$/,
-        /^.*\.(jpeg|jpg|gif|png)$/
-    ];
-
-    var meteorResourceIndicators = [
-        'meteor_js_resource=true',
-        'meteor_css_resource=true'
-    ];
-
     var cacheControl = 'no-store, max-age=0';
 
     urlRegexesToCacheForAnHour.forEach(function(regex) {
@@ -32,16 +22,6 @@ JsonRoutes.Middleware.use(function(request, response, next) {
             cacheControl = 'public, max-age=3600';
         }
     });
-
-    var uri = url.parse(request.url, true, true);
-
-    if (uri.query.meteor_js_resource ||
-        uri.query.meteor_css_resource ||
-        uri.query.hash || uri.query.v ||
-        imagesAndFonts.some(function(regex) { return regex.test(uri.pathname) })) {
-        // Meteor resource filename is hashed, cache for a year...
-        cacheControl = 'public, max-age=31536000';
-    }
 
     response.setHeader('Cache-Control', cacheControl);
 
@@ -55,8 +35,8 @@ if (userApiAccessToken) {
         // If the authorization header matches with the set USER_API_ACCESS_TOKEN it is a request
         // via the User API. We then set the userId in the request object to the authenticated user
         // to enable the calling of Meteor methods.
-        if (userApiAccessToken && request.headers['authorization'] === userApiAccessToken) {
-            request.userId = request.headers['x-authenticated-userid']
+        if (userApiAccessToken && request.headers.authorization === userApiAccessToken) {
+            request.userId = request.headers['x-authenticated-userid'];
         }
 
         // Otherwise just proceed as a normal request

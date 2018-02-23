@@ -68,5 +68,13 @@ Meteor.startup(function() {
         next();
     });
 
+    const publicFolders = /^\/(css|dropbox|extra|files|fonts|images|onedrive)/;
 
+    WebApp.rawConnectHandlers.use('/', function(req, res, next) {
+        const path = req._parsedUrl.path;
+        if (publicFolders.test(path)) {
+            res.setHeader('cache-control', 'public, max-age=31536000');
+        }
+        next();
+    });
 });
