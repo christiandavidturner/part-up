@@ -333,7 +333,7 @@
   "error-imageupload-unauthorized": "Nope",
   "file-count": "file",
   "file-count_plural": "files",
-  "filepicker-add-via": "Add file via",
+  "filepicker-add-via": "Via",
   "filepicker-device": "Device",
   "filepicker-dropbox": "Dropbox",
   "filepicker-googledrive": "Google Drive",
