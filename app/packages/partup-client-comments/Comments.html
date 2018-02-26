@@ -2,19 +2,23 @@
     <footer class="pu-commentfield">
         {{#unless POPUP }}
         <p class="pu-sub-view-all-comments-button">
-                <a href="{{ #if partupContainsOne update.type 'partups_newuser' }}
-                        {{pathFor route='profile' _id=user_id }}
-                    {{else}}
-                        {{pathFor route='partup-update' slug=partup.slug update_id=update._id }}
-                    {{/if}}">{{_ 'widgetcommentfield-comment-totalcomments' count=state.commentCount}}</a>
+            {{#unless activityView }}
+            <a href="{{ #if partupContainsOne update.type 'partups_newuser' }}
+                    {{pathFor route='profile' _id=user_id }}
+                {{else}}
+                    {{pathFor route='partup-update' slug=partup.slug update_id=update._id }}
+                {{/if}}">{{_ 'widgetcommentfield-comment-totalcomments' count=state.commentCount}}</a>
             {{#if state.showAddCommentButton }}
               <span class="pu-sub-seperator"></span>
               <a href="#" data-expand-comments class="pu-sub-action">{{_ 'widgetcommentfield-comment-button'}}</a>
             {{/if }}
+            {{/unless }}
             {{# if FULLVIEW }}
             {{#unless HIDE_SYSTEM_MESSAGES }}
                 {{# if state.systemCount }}
+                  {{#if state.showAddCommentButton }}
                     <span class="pu-sub-seperator"></span>
+                  {{/if }}
                     <a href="#" data-toggle-systemmessages>
                         {{# if state.showSystemMessages }}
                             {{_ 'widgetcommentfield-comment-systemmessage-hide'}}
