@@ -44,7 +44,7 @@
                 {{> BoardView partupId=partupId onAdd=onAddHook }}
             {{ else}}
                 {{#each activities }}
-                    {{> Activity activity=. EXPANDABLE=true LIST_VIEW=true }}
+                    {{> Activity activity=. type='listview' }}
                 {{/each }}
 
                 {{#if archivedActivities }}
@@ -55,7 +55,7 @@
                         </span>
                     </p>
                     {{#each archivedActivities }}
-                        {{> Activity activity=. EXPANDABLE=true LIST_VIEW=true }}
+                        {{> Activity activity=. type='listview' }}
                     {{/each }}
                 {{/if }}
 

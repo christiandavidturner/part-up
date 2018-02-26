@@ -11,16 +11,16 @@
         <p class="pu-sub-activitiesparagraph">{{_ 'pages-modal-create-activities-heading-paragraph'}}</p>
         <a class="pu-button pu-button-text pu-button-no-side-padding" href="#" data-popup="create-activity">{{_ 'pages-modal-create-activities-button-adopt_activities' }}</a>
 
-        {{> Activity CREATE=true createCallback=createCallback partupId=partupId }}
+        {{> activityForm partupId=partupId CREATE=true createCallback=createCallback }}
 
         <p class="pu-sub-activitiestitle">{{_ 'pages-modal-create-activities-list-heading' }}</p>
 
         {{#if showActivityPlaceholder}}
-            {{> Activity activity=placeholderActivity CREATE_PARTUP=true READONLY=true }}
+            {{> Activity activity=placeholderActivity type='create' }}
         {{/if }}
 
         {{#each activities}}
-            {{> Activity activity=. CREATE_PARTUP=true }}
+            {{> Activity activity=. type='create' }}
         {{/each}}
 
         <footer class="pu-sub-modalfooter pu-sub-modalfooter-scrolling">

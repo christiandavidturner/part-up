@@ -9,214 +9,162 @@
     {{/ if }}
 
     {{#if activity.deleted_at }}
-    <article class="pu-block pu-block-activity pu-activity{{# if BOARDVIEW }} pu-activity-board-card{{/ if }}">
-        <section class="pu-sub-section">
-            <h3 class="pu-sub-title pu-state-deleted">{{ activity.name }}</h3>
-        </section>
-    </article>
+      <article class="pu-activity">
+        <h3 class="pu-activity-title pu-state-deleted">{{ activity.name }}</h3>
+      </article>
     {{ else }}
-    <article class="pu-block pu-block-activity pu-activity
-                    {{# if EXPANDABLE }}          pu-activity-expandable           {{/ if }}
-                    {{# if contribution }}        pu-activity-singlecontribution   {{/ if }}
-                    {{# if expanded }}            pu-activity-expanded             {{/ if }}
-                    {{# if CREATE_PARTUP }}       pu-activity-in-startpartup-modal {{/ if }}
-                    {{# if BOARDVIEW }}           pu-activity-board-card           {{/ if }}
-                    {{# if activity.archived }}   pu-activity-archived             {{/ if }}"
-            data-activity-id="{{ activity._id }}">
+      <article
+        class="pu-block pu-activity pu-activity-{{type}} {{#if activity.archived }}pu-activity-archived{{/if }}"
+        data-activity-id="{{ activity._id }}">
 
-        <!-- If the activity is a single contribution, only show the contribution -->
-        {{# if contribution }}
-            <section class="pu-sub-section">
-                {{> Contribution contribution=contribution updateContribution=updateContribution READONLY=isReadOnly}}
-            </section>
-        {{ else }}
+        <header class="pu-activity-header">
+          {{#unless partupEquals type 'boardview'}}
+            {{#with lane }}
+              {{#Tag }}
+                {{ name }}
+              {{/Tag }}
+            {{/with }}
+          {{/unless}}
+          <h3 class="title" data-detail>
+              {{#if partupEquals type 'boardview' }}
+                <a href="{{ pathFor route='partup-update' slug=partupSlug update_id=activity.update_id }}">{{ activity.name }}</a>
+              {{ else }}
+                {{ activity.name }}
+              {{/if }}
+          </h3>
+        </header>
 
-            <section class="pu-sub-section-main">
-                {{#unless activity.placeholder }}
-                    <div class="more-options" >
-                        {{#if BOARDVIEW }}
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="18px" width="25px" id="Layer_1" style="enable-background:new 0 0 25 18;" version="1.1" viewBox="0 0 25 18"  xml:space="preserve" data-dropdown-open>
-                                <circle cx="7.5" cy="9" r="1.75" style="fill:#2F3435;"/>
-                                <circle cx="12.5" cy="9" r="1.75" style="fill:#2F3435;"/>
-                                <circle cx="17.5" cy="9" r="1.75" style="fill:#2F3435;"/>
-                            </svg>
-                        {{ else }}
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="25px" width="40px" id="Layer_1" style="enable-background:new 0 0 40 25;" version="1.1" viewBox="0 0 40 25"  xml:space="preserve" data-dropdown-open>
-                                <circle cx="11" cy="12.5" r="2.5" style="fill:#2F3435;"/>
-                                <circle cx="20" cy="12.5" r="2.5" style="fill:#2F3435;"/>
-                                <circle cx="29" cy="12.5" r="2.5" style="fill:#2F3435;"/>
-                            </svg>
-                        {{/if }}
-                        {{> Dropdown toggle=activityDropdownOpen template="activityActionsDropdown" data=dropdownData }}
-                    </div>
-                {{/unless }}
-                <h3 class="pu-sub-title" data-detail>
-                    {{#unless BOARDVIEW}}
-                        {{#with lane}}
-                            {{#Tag}}
-                                {{name}}
-                            {{/Tag}}
-                        {{/with}}
-                    {{/unless}}
+        <aside class="pu-activity-more-options">
+          {{#if partupEquals type 'board' }}
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="18px" width="25px" id="Layer_1" style="enable-background:new 0 0 25 18;" version="1.1" viewBox="0 0 25 18"  xml:space="preserve" data-dropdown-open>
+              <circle cx="7.5" cy="9" r="1.75" style="fill:#2F3435;"/>
+              <circle cx="12.5" cy="9" r="1.75" style="fill:#2F3435;"/>
+              <circle cx="17.5" cy="9" r="1.75" style="fill:#2F3435;"/>
+            </svg>
+          {{ else }}
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="25px" width="40px" id="Layer_1" style="enable-background:new 0 0 40 25;" version="1.1" viewBox="0 0 40 25"  xml:space="preserve" data-dropdown-open>
+              <circle cx="11" cy="12.5" r="2.5" style="fill:#2F3435;"/>
+              <circle cx="20" cy="12.5" r="2.5" style="fill:#2F3435;"/>
+              <circle cx="29" cy="12.5" r="2.5" style="fill:#2F3435;"/>
+            </svg>
+          {{/if }}
+          {{> Dropdown template="activityActionsDropdown" data=dropdownData toggle=dropdownToggleHandler }}
+        </aside>
 
-                    {{#if isActiveRoute name='partup-update' }}
-                        {{ activity.name }}
-                    {{ else }}
-                        {{#if CREATE_PARTUP }}
-                            {{ activity.name }}
-                        {{ else }}
-                            <a href="{{ pathFor route='partup-update' slug=partup.slug update_id=activity.update_id }}">
-                                {{ activity.name }}
-                            </a>
-                        {{/if }}
-                    {{/if }}
-                </h3>
-
-                {{#unless COMPACT }}
-                    {{# if activity.description }}
-                        {{#if BOARDVIEW }}
-                            {{> dangerouslyRenderHTML HTML=activity.description transform=truncateDescription access="MARKUP" }}
-                        {{ else }}
-                            {{> dangerouslyRenderHTML HTML=activity.description transform=renderWithMarkdown access="MARKUP" }}
-                        {{/if }}
-                    {{/if }}
-                {{/unless }}
-            </section>
-
-            {{#unless CREATE_PARTUP }}
-            <section class="pu-sub-section-meta">
-                <ul class="pu-list-horizontal">
-                    <li class="comments" data-detail>
-                        {{#if COMMENTS_LINK }}
-                            <a class="pu-sub-comments {{#if newComments upper_data=update.upper_data }}pu-state-unread{{/if}}" href="{{ pathFor route='partup-update' slug=partup.slug update_id=activity.update_id }}"><i class="picon picon-chat"></i> {{ update.comments_count }}</a>
-                        {{ else }}
-                            <span class="meta-span" data-toggle="comments">
-                                <i class="picon picon-chat"></i>
-                                {{ update.comments_count }}
-                                {{#unless BOARDVIEW }}
-                                {{#if screenWidthEqualOrAbove '900' }}
-                                    {{_ 'activity-comment' count=update.comments_count }}
-                                {{/if }}
-                                {{/unless }}
-                            </span>
-                        {{/if }}
-                    </li>
-                    {{#if fileCount }}
-                        <li class="files" data-detail="files">
-                            <span class="meta-span" data-toggle="files">
-                                <i class="picon picon-documents"></i>
-                                {{#unless BOARDVIEW }}
-                                    {{ fileCount }}
-                                    {{#if screenWidthEqualOrAbove '900' }}
-                                        {{_ 'file-count' count=fileCount }}
-                                    {{/if }}
-                                {{/unless }}
-                            </span>
-                        </li>
-                    {{/if }}
-                    {{#if activity.end_date }}
-                        <li class="date">
-                            <span class="meta-span">
-                                <time class="pu-sub-date" datetime="{{ activity.end_date.toISOString }}" title="{{ partupDateFull activity.end_date }}">{{ partupDateShort activity.end_date }}</time>
-                            </span>
-                        </li>
-                    {{/if }}
-                    {{#unless BOARDVIEW }}
-                    {{#if screenWidthEqualOrAbove '505' }}
-                    <li class="contribute">
-                        {{#unless isContributing }}
-                            <button class="pu-btn-me" data-contribute>
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                    width="20px" height="20px" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve">
-                                <g>
-                                    <path d="M94.737,112.253v-7.565c12.531-7.299,21.052-20.724,21.052-36.267V57.895c0-23.252-18.853-42.105-42.105-42.105
-                                        c-23.253,0-42.105,18.854-42.105,42.105v10.526c0,15.543,8.526,28.968,21.052,36.267v7.565C16.329,118.112,0,138.651,0,163.158
-                                        v10.526c0,5.828,4.718,10.526,10.526,10.526h126.315c5.809,0,10.527-4.698,10.527-10.526v-10.526
-                                        C147.369,138.651,131.045,118.112,94.737,112.253" style="fill:#ffa725;" />
-                                </g>
-                                </svg>
-                                {{#if inRange '700' '1349' }}
-                                    <span>{{_ 'activity-contribute-short' }}</span>
-                                {{/if }}
-                                {{#if screenWidthEqualOrAbove '1350' }}
-                                    <span>{{_ 'activity-contribute' }}</span>
-                                {{/if }}
-                            </button>
-                        {{/unless }}
-                        <button class="pu-btn-you" data-invite>
-                            <i class="picon-person-plus"></i>
-                            {{#if inRange '700' '1349' }}
-                                <span>{{_ 'activity-invite-short' }}</span>
-                            {{/if }}
-                            {{#if screenWidthEqualOrAbove '1350' }}
-                                <span>{{_ 'activity-invite' }}</span>
-                            {{/if }}
-                        </button>
-                    </li>
-                    {{/if }}
-                    {{/unless }}
-                </ul>
-            </section>
-            {{/unless }}
-
-            {{#if contributions.count }}
-                {{#unless EXPANDABLE }}
-                    <section class="pu-sub-section-contributions">
-                        {{#with contributions }}
-                            <ul class="pu-avatar-stack pu-avatar-stack">
-                                {{# each . }}
-                                    <li class="pu-avatar pu-avatar-small {{#unless verified}}unverified{{/unless }}" style="{{#with upper.profile.image }}background-image: url('{{ partupImageUrl id=. store='80x80' }}');{{/with }}}"></li>
-                                {{/ each }}
-                            </ul>
-                        {{/with}}
-                    </section>
-                {{ else }}
-                    <section class="pu-sub-section">
-                        {{# each contributions }}
-                            {{> Contribution contribution=. updateContribution=updateContribution READONLY=isReadOnly}}
-                        {{/ each }}
-                    </section>
-                {{/unless }}
+        {{#if activity.description}}
+          <section class="pu-activity-content">
+            {{#if partupEquals type 'boardview' }}
+              {{> dangerouslyRenderHTML HTML=activity.description transform=truncateDescription access="MARKUP" }}
+            {{ else }}
+              {{> dangerouslyRenderHTML HTML=activity.description transform=renderWithMarkdown access="MARKUP" }}
             {{/if }}
-
-            {{#unless hide.files }}
-            {{#if fileCount }}
-                <section class="pu-sub-section">
-                <div class="files">
-                        {{#if files.documents }}
-                            {{> documentRenderer documents=files.documents }}
-                        {{/if }}
-                        {{#if files.images }}
-                            {{> ImageGallery images=files.images}}
-                        {{/if }}
-                    </div>
-                </section>
-            {{/if }}
-            {{/unless }}
-
-            {{#unless hide.comments }}
-                {{#unless BOARDVIEW }}
-                {{#unless CREATE_PARTUP }}
-                    <section class="pu-sub-section-comments">
-                        <div class="comments">
-                            {{#if EXPANDED }}
-                                {{> Comments update=update showCommentClicked=false FULLVIEW=true SHOW_COMMENTS=true LIMIT=0 hideCommentButtons=false HIDE_ADD_COMMENTS=true }}
-                            {{ else }}
-                                {{> Comments update=update showCommentClicked=false FULLVIEW=false SHOW_COMMENTS=true LIMIT=2 hideCommentButtons=false HIDE_SYSTEM_MESSAGES=true }}
-                            {{/if }}
-                        </div>
-                    </section>
-                {{/unless}}
-                {{/unless}}
-            {{/unless }}
+          </section>
         {{/if }}
-    </article>
-    {{/if}}
+
+        {{#unless partupEquals type 'create' }}
+        <ul class="pu-activity-meta">
+          <li class="meta-comments">
+            <a
+              class="pu-sub-comments {{#if hasUnreadComments update.upper_data }}pu-state-unread{{/if }}"
+              href="{{ pathFor route='partup-update' slug=partupSlug update_id=update._id }}"
+            >
+              <i class="picon picon-chat"></i>
+              {{ update.comments_count }}
+            </a>
+          </li>
+          {{#if fileCount }}
+            <li class="meta-files">
+              <button type="button" data-detail="files" data-toggle="files">
+                  <i class="picon picon-documents"></i>
+                  {{#unless partupEquals type 'boardview' }}
+                  {{ fileCount }}
+                    {{#if screenWidthEqualOrAbove '900' }}
+                        {{_ 'file-count' count=fileCount }}
+                    {{/if }}
+                  {{/unless}}
+              </button>
+            </li>
+          {{/if }}
+          {{#if activity.end_date }}
+            <li class="meta-date">
+              <time
+                class="pu-date"
+                title="{{ partupDateFull activity.end_date }}"
+                datetime="{{ activity.end_date.toISOString }}"
+              >{{ partupDateShort activity.end_date }}</time>
+            </li>
+          {{/if }}
+          {{#unless partupEquals type 'boardview' }}
+          {{#unless isContributing }}
+            <li class="meta-me">
+              <button class="pu-button-me" data-contribute>
+                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    width="20px" height="20px" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve">
+                    <path d="M94.737,112.253v-7.565c12.531-7.299,21.052-20.724,21.052-36.267V57.895c0-23.252-18.853-42.105-42.105-42.105
+                      c-23.253,0-42.105,18.854-42.105,42.105v10.526c0,15.543,8.526,28.968,21.052,36.267v7.565C16.329,118.112,0,138.651,0,163.158
+                      v10.526c0,5.828,4.718,10.526,10.526,10.526h126.315c5.809,0,10.527-4.698,10.527-10.526v-10.526
+                      C147.369,138.651,131.045,118.112,94.737,112.253" style="fill:#ffa725;" />
+                  </svg>
+                  {{#unless partupEquals type 'boardview' }}
+                    {{#if inRange '700' '1349' }}
+                      <span>{{_ 'activity-contribute-short' }}</span>
+                    {{ else }}
+                      <span>{{_ 'activity-contribute' }}</span>
+                    {{/if }}
+                  {{/unless}}
+              </button>
+            </li>
+          {{/unless }}
+          <li class="meta-you">
+            <button class="pu-button-you" data-invite>
+              <i class="picon-person-plus"></i>
+              {{#unless partupEquals type 'boardview' }}
+                {{#if inRange '700' '1349' }}
+                  <span>{{_ 'activity-invite-short' }}</span>
+                {{/if }}
+                {{#if screenWidthEqualOrAbove '1350' }}
+                  <span>{{_ 'activity-invite' }}</span>
+                {{/if }}
+              {{/unless }}
+            </button>
+          </li>
+          {{/unless }}
+        </ul>
+
+        {{#if contributions.count }}
+          <section class="pu-activity-contributions">
+            <ul class="pu-avatar-stack">
+              {{#each contributions }}
+                {{#unless partupEquals ../type 'detail' }}
+                  <li
+                    class="pu-avatar pu-avatar-small {{#unless verified }}unverified{{/unless }}"
+                    style="{{ userBackgroundImage ../activity.creator_id '80x80' }}"></li>
+                {{ else }}
+                  <li>{{> Contribution contribution=. }}</li>
+                {{/unless }}
+              {{/each }}
+            </ul>
+          </section>
+        {{/if }}
+
+        {{#if partupAnd fileCount filesExpanded }}
+          <section class="pu-activity-attachments">
+            {{#if files.documents }}
+              {{> documentRenderer documents.files.documents }}
+            {{/if }}
+            {{#if files.images }}
+              {{> ImageGallery images=files.images }}
+            {{/if }}
+          </section>
+        {{/if }}
+        {{/unless }}
+      </article>
+    {{/if }}
 </template>
 
 <template name="activityActionsDropdown">
     <ul class="pu-list-dropdown ignore-drag">
-      {{#unless CREATE_PARTUP}}
+      {{#unless isCreate }}
       {{#unless isContributing }}
       <li class="pu-dropdown-item">
         <a data-contribute>
@@ -227,9 +175,9 @@
       {{#if isUpper }}
       <li class="pu-dropdown-item">
         {{#if activity.archived }}
-        <a data-unarchive>{{_ 'unarchive' }}</a>
+          <a data-unarchive>{{_ 'unarchive' }}</a>
         {{ else }}
-        <a data-archive>{{_ 'archive' }}</a>
+          <a data-archive>{{_ 'archive' }}</a>
         {{/if }}
       </li>
       {{/if }}
@@ -241,15 +189,15 @@
       {{#if isUpper }}
       {{#if updateIsStarred }}
       <li class="pu-dropdown-item">
-        <a data-unstar-activity>{{_ 'unstar'}}</a>
+        <a data-unstar>{{_ 'unstar'}}</a>
       </li>
       {{ else }}
       <li class="pu-dropdown-item">
-        <a data-star-activity>{{_ 'star'}}</a>
+        <a data-star>{{_ 'star'}}</a>
       </li>
-      {{/if}}
       {{/if }}
-      {{/unless }}
+      {{/if }}
+      {{/unless}}
       {{#if mayEditActivity }}
       <li class="pu-dropdown-item">
         <a data-edit>{{_ 'edit' }}</a>
