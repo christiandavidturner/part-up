@@ -33,7 +33,6 @@
 @import "components/markdown-support";
 @import "components/pu-accent";
 @import "components/pu-accordion";
-@import "components/pu-activity";
 @import "components/pu-app";
 @import "components/pu-app-link";
 @import "components/pu-article";
@@ -207,6 +206,7 @@
 @import "components/pu-tags-input";
 @import "components/pu-carousel";
 @import "components/pu-partup-carousel-uploader";
+@import "components/pu-activity";
 
 // layouts etc (these stylesheets override existing partup components)
 // TODO move to other folder

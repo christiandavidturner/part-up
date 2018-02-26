@@ -24,10 +24,6 @@
         }
     }
 
-    .pu-temporary-loadmore {
-        margin-top: 40px;
-    }
-
     .pu-sub-timelineline {
         display: block;
         position: absolute;
@@ -117,6 +113,9 @@
 
 
     .pu-sub-revealupdatesbutton {
+      grid-column: span 3;
+      margin: 25px 0px 25px 47px;
+
         aside {
             height: 1px;
         }
@@ -133,13 +132,6 @@
     }
 
     .pu-update:last-of-type {
-        margin-bottom: 200px;
-    }
-    .pu-update.pu-sub-revealupdatesbutton {
-      margin: 15px 0px 15px 80px;
-    }
-
-    .pu-update + .pu-temporary-loadmore {
-        margin-top: -150px;
+        margin-bottom: 45px;
     }
 }

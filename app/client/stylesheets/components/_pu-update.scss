@@ -1,67 +1,45 @@
 .pu-update {
-    @extend %clearfix;
     display: grid;
-    display: -ms-grid;
-
-    grid-template-columns: 42px 65px calc(100% - 107px);
-    -ms-grid-columns: 42px 65px calc(100% - 107px);
-
-    grid-template-rows: auto auto;
-    -ms-grid-rows: auto auto;
-
-
+    grid-template-columns: 42px 65px calc(100% - 117px);
+    grid-template-rows: auto 12px auto;
     grid-column-gap: 5px;
-    grid-row-gap: 12px;
 
-    > aside {
+    display: -ms-grid;
+    -ms-grid-columns: 42px 65px calc(100% - 117px);
+
+    align-items: center;
+
+    &-aside {
       grid-row: 1;
       grid-column: span 2;
-      align-self: center;
-
-      -ms-grid-row: 1;
-      -ms-grid-column-span: 2;
 
       display: grid;
+
       grid-template-columns: 42px 65px;
 
-      > figure, .pu-sub-time {
-        vertical-align: middle;
-      }
+      grid-column-gap: 5px;
 
-      > figure {
-        grid-column: 1;
-      }
+      align-items: center;
+      justify-items: center;
 
       .pu-sub-time {
-        grid-column: 2;
-        align-self: center;
-        justify-self: center;
         color: #7f7f7f;
         font-size: 12px;
         font-family: $font-primary;
         letter-spacing: 0.6px;
-        margin-left: 9px;
       }
     }
 
-    > header {
+    &-header {
       grid-row: 1;
-      -ms-grid-row: 1;
       grid-column: 3;
-      -ms-grid-column: 3;
-      align-self: center;
-      -ms-grid-row-align: center;
-      margin-top: -2px;
 
       > h3 {
         font-size: 15px;
-        color: $color-secondary;
-        font-weight: 600;
+        line-height: inherit;
 
-        a {
+        > a {
           color: $color-secondary;
-          text-decoration: none;
-
           &:hover {
             text-decoration: underline;
           }
@@ -69,44 +47,177 @@
       }
     }
 
-    > section {
+    &-content {
+      grid-row: 3;
       grid-column: span 3;
-      -ms-grid-row: 2;
-      -ms-grid-column: 1;
-      -ms-grid-column-span: 3;
-
-      @include goingLarge(700) {
-        grid-column-start: 2;
-        grid-column-end: span 2;
-        -ms-grid-column: 2;
-        -ms-grid-column-span: 2;
-      }
 
       > p {
-        background: white;
         padding: 12px;
+        background: white;
         border: 2px solid #eee;
         border-radius: 5px;
       }
+    }
 
-      > footer {
-        padding: 10px;
-        margin-top: -3px;
-        border: 2px solid #eee;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-        background: #fff;
+    > .pu-block {
+      grid-column: span 3;
+      grid-row: 3;
 
-        .pu-sub-view-all-comments-button {
-          font-size: 14px;
-        }
-
-        span.pu-sub-seperator {
-          &:after {
-            content: "•";
-            margin: 0px 5px;
-          }
-        }
+      .pu-paragraph {
+        width: calc(100% - 40px);
       }
     }
+
+    &-comments {
+      grid-row: 4;
+      grid-column: span 3;
+
+      margin-top: -2px;
+
+      background: white;
+      border: 2px solid #eee;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    @include goingLarge(700) {
+      &-content, > .pu-block, &-comments {
+        grid-column-start: 2;
+        grid-column-end: span 2;
+      }
+    }
+
+    &-detail {
+      .pu-block, .pu-activity, .pu-update-comments {
+        grid-column: span 3;
+      }
+    }
+
+    &-placeholder {
+      > p {
+        grid-column: span 3;
+      }
+    }
+
+    // grid-column: span 2;
+
+    // grid-template-columns: 42px 65px calc(100% - 117px);
+    // -ms-grid-columns: 42px 65px calc(100% - 117px);
+
+    // grid-template-rows: auto auto;
+    // -ms-grid-rows: auto auto;
+
+    // grid-column-gap: 5px;
+    // grid-row-gap: 12px;
+
+    // &-single { //Wrapped for single update view
+    //   .pu-commentfield {
+    //     margin-top: -3px;
+    //     padding: 12px;
+    //     border: 2px solid #eee;
+    //     border-bottom-left-radius: 5px;
+    //     border-bottom-right-radius: 5px;
+
+    //     @include goingLarge(700) {
+    //       margin-left: 47px;
+    //     }
+    //   }
+    // }
+
+    // > aside {
+    //   grid-row: 1;
+    //   grid-column: span 2;
+    //   align-self: center;
+
+    //   -ms-grid-row: 1;
+    //   -ms-grid-column-span: 2;
+
+    //   display: grid;
+    //   grid-template-columns: 42px 65px;
+
+    //   > figure, .pu-sub-time {
+    //     vertical-align: middle;
+    //   }
+
+    //   > figure {
+    //     grid-column: 1;
+    //   }
+
+    //   .pu-sub-time {
+    //     grid-column: 2;
+    //     align-self: center;
+    //     justify-self: center;
+    //     color: #7f7f7f;
+    //     font-size: 12px;
+    //     font-family: $font-primary;
+    //     letter-spacing: 0.6px;
+    //     margin-left: 9px;
+    //   }
+    // }
+
+    // > header {
+    //   grid-row: 1;
+    //   -ms-grid-row: 1;
+    //   grid-column: 3;
+    //   -ms-grid-column: 3;
+    //   align-self: center;
+    //   -ms-grid-row-align: center;
+    //   margin-top: -2px;
+
+    //   > h3 {
+    //     font-size: 15px;
+    //     color: $color-secondary;
+    //     font-weight: 600;
+
+    //     a {
+    //       color: $color-secondary;
+    //       text-decoration: none;
+
+    //       &:hover {
+    //         text-decoration: underline;
+    //       }
+    //     }
+    //   }
+    // }
+
+    // > section {
+    //   grid-column: span 3;
+    //   -ms-grid-row: 2;
+    //   -ms-grid-column: 1;
+    //   -ms-grid-column-span: 3;
+
+    //   @include goingLarge(700) {
+    //     grid-column-start: 2;
+    //     grid-column-end: span 2;
+    //     -ms-grid-column: 2;
+    //     -ms-grid-column-span: 2;
+    //   }
+
+    //   > p {
+    //     background: white;
+    //     padding: 12px;
+    //     border: 2px solid #eee;
+    //     border-radius: 5px;
+    //   }
+
+    //   > footer {
+    //     padding: 10px;
+    //     margin-top: -3px;
+    //     border: 2px solid #eee;
+    //     border-bottom-left-radius: 5px;
+    //     border-bottom-right-radius: 5px;
+    //     background: #fff;
+
+    //     .pu-sub-view-all-comments-button {
+    //       font-size: 14px;
+    //     }
+
+    //     span.pu-sub-seperator {
+    //       &:after {
+    //         content: "•";
+    //         margin: 0px 5px;
+    //       }
+    //     }
+    //   }
+    // }
 }

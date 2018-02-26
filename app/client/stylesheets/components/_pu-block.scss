@@ -15,8 +15,7 @@
 .pu-block {
     border: 2px solid $color-border-light;
     border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 10px;
     position: relative;
     background-color: $color-background;
 
@@ -67,7 +66,6 @@
 
     time {
         display: inline-block;
-        margin-bottom: 10px;
         line-height: 1.6em;
         color: $color-text-subtle;
         font-weight: bold;
@@ -289,43 +287,6 @@
                 }
             }
         }
-
-        // .pu-sub-useractions {
-        //     transition: opacity 0.2s, height 0.2s, margin-bottom 0.2s, padding-top 0.2s;
-        //     opacity: 0;
-        //     padding-top: 0px;
-        //     margin-bottom: 0px;
-        //     height: 0px;
-
-        //     a {
-        //         font-size: 11px;
-        //         color: $color-text-subtle;
-        //         text-decoration: none;
-
-        //         span {
-        //             text-decoration: underline;
-        //         }
-
-        //         &:first-child:after {
-        //             content: "•";
-        //             margin-left: 5px;
-        //             margin-right: 5px;
-        //         }
-
-        //         &:last-child:after {
-        //             content: "";
-        //         }
-        //     }
-        // }
-
-        // &:hover {
-        //     .pu-sub-useractions {
-        //         opacity: 1;
-        //         height: 25px;
-        //         padding-top: 10px;
-        //         margin-bottom: -5px;
-        //     }
-        // }
     }
 
     @media screen and (min-width: $breakpoint-tablet) {

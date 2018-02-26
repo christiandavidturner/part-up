@@ -13,6 +13,34 @@
 }
 
 .pu-commentfield {
+  .pu-list-comments {
+    padding: 0px 0px 0px 12px;
+  }
+  .pu-commentform {
+    padding: 0px 12px 8px 12px;
+  }
+
+  .pu-sub-view-all-comments-button {
+    padding: 5px 12px;
+
+    span.pu-sub-seperator:after {
+      content: "•";
+      margin: 0px 5px;
+    }
+
+    a {
+      color: #999;
+      font-size: 14px;
+    }
+
+    a:last-child {
+      text-decoration: underline;
+
+      &:hover {
+        color: $color-secondary;
+      }
+    }
+  }
     .pu-list-comments li:last-child p {
         animation-duration: 1s;
         animation-fill-mode: both;
