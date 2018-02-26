@@ -1,6 +1,7 @@
 <template name="Update">
-  <article class="pu-update">
-      <aside>
+  <article class="pu-update {{#if DETAIL}}pu-update-detail{{/if}}">
+    {{#unless partupAnd DETAIL update.isActivityUpdate }}
+      <aside class="pu-update-aside">
         {{#if update.system }}
           <figure class="pu-avatar pu-avatar-update pu-avatar-system">
               <span class="pu-sub-image"></span>
@@ -12,33 +13,33 @@
         {{/if }}
         <time class="pu-sub-time" datetime="{{ update.updated_at.toISOString }}" title="{{ partupDateFull update.updated_at }}">{{ partupDatePartupActivity update.updated_at }}</time>
       </aside>
-      <header>
-        <h3>
-          {{#if LINK }}
-            <a href="{{ updateMeta.titlePath }}">{{ updateMeta.title }}</a>
-          {{else}}
-            {{ updateMeta.title }}
-          {{/if }}
-        </h3>
+
+      <header class="pu-update-header">
+        <h3><a href="{{ updateMeta.titlePath }}">{{ updateMeta.title }}</a></h3>
       </header>
+    {{/unless }}
 
-      <section>
-        {{#if update.system }}
-          <p class="pu-paragraph">{{{ systemMessageContent }}}</p>
-        {{ else }}
-          {{> Template.dynamic template=updateMeta.templateName data=update }}
-        {{/if }}
-
-        {{#if update.isActivityUpdate }}
-          {{> Activity activity=updateMeta.activity READONLY=NOT_DETAIL EXPANDABLE=DETAIL EXPANDED=DETAIL UPDATE_LINK=NOT_DETAIL }}
-        {{/if }}
-        {{#if update.isContributionUpdate }}
-          {{> Activity activity=updateMeta.activity contribution_id=update.type_data.contribution_id READONLY=true COMPACT=true EXPANDED=true }}
-        {{/if }}
-
-        {{#if commentable }}
-          {{> Comments update=update LIMIT=commentLimit }}
-        {{/if }}
+    {{#if update.system }}
+      <section class="pu-update-content">
+        <p class="pu-paragraph">{{{ systemMessageContent }}}</p>
       </section>
+    {{ else }}
+      {{> Template.dynamic template=updateMeta.templateName data=update }}
+    {{/if }}
+
+    {{#if update.isActivityUpdate }}
+      {{> Activity activity=updateMeta.activity type=activityType }}
+    {{/if }}
+    {{#if update.isContributionUpdate }}
+      <section class="pu-block">
+        {{> Contribution contribution=contribution activity=updateMeta.activity }}
+      </section>
+    {{/if }}
+
+    {{#if commentable }}
+    <section class="pu-update-comments">
+      {{> Comments update=update LIMIT=commentLimit activityView=update.isActivityUpdate FULLVIEW=true }}
+    </section>
+    {{/if }}
     </article>
 </template>

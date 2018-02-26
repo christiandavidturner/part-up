@@ -3,11 +3,17 @@ import { get, each } from 'lodash';
 // jscs:disable
 /**
  * Widget to render an update
- * @param {Boolean} LINK Make the title a clickable link that directs to the update detail page
+ * // TODO: ADD PARAMS
  */
 // jscs:enable
 
 Template.Update.helpers({
+  activityType() {
+    return this.DETAIL ? 'detail' : 'update';
+  },
+  contribution() {
+    return Contributions.findOne(this.update.type_data.contribution_id);
+  },
   update() {
     // Override the non-reactive data.update to make it reactive
     return Updates.findOne(get(this.update, '_id'));
@@ -60,14 +66,9 @@ Template.Update.helpers({
         return TAPi18n.__(titleKey, params);
       },
       titlePath() {
-        const slug = this.partupSlug;
-        let path;
-        if (update.type.indexOf('partups_new_user') > -1) {
-          path = Router.path('profile', { _id: update.upper_id });
-        } else {
-          path = Router.path('partup-update', { slug, update_id: update._id });
-        }
-        return path;
+        return update.type.indexOf('partups_new_user') > -1
+          ? Router.path('profile', { _id: update.upper_id })
+          : Router.path('partup-update', { slug: partup.slug, update_id: update._id });
       },
       upperImageId() {
         return Meteor.users.findSinglePublicProfile(update.upper_id).fetch().pop().profile.image
@@ -94,7 +95,7 @@ Template.Update.helpers({
     );
   },
   commentable() {
-    return !this.update.isContributionUpdate() && !this.update.isActivityUpdate() && !!!this.update.system;
+    return !this.update.isContributionUpdate() && !!!this.update.system;
   },
   commentLimit() {
     return this.DETAIL ? 0 : 2;
