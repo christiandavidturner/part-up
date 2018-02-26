@@ -16,8 +16,8 @@ Template.messageForm.onCreated(function () {
     this.isExistingUpdate = this.data instanceof Update;
 
     this.partupId = this.isExistingUpdate ?
-        this.data.partup_id :
-    this.data.partupId;
+        this.data.partup_id : // Update instance
+    this.data.partupId;       // New update
 
     this.fileController = new FileController({
         limit: {

@@ -11,11 +11,11 @@ Meteor.publish('images.one', function(imageId) {
     return Images.find({_id: imageId}, {limit: 1});
 });
 
-Meteor.publish('images.many', function() {
+Meteor.publish('images.many', function(imageIds) {
     this.unblock();
 
     if (Meteor.user()) {
-        return Images.find();
+        return Images.find({"_id": {"$in": imageIds}});
     }
     throw new Meteor.Error(0, 'unauthorized');
 });

@@ -1,6 +1,8 @@
 <template name="ImageGallery">
+    {{# unless loading }}
     <ul class="pu-updateimages pu-updateimages" data-open-gallery="{{popupId}}">
         {{# each images }}
+            <p>{{ . }}</p>
             {{#if singleImage}}
                 <li data-image="{{ . }}"><figure style="background-image:url({{ partupImageUrl id=. store='1200x520'}});"></figure></li>
             {{else}}
@@ -11,10 +13,11 @@
     {{#if partupIsPopupActive popupId }}
         {{#contentFor region="PopupContent" data=.}}
             {{# each images}}
-                <li data-id="{{.}}">
+                <li data-id="{{ . }}">
                     <figure style="background-image:url({{ partupImageUrl id=. store='1200x520'}});"></figure>
                 </li>
             {{/ each}}
         {{/contentFor}}
     {{/if}}
+    {{/unless}}
 </template>
