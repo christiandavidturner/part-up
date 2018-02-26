@@ -428,40 +428,34 @@ Router.route('/register/details', {
 Router.route('/partups/:slug', {
     name: 'partup',
     where: 'client',
-    yieldRegions: {
-        app: { to: 'main' },
-        app_partup: { to: 'app' },
-        app_partup_updates: { to: 'app_partup' },
-    },
-    data: function() {
-      const partupId = Partup.client.strings.partupSlugToId(this.params.slug);
+    data() {
       return {
-          partupId,
-          accessToken: this.params.query.token,
-          defaultFilter: 'conversations',
-          renderIconText: !User(Meteor.user()).isPartnerOrSupporterInPartup(partupId),
-      };
+        partupId: Partup.client.strings.partupSlugToId(this.params.slug),
+      }
     },
-    onRun() {
-        Meteor.call('partups.analytics.click', this.data().partupId);
-        this.next();
-    },
-    onBeforeAction() {
-        let partupId = this.data().partupId;
-        let accessToken = this.data().accessToken;
-        if (partupId && accessToken) {
-            Session.set('partup_access_token', accessToken);
-            Session.set('partup_access_token_for_partup', partupId);
-        }
+    action() {
+      if (!Meteor.userId()) {
+        return this.redirect('partup-start', { slug: this.params.slug });
+      }
 
-        const seenStartpage = Session.get(`redirected-_to_onboarding-${partupId}`);
-        if (!User(Meteor.user()).isPartnerOrSupporterInPartup(partupId) && !seenStartpage) {
-          Session.set(`redirected-_to_onboarding-${partupId}`, true);
-          this.redirect(`/partups/${this.params.slug}/start`);
-        } else {
-          this.next();
-        }
+      const partupId = Partup.client.strings.partupSlugToId(this.params.slug);
+      Meteor.call('partup_user_settings', partupId, (error, result) => {
+        // if (error) {
+        //   return this.redirect('partup-start', { slug: this.params.slug });
+        // }
+        console.log('redirecting!');
+        this.redirect(`/partups/${this.params.slug}/${result.landing_page}`);
+      });
     },
+    // // Should this be set for all partup pages?
+    // onBeforeAction() {
+      // let partupId = this.data().partupId;
+      // let accessToken = this.data().accessToken;
+      // if (partupId && accessToken) {
+      //     Session.set('partup_access_token', accessToken);
+      //     Session.set('partup_access_token_for_partup', partupId);
+      // }
+    // },
 });
 
 Router.route('/partups/:slug/start', {
@@ -477,9 +471,32 @@ Router.route('/partups/:slug/start', {
         Session.set(`redirected_to_onboarding-${partupId}`, true);
 
         return {
-            partupId: Partup.client.strings.partupSlugToId(this.params.slug),
+          partupId,
         };
     },
+});
+
+Router.route('/partups/:slug/conversations', {
+  name: 'partup-conversations',
+  where: 'client',
+  yieldRegions: {
+      app: { to: 'main' },
+      app_partup: { to: 'app' },
+      app_partup_updates: { to: 'app_partup' },
+  },
+  data() {
+    const partupId = Partup.client.strings.partupSlugToId(this.params.slug);
+    return {
+        partupId,
+        accessToken: this.params.query.token,
+        defaultFilter: 'conversations',
+        renderIconText: !User(Meteor.user()).isPartnerOrSupporterInPartup(partupId),
+    };
+  },
+  // onRun() {
+  //     Meteor.call('partups.analytics.click', this.data().partupId);
+  //     this.next();
+  // },
 });
 
 Router.route('/partups/:slug/updates/:update_id', {
