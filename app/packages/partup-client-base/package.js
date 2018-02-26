@@ -118,6 +118,7 @@ Package.onUse(function(api) {
             'helpers/IE.js',
             'helpers/screenSize.js',
             'helpers/route.js',
+            'helpers/userBackgroundImage.js',
 
             'views/CenterView.html',
             'views/dangerouslyRenderHTML/dangerouslyRenderHTML.html',
