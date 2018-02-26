@@ -1,111 +1,78 @@
 <template name="Contribution">
-    {{# if showForm }}
-        <div class="pu-contribution pu-contribution-form">
-            <figure class="pu-avatar pu-avatar-small" style="{{#with currentUser.profile.image}}background-image: url('{{ partupImageUrl id=. }}');{{/with}}"></figure>
-
-            {{# autoForm schema=formSchema id=generateFormId class='pu-form' doc=contribution validation='submitThenKeyup' }}
-                <div class="pu-row pu-row-top">
-                    <div class="cell">
-                        <label class="pu-formfield">
-                            <span class="pu-label">{{_ 'contribution-form-hours-label' }}</span>
-                            <div class="pu-sub-validations {{# if afFieldIsInvalid name='hours' }}pu-state-invalid{{/ if }}">
-                                <span class="pu-sub-input">{{> afFieldInput name='hours' placeholder=placeholders.hours class='pu-input pu-input-accent' numeric="true" }}</span>
-                                <span class="pu-sub-error">{{ afFieldMessage name='hours' }}</span>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="cell">
-                        <label class="pu-formfield">
-                            <span class="pu-label">{{_ 'contribution-form-rate-label' }}</span>
-                            <div class="pu-sub-validations {{# if afFieldIsInvalid name='rate' }}pu-state-invalid{{/ if }}">
-                                <span class="pu-sub-input">
-                                    <span class="pu-inputcontainer pu-inputcontainer-currency">
-                                        {{> afFieldInput name='rate' placeholder=placeholders.rate class='pu-input pu-input-accent' numeric="true" }}
-                                        {{> afFieldInput name='currency' value=currentCurrency placeholder='EUR' firstOption=false options="allowed" class="pu-input pu-input-select"}}
-                                    </span>
-                                </span>
-                                <span class="pu-sub-error">{{ afFieldMessage name='rate' }}</span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <footer class="pu-row">
-                    <div class="cell">
-                        <button type="submit" class="pu-button {{# if submitting }}pu-state-disabled pu-state-loading{{/ if }}">
-                            <span>{{_ 'contribution-form-submit' }}</span>
-                            {{> Spinner color='inverted' type='small' }}
-                        </button>
-                    </div>
-                    <div class="cell stretch">
-                        <button type="button" class="pu-button pu-button-gray" data-contribution-close>{{_ 'contribution-form-close' }}</button>
-                    </div>
-                    <div class="cell">
-                        <div class="pu-formfield-right">
-                            <button type="button" class="pu-button pu-button-text pu-button-text-subtle" data-contribution-remove>{{_ 'contribution-form-remove' }}</button>
-                        </div>
-                    </div>
-                </footer>
-
-            {{/ autoForm }}
-        </div>
+  <div class="pu-contribution {{#if isOwnContribution }}pu-contribution-own{{/if }} {{#if contribution.archived }}pu-contribution-archived{{/if }} {{#unless contribution.verified}}unverified{{/unless}}">
+    {{#if contribution.archived }}
+      <p>{{_ 'contribution-removed' }}</p>
     {{ else }}
-        {{# if contribution.archived }}
-            <div class="pu-contribution pu-contribution-removed">
-                <p>{{_ 'contribution-removed' }}</p>
-            </div>
+      {{#if editing }}
+        <figure class="pu-avatar pu-avatar-small" style="{{ userBackgroundImage contribution.upper_id '80x80' }}"></figure>
+        {{#autoForm id=formId schema=schema doc=contribution class='pu-form' validation='submitThenKeyup' }}
+          <label>
+            <span>{{_ 'contribution-form-hours-label'}}</span>
+            {{> afFieldInput name='hours' placeholder=placeholders.hours numeric=true class='pu-input pu-input-accent' }}
+          </label>
+          <label>
+            <span>{{_ 'contribution-form-rate-label'}}</span>
+            {{> afFieldInput name='rate' placeholder=placeholders.rate numeric=true class='pu-input pu-input-accent' }}
+          </label>
+          <label>
+            {{> afFieldInput name='currency' placeholder=placeholders.currency firstOption=false options='allowed' class='pu-input pu-input-select' }}
+          </label>
+          <div class="button-wrap">
+            <button type="submit" class="pu-button">
+              {{_ 'contribution-form-submit' }}
+            </button>
+            <button type="button" class="pu-button pu-button-gray" data-close>
+              {{_ 'contribution-form-close' }}
+            </button>
+            <button type="button" class="pu-button pu-button-text pu-button-text-subtle" data-remove>
+              {{_ 'contribution-form-remove' }}
+            </button>
+          </div>
+        {{/autoForm}}
+      {{ else }}
+
+        {{#if isOwnContribution }}
+          <figure class="pu-avatar pu-avatar-small" style="{{ userBackgroundImage contribution.upper_id '80x80' }}">
+            <i class="picon-pencil"></i>
+          </figure>
         {{ else }}
-            {{# if upperContribution }}
-                <div class="pu-contribution pu-contribution-own {{#unless contribution.verified}}unverified{{/unless }}">
-                    <figure class="pu-avatar pu-avatar-small" style="{{#with upper.profile.image }}background-image: url('{{ partupImageUrl id=. }}');{{/with }}}">
-                        <i class="picon-pencil"></i>
-                    </figure>
-                    {{# if addsValue }}
-                        <p>
-                            {{# if hasValue contribution.hours }}{{_ 'contribution-hour' count=contribution.hours }}{{/ if }}
-                            {{# if showSplit }} &mdash; {{/ if }}
-                            {{# if hasValue contribution.rate }}{{ contribution.rate }} {{ rateTranslation }}{{/ if }}
-                        </p>
-                    {{ else }}
-                        <p class="pu-contribution-none">{{_ 'contribution-none' }}</p>
-                    {{/ if }}
-                    <!-- {{# if contribution.verified }}
-                        {{> Ratings contribution=contribution ratings=ratings READONLY=READONLY }}
-                    {{ else }}
-                        <div class="pu-ratings">
-                            <p class="pu-sub-no-rating pu-sub-unverified">{{_ 'contribution-unverified' }}</p>
-                        </div>
-                    {{/ if }} -->
-                </div>
-            {{ else }}
-                <div class="pu-contribution {{#unless contribution.verified}}unverified{{/unless }}">
-                    <a href="{{ pathFor 'profile' _id=upper._id }}" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ contribution.upper_id }}">
-                        <img src="{{ partupImageUrl id=upper.profile.image store='80x80' }}" alt="" class="pu-avatar pu-avatar-small">
-                    </a>
-                    {{# if addsValue }}
-                        <p>
-                            {{# if contribution.hours }}{{_ 'contribution-hour' count=contribution.hours }}{{/ if }}
-                            {{# if showSplit }} &mdash; {{/ if }}
-                            {{# if contribution.rate }}{{ contribution.rate }} {{ rateTranslation }} {{/ if }}
-                        </p>
-                    {{/ if }}
-                    {{# if contribution.verified }}
-                        <!-- {{> Ratings contribution=contribution ratings=ratings READONLY=READONLY }} -->
-                    {{ else }}
-                        <div class="pu-ratings">
-                            <p class="pu-sub-no-rating pu-sub-unverified">{{_ 'contribution-unverified' }}</p>
-                        </div>
-                    {{/ if }}
+          <a href="{{ pathFor 'profile' _id=contributor._id}}" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ contributor._id }}">
+            <img src="{{ partupImageUrl id=contributor.profile.image store='80x80' }}" class="pu-avatar pu-avatar-small">
+          </a>
+        {{/if }}
 
-                    {{# if canVerifyContribution }}
-                    <div class="pu-sub-acceptbuttons">
-                        <a class="pu-button pu-button-text pu-button-text-subtle" data-contribution-reject>{{_ 'contribution-reject'}}</a>
-                        <a class="pu-button" data-contribution-accept>{{_ 'contribution-accept'}}</a>
-                    </div>
-                    {{/ if }}
-                </div>
+        {{#if filled }}
+          <p class="pu-contribution-info">
+          {{#if isNumber contribution.hours }}
+            {{_ 'contribution-hour' count=contribution.hours }}
+          {{/if }}
+          {{#if hoursAndRate }}&mdash; {{/if }}
+          {{#if isNumber contribution.rate }}
+            {{ contribution.rate }} {{_ 'contribution-hourly-rate' currency=contribution.currency }}
+          {{/if }}
+          </p>
+        {{ else }}
+          {{#if isOwnContribution }}
+            <p class="pu-contribution-none">
+              {{_ 'contribution-none' }}
+            </p>
+          {{ else }}
+            {{#unless contribution.verified }}
+              <span>{{_ 'contribution-unverified' }}</span>
+            {{/unless }}
+          {{/if }}
+        {{/if }}
 
-            {{/ if }}
-        {{/ if }}
-    {{/ if }}
+        {{#unless contribution.verified }}
+        {{#if mayVerify }}
+          <div class="pu-contribution-verify">
+              <a class="pu-button pu-button-text pu-button-text-subtle" data-reject>{{_ 'contribution-reject'}}</a>
+              <a class="pu-button" data-accept>{{_ 'contribution-accept'}}</a>
+          </div>
+        {{/if }}
+        {{/unless }}
+
+      {{/if }}
+    {{/if }}
+  </div>
 </template>
