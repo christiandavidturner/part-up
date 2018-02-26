@@ -7,11 +7,12 @@ Template.app_partup_updates.onCreated(function() {
   if (!this.partup) {
     return false;
   }
+
   this.updatesController = new UpdatesController({
     partupId: this.data.partupId,
     filter: this.data.defaultFilter || 'default'
   });
-  this.updatesController.fetch();
+
 });
 
 Template.app_partup_updates.onRendered(function() {
@@ -24,12 +25,10 @@ Template.app_partup_updates.onRendered(function() {
           const current = target.scrollTop + target.clientHeight;
           const when = ((target.scrollHeight / 10) * 9) - 200;
 
-          if (current > previous) {
-            previous = current;
-            if (current > when) {
-              this.updatesController.increaseLimit();
-            }
+          if (current > previous && current >= when) {
+            this.updatesController.increaseLimit();
           }
+          previous = current;
         }, 500);
         this.infiniteScollContainerEl.addEventListener('scroll', this.scrollHandler, { passive: true });
       }
@@ -101,14 +100,19 @@ Template.app_partup_updates.helpers({
       if (showSeperator) {
         Meteor.defer(() => {
           setTimeout(() => {
-            const DOMNode = template.find('.pu-sub-newupdatesseparator');
-            const inView = (node = {}) => {
-              return node.offsetTop >= 0 && node.offsetTop + node.clientHeight <= window.innerHeight;
+            let DOMNode = template.find('.pu-sub-newupdatesseparator');
+            const inView = (node) => {
+              if (node && node.offsetTop) {
+                return node.offsetTop >= 0 && node.offsetTop + node.clientHeight <= window.innerHeight;
+              } else {
+                return false;
+              }
             }
             if (inView(DOMNode)) {
               removeSeperator(DOMNode);
             } else {
               const handler = throttle((evt) => {
+                DOMNode = template.find('.pu-sub-newupdatesseparator');
                 if (inView(DOMNode)) {
                   template.containerEl.removeEventListener('scroll', handler);
                   removeSeperator(DOMNode);
@@ -116,13 +120,13 @@ Template.app_partup_updates.helpers({
               }, 250);
               template.containerEl.addEventListener('scroll', handler, { passive: true});
             }
-          }, 150);
+          }, 500);
         });
       }
       return showSeperator;
     },
     loading() {
-      return Template.instance().updatesController.loading.get();
+      return !Template.instance().updatesController.initialized.get();
     },
     loadingMore() {
       return Template.instance().updatesController.loadingMore.get();
@@ -156,7 +160,6 @@ Template.app_partup_updates.events({
   'click [data-reveal-new-updates]'(event, { data: { partupId }, updatesController }) {
     event.preventDefault();
     updatesController.previousRefreshDate = updatesController.refreshDate;
-    updatesController.refreshDate = new Date();
     updatesController.increaseLimit(updatesController.newUpdateCount.curValue);
     updatesController.newUpdateCount.set(0);
 

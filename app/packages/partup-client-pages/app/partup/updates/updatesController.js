@@ -3,18 +3,18 @@ import { get, isFunction } from 'lodash';
 class UpdatesController {
   constructor({ partupId, limit = 10, filter = undefined }) {
     const self = this;
-    this.initialized = false;
+    this.initialized = new ReactiveVar(false);
     this.partupId = partupId;
 
     this.previousRefreshDate = this.refreshDate = new Date();
     this.startingLimit = limit;
-    this.loading = new ReactiveVar(true);
+    this.loading = new ReactiveVar(false);
     this.loadingMore = new ReactiveVar(false);
     this.endReached = new ReactiveVar(false);
 
     this.limit = new ReactiveVar(this.startingLimit, (oldLimit, newLimit) => {
       if (this.endReached.curValue) {
-        return;
+        return true;
       }
       if (oldLimit !== newLimit) {
         this.updateCursor(newLimit, this.filter.curValue);
@@ -43,7 +43,7 @@ class UpdatesController {
     this.cursor = Updates.findForPartup(partupId, { limit, filter });
     this.cursor.observeChanges({
       addedBefore(id, doc, before) {
-        if (self.initialized) {
+        if (self.initialized.curValue) {
           // Before will be null when an update is removed, in that case the new update is placed at the bottom of the list to fill up the limit
           if (before === null) {
             self.fetch();
@@ -51,8 +51,10 @@ class UpdatesController {
           } else if (
             (doc.upper_id === Meteor.userId() && moment(doc.created_at).diff(self.refreshDate))
           ) {
+            self.endReached.set(false);
             self.increaseLimit(1);
           } else {
+            self.endReached.set(false);
             self.newUpdateCount.set(self.newUpdateCount.curValue + 1);
           }
         }
@@ -62,8 +64,9 @@ class UpdatesController {
     this.subCount = 0;
     this.subLimitStep = 50;
     this.autorunComputation;
+
+    let subHandle;
     Tracker.autorun((computation) => {
-      let subHandle;
 
       // Store the computation so the tracker can be stopped when 'dispose' is called
       this.autorunComputation = computation;
@@ -71,13 +74,15 @@ class UpdatesController {
 
       // endReached is used to tell we should stop caring about the increasing limit request by the user
       // loadingMore is used to skip creating duplicate subs
-      if (((currentLimit >= this.subLimitStep * this.subCount) && !this.endReached.curValue && !this.loadingMore.curValue) || !this.initialized) {
-        if (this.initialized) {
+      if (!this.loading.curValue && ((currentLimit >= this.subLimitStep * this.subCount) && !this.endReached.curValue && !this.loadingMore.curValue)) {
+        if (this.initialized.curValue) {
           this.loadingMore.set(true);
+        } else {
+          this.loading.set(true);
         }
 
         const skip = this.subCount * this.subLimitStep;
-        const limit = (this.subCount + 1) * this.subLimitStep;
+        const limit = this.subLimitStep;
 
         subHandle = subManager.updates.subscribe(
           'updates.from_partup',
@@ -89,12 +94,17 @@ class UpdatesController {
           }
         );
       }
+
       if (isFunction(get(subHandle, 'ready')) && subHandle.ready()) {
+        subHandle = null;
         this.subCount++;
         this.fetch();
-        if (!this.initialized) {
-          this.loading.set(false);
-          this.initialized = true;
+
+        if (!this.initialized.curValue) {
+          setTimeout(() => {
+            this.loading.set(false);
+            this.initialized.set(true);
+          });
         } else {
           this.loadingMore.set(false);
         }
@@ -103,6 +113,7 @@ class UpdatesController {
   }
 
   increaseLimit(inc = 15) {
+    this.previousRefreshDate = this.refreshDate;
     this.limit.set(this.limit.curValue + inc);
   }
 
@@ -111,6 +122,7 @@ class UpdatesController {
   }
 
   fetch() {
+    this.refreshDate = new Date();
     this.updates.set(this.cursor.fetch());
   }
 
