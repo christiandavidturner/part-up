@@ -1,9 +1,14 @@
 Template.app_network.onCreated(function() {
     var template = this
-    var networkSlug = template.data.networkSlug
+    var networkSlug = template.data.networkSlug;
 
     template.networkSlug = new ReactiveVar(networkSlug)
-    template.networkLoaded = new ReactiveVar(false)
+    template.networkLoaded = new ReactiveVar(false);
+
+    if (!networkSlug) {
+      return;
+    }
+
     template.networkSubscription = template.subscribe('networks.one', networkSlug, {
         onReady: function () {
             if (!Networks.findOne({slug: networkSlug})) {
