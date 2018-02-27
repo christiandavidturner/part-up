@@ -62,6 +62,7 @@ Meteor.publish('updates.partup', function(partupId, parameters, accessToken) {
 
     const upperIds = []
     const imageIds = []
+    const fileIds = []
 
     updates.forEach((update) => {
 
@@ -75,7 +76,9 @@ Meteor.publish('updates.partup', function(partupId, parameters, accessToken) {
                 imageIds.push(upperImageId)
             }
         }
-        
+        // Attached file to update
+        fileIds.push(_.get(update, 'type_data.documents', []))
+
         // Comment user Ids
         _.get(update, 'comments', []).map((comment) => upperIds.push(comment.creator._id))
 
@@ -85,7 +88,8 @@ Meteor.publish('updates.partup', function(partupId, parameters, accessToken) {
 
     const cursors = [
       Meteor.users.findMultiplePublicProfiles(_.uniq(upperIds)),       
-      Images.find({"_id": {"$in": _.uniq(imageIds)}})
+      Images.find({"_id": {"$in": _.uniq(imageIds)}}),
+      Files.find({"_id": {"$in": _.flatten(fileIds)}})
     ] 
 
     return [

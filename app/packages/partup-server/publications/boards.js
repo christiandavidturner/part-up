@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, flatten } from 'lodash';
 
 Meteor.publish('board.for_partup_id', function(partupId) {
   check(partupId, String);
@@ -13,7 +13,26 @@ Meteor.publish('board.for_partup_id', function(partupId) {
     const updatesCursor = Updates.find({ partup_id: partupId, 'type_data.activity_id': { $exists: true } });
     const contributionCursor = Contributions.find({ partup_id: partupId });
 
-    return [boardCursor, laneCursor, activityCursor, contributionCursor, updatesCursor];
+    const cursors = [boardCursor, laneCursor, activityCursor, contributionCursor, updatesCursor]
+
+    // Files
+    const fileIds = flatten(activityCursor.map((activity) => {
+      return get(activity, 'files.documents', [])
+    }))
+    if (fileIds.length) {
+      cursors.push(Files.find({ _id: { $in: fileIds}}))
+    }
+
+    // Images
+    const imageIds = flatten(activityCursor.map((activity) => {
+      return get(activity, 'files.images', [])
+    }))
+    if (imageIds.length) {
+      cursors.push(Files.find({ _id: { $in: imageCursor}}))
+    }
+    
+    return cursors
+
   } else {
     return this.ready();
   }

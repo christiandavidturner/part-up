@@ -154,7 +154,7 @@
         {{#if partupAnd fileCount filesExpanded }}
           <section class="pu-activity-attachments">
             {{#if files.documents }}
-              {{> documentRenderer documents.files.documents }}
+              {{> documentRenderer documents=files.documents }}
             {{/if }}
             {{#if files.images }}
               {{> ImageGallery images=files.images }}

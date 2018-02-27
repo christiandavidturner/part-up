@@ -28,11 +28,11 @@
             {{> ImageGallery images=type_data.images updateId=_id}}
         {{/ if}}
 
-        {{# if type_data.documents }}
+        {{# if type_data.documents }} 
             {{#if areDocumentIds type_data.documents }}
                 {{> documentRenderer documents=type_data.documents updateId=_id }}
             {{ else }}
-                {{> DocumentRenderer documents=type_data.documents updateId=_id}}
+                {{> DocumentRenderer documents=type_data.documents updateId=_id }}
             {{/if }}
         {{/ if}}
     </article>
