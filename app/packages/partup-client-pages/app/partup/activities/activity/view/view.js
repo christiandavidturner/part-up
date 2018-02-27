@@ -57,6 +57,9 @@ Template.ActivityView.helpers({
     const self = this;
 
     return {
+      activity() {
+        return self.activity;
+      },
       isCreate() {
         return self.type === 'create';
       },
