@@ -33,7 +33,7 @@ Template.app_partup_updates.onRendered(function() {
         this.infiniteScollContainerEl.addEventListener('scroll', this.scrollHandler, { passive: true });
       }
     });
-  });
+  }, 50);
 });
 
 Template.app_partup_updates.onDestroyed(function() {
