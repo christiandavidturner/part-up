@@ -14,7 +14,7 @@
   &-header {
     grid-column: 1;
     grid-row: 1;
-    
+
     .pu-tag {
       margin-right: 10px;
       // vertical-align: top;
@@ -165,7 +165,7 @@
         }
         button {
           padding: 2px 7px 2px;
-          display: inline-flex;  
+          display: inline-flex;
           span {
             color: #ffa725;
             font-size: 14px;
@@ -231,7 +231,7 @@
   &-boardview {
     > aside {
       height: 25px;
-      padding-top: 5px;  
+      padding-top: 5px;
       justify-self: end;
       align-self: top;
 
@@ -307,6 +307,16 @@
   &-create {
     .pu-activity-header {
       padding-top: 5px;
+    }
+  }
+
+  &-archived {
+    .pu-activity-header {
+      .title {
+        > a {
+          color: #999;
+        }
+      }
     }
   }
 
