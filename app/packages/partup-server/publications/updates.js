@@ -8,7 +8,7 @@ Meteor.publish('updates.single', function(updateId, partupId) {
   const partup = Partups.guardedFind(this.userId, { _id: partupId }, { limit: 1 }).fetch().pop();
 
   if (partup) {
-    // Update 
+    // Update
     const cursor = Updates.find({ _id: updateId }, { limit: 1 });
     const update = cursor.fetch().pop();
     const creator_image = Meteor.users.findSinglePublicProfile(update.upper_id).fetch().pop().profile.image
@@ -25,8 +25,12 @@ Meteor.publish('updates.single', function(updateId, partupId) {
       cursor,
       Images.find({"_id": {"$in": imageIds}}),
       Files.findForUpdate(update),
-      ...([Images.findForUpdate(update)] || [])
     ]
+
+    const imagesCursor = Images.findForUpdate(update);
+    if (imagesCursor) {
+      cursors.push(imagesCursor);
+    }
 
     return cursors
   }
@@ -68,7 +72,7 @@ Meteor.publish('updates.partup', function(partupId, parameters, accessToken) {
 
         // Upper ID is only available for non-system updates
         if (update.upper_id) {
-            upperIds.push(update.upper_id)    
+            upperIds.push(update.upper_id)
 
             // Find the image id associated with the user
             upperImageId = _.get(Meteor.users.findSinglePublicProfile(update.upper_id).fetch().pop(), 'profile.image')
@@ -87,10 +91,10 @@ Meteor.publish('updates.partup', function(partupId, parameters, accessToken) {
     })
 
     const cursors = [
-      Meteor.users.findMultiplePublicProfiles(_.uniq(upperIds)),       
+      Meteor.users.findMultiplePublicProfiles(_.uniq(upperIds)),
       Images.find({"_id": {"$in": _.uniq(imageIds)}}),
       Files.find({"_id": {"$in": _.flatten(fileIds)}})
-    ] 
+    ]
 
     return [
         updates,
