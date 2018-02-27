@@ -433,19 +433,20 @@ Router.route('/partups/:slug', {
         partupId: Partup.client.strings.partupSlugToId(this.params.slug),
       }
     },
-    action() {
+    async onRun() {
       if (!Meteor.userId()) {
         return this.redirect('partup-start', { slug: this.params.slug });
       }
-
       const partupId = Partup.client.strings.partupSlugToId(this.params.slug);
-      Meteor.call('partup_user_settings', partupId, (error, result) => {
-        // if (error) {
-        //   return this.redirect('partup-start', { slug: this.params.slug });
-        // }
-        console.log('redirecting!');
-        this.redirect(`/partups/${this.params.slug}/${result.landing_page}`);
+      const landingpage = await new Promise((resolve, reject) => {
+          Meteor.call('partup_user_settings', partupId, (error, result) => {
+            if (error) {
+              return this.redirect('partup-start', { slug: this.params.slug });
+            }
+            resolve(result.landing_page);
+          });
       });
+      this.redirect(`/partups/${this.params.slug}/${landingpage}`);
     },
     // // Should this be set for all partup pages?
     // onBeforeAction() {
@@ -468,8 +469,6 @@ Router.route('/partups/:slug/start', {
     },
     data: function() {
         let partupId = Partup.client.strings.partupSlugToId(this.params.slug);
-        Session.set(`redirected_to_onboarding-${partupId}`, true);
-
         return {
           partupId,
         };
