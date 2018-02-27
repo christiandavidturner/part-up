@@ -28,9 +28,9 @@ Meteor.publish('board.for_partup_id', function(partupId) {
       return get(activity, 'files.images', [])
     }))
     if (imageIds.length) {
-      cursors.push(Files.find({ _id: { $in: imageCursor}}))
+      cursors.push(Images.find({ _id: { $in: imageIds}}))
     }
-    
+
     return cursors
 
   } else {
