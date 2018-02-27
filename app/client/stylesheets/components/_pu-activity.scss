@@ -5,7 +5,7 @@
 
   display: grid;
   grid-template-columns: calc(100% - 40px) 40px;
-  grid-row-gap: 5px;
+  // grid-row-gap: 5px;
 
   > * {
     padding: 0px 12px;
@@ -14,15 +14,14 @@
   &-header {
     grid-column: 1;
     grid-row: 1;
-
-    padding-top: 12px;
-
+    
     .pu-tag {
       margin-right: 10px;
-      vertical-align: top;
+      // vertical-align: top;
     }
 
     .title {
+      padding-top: 12px;
       display: inline-block;
       font-size: 15px;
       line-height: 18px;
@@ -41,6 +40,7 @@
     grid-row: 1;
     cursor: pointer;
     position: relative;
+    padding-top: 5px;
 
     .pu-dropdownie {
       padding: 0;
@@ -95,6 +95,7 @@
     border-top: 2px solid #eee;
 
     padding-top: 3px;
+    padding-bottom: 3px;
 
     > * {
       grid-row: 1;
@@ -151,11 +152,36 @@
     }
 
     .meta {
+      &-files {
+        span {
+          font-size: 14px;
+          line-height: 24px;
+        }
+      }
       &-me {
         grid-column: 5;
+        svg{
+          padding-top: 3px;
+        }
+        button {
+          padding: 2px 7px 2px;
+          display: inline-flex;  
+          span {
+            color: #ffa725;
+            font-size: 14px;
+            line-height: 24px;
+          }
+        }
       }
       &-you {
         grid-column: 6;
+        i {
+          color: #ffa725;
+        }
+        span {
+          color: #ffa725;
+          font-size: 14px;
+        }
       }
     }
 
@@ -203,13 +229,11 @@
   }
 
   &-boardview {
-    grid-row-gap: 3px;
-
     > aside {
       height: 25px;
-      padding-top: 4.5px;
+      padding-top: 5px;  
       justify-self: end;
-      align-self: center;
+      align-self: top;
 
       .pu-dropdownie {
         top: 24px;
@@ -253,7 +277,7 @@
   &-detail {
     .pu-activity-contributions {
       .pu-avatar-stack {
-        padding: 9px 0px 3px;
+        padding: 9px 0px 9px;
 
         > li {
           padding: 3px 0;
@@ -266,15 +290,19 @@
             padding-bottom: 0;
           }
         }
+
+        .pu-avatar .picon-pencil{
+          margin-top: 2px;
+        }
       }
     }
   }
 
-  &-update {
-    .title {
-      padding-top: 3px;
-    }
-  }
+  // &-update {
+  //   .title {
+  //     padding-top: 3px;
+  //   }
+  // }
 
   &-create {
     .pu-activity-header {

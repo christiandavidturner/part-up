@@ -16,9 +16,6 @@
             {{# if FULLVIEW }}
             {{#unless HIDE_SYSTEM_MESSAGES }}
                 {{# if state.systemCount }}
-                  {{#if state.showAddCommentButton }}
-                    <span class="pu-sub-seperator"></span>
-                  {{/if }}
                     <a href="#" data-toggle-systemmessages>
                         {{# if state.showSystemMessages }}
                             {{_ 'widgetcommentfield-comment-systemmessage-hide'}}
