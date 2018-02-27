@@ -7,11 +7,39 @@ services:
   meteor:
     build: .
     links:
-      - mongo
-    env_file: config/development/env
+     - mongo
+     - s3
     environment:
-      MONGO_URL: mongodb://mongo/partup
-      ROOT_URL: http://localhost:8080
+      AWS_ACCESS_KEY_ID: my-access-key-id
+      AWS_SECRET_ACCESS_KEY: my-secret-access-key
+      AWS_S3_ENDPOINT: http://s3:9000
+      PORT: 3000
+      TEMP_DIR: /tmp
+      CLOUD_DIR: /tmp
+      MONGO_URL: mongodb://mongo/meteor
       NODE_ENV: development
+      ROOT_URL: http://localhost:3000
+      AWS_BUCKET_REGION: eu-west-1
+      AWS_BUCKET_NAME: partup-development
+      METEOR_SETTINGS: '{"public":{"analyticsSettings":{"Google Analytics":{"trackingId":"UA-34557675-15"}}, "aws": {"region":"eu-west-1", "bucket":"partup-development"}}}'
+      USER_API_ACCESS_TOKEN: test
     ports:
       - "3000:3000"
+
+  s3:
+    image: minio/minio
+    command: server /data
+    environment:
+      MINIO_ACCESS_KEY: my-access-key-id
+      MINIO_SECRET_KEY: my-secret-access-key
+    volumes:
+      - minio_data:/data
+
+  bucket_creator:
+    image: alpine
+    command: sh -c 'mkdir -p /data/partup-development'
+    volumes:
+      - minio_data:/data
+
+volumes:
+  minio_data:
