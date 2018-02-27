@@ -25,7 +25,7 @@ Meteor.publish('updates.single', function(updateId, partupId) {
       cursor,
       Images.find({"_id": {"$in": imageIds}}),
       Files.findForUpdate(update),
-      ...(Images.findForUpdate(update) || [])
+      ...([Images.findForUpdate(update)] || [])
     ]
 
     return cursors

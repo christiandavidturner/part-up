@@ -277,7 +277,6 @@ Partup.prototype.makePartnerSupporter = function(upperId) {
 Partup.prototype.makePartner = function(upperId) {
     Partups.update(this._id, { $pull: { 'supporters': upperId, 'invites': upperId }, $addToSet: { 'uppers': upperId } });
     Meteor.users.update(upperId, { $pull: { 'supporterOf': this._id }, $addToSet: { 'upperOf': this._id } });
-    console.log('makeSupporter', Meteor.isServer);
     PartupUserSettings.setLandingPage(this._id, upperId, 'conversations');
 };
 

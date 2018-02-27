@@ -11,14 +11,10 @@ Meteor.publish('activities.partup_create', function(partupId) {
 });
 
 Meteor.routeComposite('/activities/me', function(request, parameters) {
-
-    const userId = this.userId;
-    if (!userId) {
-      return;
-    }
+    if (!this.userId) return;
 
     const archived = parameters.query && parameters.query.filterByArchived === 'true';
-    const user = Meteor.users.findOne(userId, { fields: { _id: 1, upperOf: 1 } });
+    const user = Meteor.users.findOne(this.userId, { fields: { _id: 1, upperOf: 1 } });
 
     const options = {};
     options.limit = parseInt(lodash.get(parameters, 'query.limit')) || 25;
@@ -35,7 +31,7 @@ Meteor.routeComposite('/activities/me', function(request, parameters) {
     // Get contributions that
     const userContributionCursor = Contributions.find({
         partup_id: { $in: partupIds },
-        upper_id: userId,
+        upper_id: this.userId,
     });
 
     const activityIds = [...new Set(userContributionCursor.map(({ activity_id }) => activity_id))];
@@ -58,7 +54,7 @@ Meteor.routeComposite('/activities/me', function(request, parameters) {
     }]);
 
     return {
-        find: () => Meteor.users.find({_id: userId}),
+        find: () => Meteor.users.find({_id: this.userId}),
         children: [
             {find: () => partupsCursor},
             {find: () => ({

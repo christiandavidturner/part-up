@@ -836,9 +836,6 @@ Router.route('/tribes/:slug/partups/create', {
       };
   },
 });
-/** ***********************************************************/
-/* Networks Create Partup END END END */
-/** ***********************************************************/
 
 Router.route('/tribes/:slug/uppers', {
     name: 'network-uppers',
