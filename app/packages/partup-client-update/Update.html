@@ -1,23 +1,21 @@
 <template name="Update">
   <article class="pu-update {{#if DETAIL}}pu-update-detail{{/if}}">
-    {{#unless partupAnd DETAIL update.isActivityUpdate }}
-      <aside class="pu-update-aside">
-        {{#if update.system }}
-          <figure class="pu-avatar pu-avatar-update pu-avatar-system">
-              <span class="pu-sub-image"></span>
-          </figure>
-        {{ else }}
-          <figure class="pu-avatar pu-avatar-update">
-              <a href="{{ pathFor route='profile' _id=update.upper_id }}" rel="author" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ update.upper_id }}" class="pu-sub-image" style="background-image: url('{{ partupImageUrl id=updateMeta.upperImageId store='80x80' }}');"></a>
-          </figure>
-        {{/if }}
-        <time class="pu-sub-time" datetime="{{ update.updated_at.toISOString }}" title="{{ partupDateFull update.updated_at }}">{{ partupDatePartupActivity update.updated_at }}</time>
-      </aside>
+    <aside class="pu-update-aside">
+      {{#if update.system }}
+        <figure class="pu-avatar pu-avatar-update pu-avatar-system">
+            <span class="pu-sub-image"></span>
+        </figure>
+      {{ else }}
+        <figure class="pu-avatar pu-avatar-update">
+            <a href="{{ pathFor route='profile' _id=update.upper_id }}" rel="author" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ update.upper_id }}" class="pu-sub-image" style="background-image: url('{{ partupImageUrl id=updateMeta.upperImageId store='80x80' }}');"></a>
+        </figure>
+      {{/if }}
+      <time class="pu-sub-time" datetime="{{ update.updated_at.toISOString }}" title="{{ partupDateFull update.updated_at }}">{{ partupDatePartupActivity update.updated_at }}</time>
+    </aside>
 
-      <header class="pu-update-header">
-        <h3><a href="{{ updateMeta.titlePath }}">{{ updateMeta.title }}</a></h3>
-      </header>
-    {{/unless }}
+    <header class="pu-update-header">
+      <h3><a href="{{ updateMeta.titlePath }}">{{ updateMeta.title }}</a></h3>
+    </header>
 
     {{#if update.system }}
       <section class="pu-update-content">
