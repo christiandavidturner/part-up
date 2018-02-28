@@ -3,9 +3,14 @@ import { get, each } from 'lodash';
 // jscs:disable
 /**
  * Widget to render an update
- * // TODO: ADD PARAMS
+ * @param {Boolean} DETAIL flag to say if an update is single in detail view or one of many in a list
  */
 // jscs:enable
+
+Template.Update.onCreated(function() {
+  // Stored seperately to avoid being called every second (time ticks)
+  this.updated_at = get(this.update, 'updated_at');
+});
 
 Template.Update.helpers({
   activityType() {
@@ -17,6 +22,9 @@ Template.Update.helpers({
   update() {
     // Override the non-reactive data.update to make it reactive
     return Updates.findOne(get(this.update, '_id'));
+  },
+  updatedAt() {
+    return Template.instance().updated_at;
   },
   updateMeta() {
     const templateInstance = Template.instance();
@@ -116,7 +124,7 @@ Template.Update.helpers({
 Template.Update.events({
     'click [data-edit-message]': function(event, template) {
         event.preventDefault();
-        const updateId = get(template.data, 'update._id') 
+        const updateId = get(template.data, 'update._id')
         if (!updateId) return
         Partup.client.popup.open({
             id: 'edit-message-' + updateId,

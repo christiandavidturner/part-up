@@ -10,7 +10,7 @@
             <a href="{{ pathFor route='profile' _id=update.upper_id }}" rel="author" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ update.upper_id }}" class="pu-sub-image" style="background-image: url('{{ partupImageUrl id=updateMeta.upperImageId store='80x80' }}');"></a>
         </figure>
       {{/if }}
-      <time class="pu-sub-time" datetime="{{ update.updated_at.toISOString }}" title="{{ partupDateFull update.updated_at }}">{{ partupDatePartupActivity update.updated_at }}</time>
+      <time class="pu-sub-time" datetime="{{ updatedAt.toISOString }}" title="{{ partupDateFull updatedAt }}">{{ partupDatePartupActivity updatedAt }}</time>
     </aside>
 
     <header class="pu-update-header">
@@ -35,9 +35,9 @@
     {{/if }}
 
     {{#if commentable }}
-    <section class="pu-update-comments">
-      {{> Comments update=update LIMIT=commentLimit activityView=update.isActivityUpdate FULLVIEW=true }}
-    </section>
+      <section class="pu-update-comments">
+        {{> Comments update=update LIMIT=commentLimit activityView=update.isActivityUpdate FULLVIEW=true }}
+      </section>
     {{/if }}
     </article>
 </template>
