@@ -20,8 +20,7 @@ const contribute = (activity, callback = noop, contribution) => {
         if (get(result, 'success')) {
           resolve({ motivation: result.comment });
         } else {
-          // TODO: write reject message
-          reject('');
+          reject();
         }
       });
     }
@@ -36,7 +35,7 @@ const contribute = (activity, callback = noop, contribution) => {
       } catch (error) {}
       callback(error, result);
     });
-  }).catch((error) => Partup.client.notify.error(error));
+  }).catch((error) => error && Partup.client.notify.error(error));
 };
 
 Template.ActivityView.onCreated(function() {
@@ -152,6 +151,7 @@ Template.ActivityView.events({
     });
   },
   'click [data-archive]'(event, template) {
+    template.dropdownToggle.set(false);
     Meteor.call('activities.archive', get(template.data.activity, '_id'), (error) => {
       if (error) {
         Partup.client.notify.error(error.reason);
@@ -160,6 +160,7 @@ Template.ActivityView.events({
     });
   },
   'click [data-unarchive]'(event, template) {
+    template.dropdownToggle.set(false);
     Meteor.call('activities.unarchive', get(template.data.activity, '_id'), (error) => {
       if (error) {
         Partup.client.notify.error(error.reason);
@@ -168,6 +169,7 @@ Template.ActivityView.events({
     });
   },
   'click [data-star]'(event, template) {
+    template.dropdownToggle.set(false);
     Meteor.call('updates.messages.star', get(template.data.activity, 'update_id'), (error) => {
       if (error) {
         if (error.reason === 'partup_message_too_many_stars') {
@@ -181,6 +183,7 @@ Template.ActivityView.events({
     });
   },
   'click [data-unstar]'(event, template) {
+    template.dropdownToggle.set(false);
     Meteor.call('updates.messages.unstar', get(template.data.activity, 'update_id'), (error) => {
       if (error) {
         Partup.client.notify.error(TAPi18n.__('update-unstarred-error'));
