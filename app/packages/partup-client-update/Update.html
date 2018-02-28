@@ -22,7 +22,9 @@
         <p class="pu-paragraph">{{{ systemMessageContent }}}</p>
       </section>
     {{ else }}
-      {{> Template.dynamic template=updateMeta.templateName data=update }}
+      <section class="pu-block pu-update-content">
+        {{> Template.dynamic template=updateMeta.templateName data=update }}
+      </section>
     {{/if }}
 
     {{#if update.isActivityUpdate }}
