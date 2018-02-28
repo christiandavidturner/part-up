@@ -38,7 +38,6 @@
     </article>
 </template>
 
-
 <template name="messageAddedActionsDropdown">
     <ul class="pu-list-dropdown ignore-drag">
         {{#if updateIsFromCurrentUser }}
@@ -46,6 +45,7 @@
             <a data-edit-message>{{_ 'update-editmessage-edit'}}</a>
         </li>
         {{/if }}
+        {{#if mayStar }}
         {{#if updateIsStarred }}
             <li class="pu-dropdown-item">
                 <a data-unstar-message>{{_ 'unstar'}}</a>
@@ -54,7 +54,8 @@
             <li class="pu-dropdown-item">
                 <a data-star-message>{{_ 'star'}}</a>
             </li>
-        {{/if}}
+        {{/if }}
+        {{/if }}
         {{#if mayRemove }}
             <li class="pu-dropdown-item">
                 <a  data-remove-message>{{_ 'update-editmessage-remove'}}</a>

@@ -52,6 +52,9 @@ Template.update_partups_message_added.helpers({
                     return true;
                 }
             },
+            mayStar() {
+              return User(Meteor.user()).isPartnerInPartup(instance.data.partup_id);
+            },
             mayRemove() {
                 return this.hasNoComments() && this.updateIsFromCurrentUser();
             },
