@@ -1,5 +1,11 @@
 import {FileUploader} from 'meteor/partup-lib';
 
+Template.DocumentRenderer.onCreated(function() {
+  this.autorun(() => {
+    this.subscribe('files.many', this.data.documents);
+  })
+});
+
 Template.DocumentRenderer.helpers({
     getSvgIcon: FileUploader.getSvgIcon,
     bytesToSize: FileUploader.bytesToSize,
