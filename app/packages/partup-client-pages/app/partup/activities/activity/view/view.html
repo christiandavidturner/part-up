@@ -19,14 +19,16 @@
 
         <header class="pu-activity-header">
           {{#unless partupEquals type 'boardview'}}
-            {{#with lane }}
-              {{#Tag }}
-                {{ name }}
-              {{/Tag }}
-            {{/with }}
+            {{#if lane.name }}
+              {{#with lane }}
+                {{#Tag }}
+                  {{ name }}
+                {{/Tag }}
+              {{/with }}
+            {{/if }}
           {{/unless}}
           <h3 class="title" data-detail>
-              {{#if partupEquals type 'boardview' }}
+              {{#if partupOr partupEquals type 'boardview' partupEquals type 'listview' }}
                 <a href="{{ pathFor route='partup-update' slug=partupSlug update_id=activity.update_id }}">{{ activity.name }}</a>
               {{ else }}
                 {{ activity.name }}
@@ -139,7 +141,7 @@
               {{#each contributions }}
                 {{#unless partupEquals ../type 'detail' }}
                   <li
-                    data-hovercontainer="HoverContainer_upper" 
+                    data-hovercontainer="HoverContainer_upper"
                     data-hovercontainer-context="{{ ../activity.creator_id }}"
                     class="pu-avatar pu-avatar-small {{#unless verified }}unverified{{/unless }}"
                     style="{{ userBackgroundImage ../activity.creator_id '80x80' }}"></li>
