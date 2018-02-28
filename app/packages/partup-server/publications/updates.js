@@ -11,26 +11,34 @@ Meteor.publish('updates.single', function(updateId, partupId) {
     // Update
     const cursor = Updates.find({ _id: updateId }, { limit: 1 });
     const update = cursor.fetch().pop();
-    const creator_image = Meteor.users.findSinglePublicProfile(update.upper_id).fetch().pop().profile.image
 
     // Uppers
     const commentUpperIds = _.get(update, 'comments', []).map((comment) => comment.creator._id)
     const upperIds = _.uniq([update.upper_id, ...commentUpperIds])
 
     // Images
-    const commentImagesIds = _.get(update, 'comments', []).map((comment) => comment.creator.image)
-    const imageIds = _.uniq([creator_image, ...commentImagesIds])
+    const creator_image = Meteor.users.findSinglePublicProfile(update.upper_id).fetch().pop().profile.image
+
+    let typeDataImages = [];
+    switch (update.type) {
+      case 'partups_image_changed':
+        typeDataImages = [update.type_data.old_image, update.type_data.new_image];
+        break;
+      case 'partups_message_added':
+        typeDataImages = update.type_data.images || [];
+        break;
+      default:
+        break;
+    }
+
+    const commentImages = _.get(update, 'comments', []).map((comment) => comment.creator.image)
+    const imageIds = _.uniq([creator_image, ...typeDataImages, ...commentImages])
 
     const cursors = [
       cursor,
       Images.find({"_id": {"$in": imageIds}}),
       Files.findForUpdate(update),
     ]
-
-    const imagesCursor = Images.findForUpdate(update);
-    if (imagesCursor) {
-      cursors.push(imagesCursor);
-    }
 
     return cursors
   }
