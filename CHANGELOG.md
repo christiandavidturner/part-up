@@ -1,3 +1,25 @@
+<a name="3.9.0"></a>
+# [3.9.0](https://github.com/part-up/part-up/compare/3.8.1...3.9.0) (2018-02-11)
+
+
+### Bug Fixes
+
+* **client:** Boardview improvements ([4cbe572](https://github.com/part-up/part-up/commit/4cbe572))
+* **client:** Change file-picker via dutch copy ([ab7f4e4](https://github.com/part-up/part-up/commit/ab7f4e4))
+* **client:** Clear cached subs after user logout ([2fe8338](https://github.com/part-up/part-up/commit/2fe8338))
+* **client:** Only scroll lane when popup success ([50dc40d](https://github.com/part-up/part-up/commit/50dc40d))
+* **client:** Optimize move activity request ([71bcd65](https://github.com/part-up/part-up/commit/71bcd65))
+* **client:** Prevent UI blocking in boardview ([cc3d4be](https://github.com/part-up/part-up/commit/cc3d4be))
+* **client:** Wait for request ([752a9dc](https://github.com/part-up/part-up/commit/752a9dc))
+* **client:** Wrap home page title on small screens ([3714532](https://github.com/part-up/part-up/commit/3714532))
+
+
+### Features
+
+* **client:** Autosize textarea elements ([d7c5722](https://github.com/part-up/part-up/commit/d7c5722))
+
+
+
 <a name="3.8.1"></a>
 ## [3.8.1](https://github.com/part-up/part-up/compare/3.8.0...3.8.1) (2018-02-09)
 
