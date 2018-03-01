@@ -22,16 +22,25 @@
 
     grid-template-columns: 42px 65px;
 
-    grid-column-gap: 5px;
+    display: -ms-grid;
+    -ms-grid-columns: 42px 65px;
 
     align-items: center;
     justify-items: center;
+
 
     .pu-sub-time {
       color: #7f7f7f;
       font-size: 12px;
       font-family: $font-primary;
       letter-spacing: 0.6px;
+
+      vertical-align: middle;
+
+      display: block;
+      -ms-grid-column: 2;
+      -ms-grid-row-align: center;
+      -ms-grid-column-align: center;
     }
   }
 
@@ -41,6 +50,9 @@
 
     -ms-grid-row: 1;
     -ms-grid-column: 3;
+
+    vertical-align: middle;
+    -ms-grid-row-align: center;
 
     > h3 {
       font-size: 15px;
@@ -106,7 +118,8 @@
 
   &-detail {
     .pu-block, .pu-activity, .pu-update-comments {
-      grid-column: span 3;
+      grid-column: 3;
+      -ms-grid-column: 3;
     }
   }
 
