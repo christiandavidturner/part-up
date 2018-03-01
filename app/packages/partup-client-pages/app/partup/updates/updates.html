@@ -45,48 +45,52 @@
       {{/if}}
     </header>
 
-    {{#if newUpdatesCount }}
-      <div class="pu-sub-revealupdatesbutton">
-        <a href="#" data-reveal-new-updates class="pu-button pu-button-bluebar">{{_ 'pages-app-partup-updates-revealupdates' count=newUpdatesCount }}</a>
-      </div>
-    {{/if}}
-
-    {{#each updates }}
-      {{#if isAnotherDay }}
-        <section class="pu-sub-separator">
-          {{ partupDatePartupTimeline updated_at }}
-          <i class="picon-arrow-down"></i>
-        </section>
-      {{/if }}
-
-      {{> Update update=. LINK=true DETAIL=false }}
-
-      {{#if showNewUpdatesSeparator }}
-        <div class="pu-sub-newupdatesseparator pu-state-active">
-          <p class="pu-textline">
-            <span>
-              {{_ 'pages-app-partup-updates-new_updates_separator' }}
-              <i class="picon-arrow-up"></i>
-            </span>
-          </p>
+    {{#if templateLoaded }}
+      {{#if newUpdatesCount }}
+        <div class="pu-sub-revealupdatesbutton">
+          <a href="#" data-reveal-new-updates class="pu-button pu-button-bluebar">{{_ 'pages-app-partup-updates-revealupdates' count=newUpdatesCount }}</a>
         </div>
-      {{/if }}
-    {{ else }}
-      {{#if loading }}
-        {{> Loader ALIGNMENT='center' }}
-      {{ else }}
-        <section class="pu-update pu-update-placeholder">
-          <p>{{_ 'pages-app-partup-updates-no_updates'}}</p>
-        </section>
-      {{/if }}
-    {{/each }}
+      {{/if}}
 
-    {{#unless loading }}
-    {{#unless endReached }}
-      <button class="pu-temporary-loadmore pu-button pu-button-secondary {{#if partupOneIsTrue loading loadingMore}}pu-state-disabled pu-state-loading{{/if}}" data-trigger-load>
-        {{_ 'pages-app-partup-updates-load_more_updates' }}
-      </button>
-    {{/unless }}
-    {{/unless }}
+      {{#each updates }}
+        {{#if isAnotherDay }}
+          <section class="pu-sub-separator">
+            {{ partupDatePartupTimeline updated_at }}
+            <i class="picon-arrow-down"></i>
+          </section>
+        {{/if }}
+
+        {{> Update update=. LINK=true DETAIL=false }}
+
+        {{#if showNewUpdatesSeparator }}
+          <div class="pu-sub-newupdatesseparator pu-state-active">
+            <p class="pu-textline">
+              <span>
+                {{_ 'pages-app-partup-updates-new_updates_separator' }}
+                <i class="picon-arrow-up"></i>
+              </span>
+            </p>
+          </div>
+        {{/if }}
+      {{ else }}
+        {{#if loading }}
+          {{> Loader ALIGNMENT='center' }}
+        {{ else }}
+          <section class="pu-update pu-update-placeholder">
+            <p>{{_ 'pages-app-partup-updates-no_updates'}}</p>
+          </section>
+        {{/if }}
+      {{/each }}
+
+      {{#unless loading }}
+      {{#unless endReached }}
+        <button class="pu-temporary-loadmore pu-button pu-button-secondary {{#if partupOneIsTrue loading loadingMore}}pu-state-disabled pu-state-loading{{/if}}" data-trigger-load>
+          {{_ 'pages-app-partup-updates-load_more_updates' }}
+        </button>
+      {{/unless }}
+      {{/unless }}
+    {{ else }}
+      <!-- {{> Loader ALIGNMENT='center' }} -->
+    {{/if }}
   </div>
 </template>

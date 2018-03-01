@@ -8,6 +8,8 @@ Template.app_partup_updates.onCreated(function() {
     return false;
   }
 
+  this.templateLoaded = new ReactiveVar(false);
+
   this.updatesController = new UpdatesController({
     partupId: this.data.partupId,
     filter: this.data.defaultFilter || 'default'
@@ -34,6 +36,9 @@ Template.app_partup_updates.onRendered(function() {
       }
     });
   }, 50);
+  Meteor.defer(() => {
+    this.templateLoaded.set(true);
+  });
 });
 
 Template.app_partup_updates.onDestroyed(function() {
@@ -124,6 +129,9 @@ Template.app_partup_updates.helpers({
         });
       }
       return showSeperator;
+    },
+    templateLoaded() {
+      return Template.instance().templateLoaded.get();
     },
     loading() {
       return !Template.instance().updatesController.initialized.get();

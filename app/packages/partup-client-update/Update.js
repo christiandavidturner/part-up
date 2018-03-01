@@ -10,7 +10,6 @@ import { get, each } from 'lodash';
 Template.Update.onCreated(function() {
   // Stored seperately to avoid being called every second (time ticks)
   this.updated_at = get(this.data.update, 'updated_at');
-
 });
 
 Template.Update.helpers({

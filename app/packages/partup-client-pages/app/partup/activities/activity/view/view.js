@@ -43,6 +43,12 @@ Template.ActivityView.onCreated(function() {
 
   this.dropdownToggle = new ReactiveVar(false);
   this.filesToggle = new ReactiveVar(this.data.type === 'detail');
+
+  try {
+    if (Router.current().route.getName().match(/partup-documents/)) {
+      this.filesToggle.set(true);
+    }
+  } catch (err) {}
 });
 
 Template.ActivityView.helpers({

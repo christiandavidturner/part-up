@@ -3,7 +3,6 @@
 
   grid-column: span 3;
   -ms-grid-column-span: 3;
-  // -ms-grid-column-span: 3;
 
   display: grid;
   grid-template-columns: calc(100% - 40px) 40px;
@@ -12,7 +11,7 @@
   -ms-grid-columns: calc(100% - 40px) 40px;
 
   > * {
-    padding: 0px 12px;
+    padding: 3px 12px;
   }
 
   &-header {
@@ -22,12 +21,14 @@
     -ms-grid-column: 1;
     -ms-grid-row: 1;
 
+    padding: 6px 12px 10px 12px;
+
     .pu-tag {
       margin-right: 10px;
     }
 
     .title {
-      padding: 7px 0px 5px 0px;
+      padding: 7px 0px 0px 0px;
       display: inline-block;
       font-size: 15px;
       line-height: 18px;
@@ -93,7 +94,7 @@
 
     .pu-paragraph {
       font-size: 14px;
-      padding: 5px 0px;
+      padding: 0px;
     }
   }
 
@@ -106,7 +107,6 @@
 
     display: grid;
     grid-template-columns: auto auto auto 1fr auto auto;
-    // grid-column-gap: 7px;
 
     display: -ms-grid;
     -ms-grid-columns: auto auto auto 1fr auto auto;
@@ -273,7 +273,10 @@
       height: 25px;
       padding-top: 5px;
       justify-self: end;
-      align-self: top;
+
+      svg {
+        width: 32px;
+      }
 
       .pu-dropdownie {
         top: 24px;
@@ -281,14 +284,13 @@
     }
 
     .pu-activity-header {
-      padding-top: 0;
-
-      h3 {
-        vertical-align: bottom;
-      }
+      padding-bottom: 7px;
     }
 
     .pu-activity-content {
+      margin-top: -7px;
+      padding-bottom: 6px;
+
       .pu-paragraph {
         padding-top: 0;
       }
@@ -309,8 +311,13 @@
     }
 
     .pu-avatar-stack {
-      height: 42px;
+      height: 37px;
       margin-left: -2px;
+
+      li.pu-avatar-small {
+        height: 30px;
+        width: 30px;
+      }
     }
   }
 
