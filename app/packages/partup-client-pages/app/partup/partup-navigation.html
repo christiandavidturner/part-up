@@ -10,7 +10,7 @@
                     <div class="pu-nav-group-title">
                         <a href="{{ pathFor route='network' slug=network.slug query='show=false' }}">
                             <figure
-                                class="pu-avatar pu-avatar-square" 
+                                class="pu-avatar pu-avatar-square"
                                 style="{{# with partupImageById network.image}}background-image:url('{{ . }}');{{/ with}}"></figure>
                             <div class="title">
                                 <p>{{ network.name }}</p>
@@ -21,7 +21,7 @@
                 {{ else }}
                     <div class="pu-nav-group-title" data-toggle-sidebar>
                         <figure
-                            class="pu-avatar pu-avatar-square pu-avatar-partup" 
+                            class="pu-avatar pu-avatar-square pu-avatar-partup"
                             style="{{# with partupImageById partup.image}}background-image:url('{{ . }}');{{/ with}}"></figure>
                         <div class="title">
                             <p>{{ partup.name }}</p>
@@ -38,13 +38,13 @@
                     <li>
                         <a href="{{pathFor 'partup-start' slug=partup.slug}}" class="pu-button pu-button-nav {{ isActiveRoute name='partup-start' class='pu-state-active'}}">
                             <i class="picon-recommended"></i>
-                            {{#unless isPartnerOrSupporter currentUser}}
+                            {{#if renderIconText}}
                                 {{_ 'pages-app-partup-menu_start'}}
-                            {{/unless }}
+                            {{/if }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{pathFor 'partup' slug=partup.slug}}" class="pu-button pu-button-nav {{ isActiveRoute name='partup' class='pu-state-active'}}">
+                        <a href="{{pathFor 'partup-conversations' slug=partup.slug}}" class="pu-button pu-button-nav {{ isActiveRoute name='partup-conversations' class='pu-state-active'}}">
                             <i class="picon-message"></i>
                             {{_ 'pages-app-partup-menu_conversations'}}
                         </a>
@@ -79,7 +79,7 @@
             {{ else }}
                 <div class="pu-dropdown-expand">
                     {{#with selectorSettings }}
-                        {{> PartupNavigationSelector 
+                        {{> PartupNavigationSelector
                             slug=slug
                             partup=data
                             default=currentRoute }}
@@ -105,7 +105,7 @@
                         {{#if screenWidthEqualOrAbove '600'}}
                             {{_ 'pages-app-partup-menu_share-button'}}
                         {{/if}}
-                    </button> 
+                    </button>
                     {{> Dropdown toggle=shareToggled template='partup_share' data=. classes='pu-dropdownie-share arrow-right'}}
                 </li>
             </ul>
@@ -117,7 +117,7 @@
     <ul class="pu-list">
         <li class="pu-dropdownitem pu-dropdownitem-small">
             <button data-open-partup-settings>
-                {{_ 'pages-app-profile-tab-button-settings'}} 
+                {{_ 'pages-app-profile-tab-button-settings'}}
             </button>
         </li>
     </ul>
@@ -126,7 +126,7 @@
     <ul class="pu-list">
         <li class="pu-dropdownitem pu-dropdownitem-small">
             <button data-open-partup-settings>
-                {{_ 'pages-app-profile-tab-button-settings'}} 
+                {{_ 'pages-app-profile-tab-button-settings'}}
             </button>
         </li>
             <li class="pu-dropdownitem pu-dropdownitem-small">

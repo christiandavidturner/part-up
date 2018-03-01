@@ -1,56 +1,20 @@
-/**
- * Publish all activities in a partup
- *
- *
- * @param {String} partupId
- * @param {String} accessToken
- */
-Meteor.publishComposite('activities.from_partup', function(partupId, accessToken) {
-    check(partupId, String);
-    if (accessToken) check(accessToken, String);
 
-    this.unblock();
+Meteor.publish('activities.partup_create', function(partupId) {
+  check(partupId, String);
+  this.unblock();
 
-    return {
-        find: function() {
-            var partup = Partups.guardedFind(this.userId, {_id: partupId}, {limit: 1}, accessToken).fetch().pop();
-            if (!partup) return;
-
-            return Activities.findForPartup(partup);
-        },
-        children: [
-            {find: Updates.findForActivity},
-            {find: Contributions.findForActivity, children: [
-                {
-                    find: Meteor.users.findForContribution, children: [
-                        {find: Images.findForUser}
-                    ]
-                },
-                {find: Ratings.findForContribution, children: [
-                    {find: Meteor.users.findForRating, children: [
-                        {find: Images.findForUser}
-                    ]},
-                ]}
-            ]},
-            { find: Images.findForActivity },
-            { find: Files.findForActivity },
-
-        ]
-    };
+  const partup = Partups.findOne(partupId);
+  if (!partup.isViewableByUser(this.userId)) {
+    return this.ready();
+  }
+  return Activities.find({ partup_id: partupId, archived: { $ne: true } }, { sort: { created_at: -1 } });
 });
 
-/**
- * Publish all activities in a partup
- *
- *
- * @param {String} partupId
- * @param {String} accessToken
- */
 Meteor.routeComposite('/activities/me', function(request, parameters) {
+    if (!this.userId) return;
 
-    const userId = parameters.query.userId || this.userId;
     const archived = parameters.query && parameters.query.filterByArchived === 'true';
-    const user = Meteor.users.findOne(userId, { fields: { _id: 1, upperOf: 1 } });
+    const user = Meteor.users.findOne(this.userId, { fields: { _id: 1, upperOf: 1 } });
 
     const options = {};
     options.limit = parseInt(lodash.get(parameters, 'query.limit')) || 25;
@@ -67,7 +31,7 @@ Meteor.routeComposite('/activities/me', function(request, parameters) {
     // Get contributions that
     const userContributionCursor = Contributions.find({
         partup_id: { $in: partupIds },
-        upper_id: userId,
+        upper_id: this.userId,
     });
 
     const activityIds = [...new Set(userContributionCursor.map(({ activity_id }) => activity_id))];
@@ -90,7 +54,7 @@ Meteor.routeComposite('/activities/me', function(request, parameters) {
     }]);
 
     return {
-        find: () => Meteor.users.find({_id: userId}),
+        find: () => Meteor.users.find({_id: this.userId}),
         children: [
             {find: () => partupsCursor},
             {find: () => ({

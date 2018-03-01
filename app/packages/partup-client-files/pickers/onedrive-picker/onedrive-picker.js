@@ -93,5 +93,8 @@ Template.onedrivePicker.onRendered(function() {
 });
 
 Template.onedrivePicker.onDestroyed(function() {
-    this.$trigger.off('click', this.open);
+  const self = this;
+  if (self.$trigger) {
+    self.$trigger.unbind();
+  }
 });

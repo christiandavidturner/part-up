@@ -2,19 +2,20 @@
     <footer class="pu-commentfield">
         {{#unless POPUP }}
         <p class="pu-sub-view-all-comments-button">
-                <a href="{{ #if partupContainsOne update.type 'partups_newuser' }}
-                        {{pathFor route='profile' _id=user_id }}
-                    {{else}}
-                        {{pathFor route='partup-update' slug=partup.slug update_id=update._id }}
-                    {{/if}}">{{_ 'widgetcommentfield-comment-totalcomments' count=state.commentCount}}</a>
-                <span class="pu-sub-seperator"></span>
+            {{#unless activityView }}
+            <a href="{{ #if partupContainsOne update.type 'partups_newuser' }}
+                    {{pathFor route='profile' _id=user_id }}
+                {{else}}
+                    {{pathFor route='partup-update' slug=partup.slug update_id=update._id }}
+                {{/if}}">{{_ 'widgetcommentfield-comment-totalcomments' count=state.commentCount}}</a>
             {{#if state.showAddCommentButton }}
+              <span class="pu-sub-seperator"></span>
               <a href="#" data-expand-comments class="pu-sub-action">{{_ 'widgetcommentfield-comment-button'}}</a>
             {{/if }}
+            {{/unless }}
             {{# if FULLVIEW }}
             {{#unless HIDE_SYSTEM_MESSAGES }}
                 {{# if state.systemCount }}
-                    <span class="pu-sub-seperator"></span>
                     <a href="#" data-toggle-systemmessages>
                         {{# if state.showSystemMessages }}
                             {{_ 'widgetcommentfield-comment-systemmessage-hide'}}
@@ -47,7 +48,7 @@
                 {{ else }}
                     <li class="pu-comment" {{ isUserComment }}>
                         <a href="{{ pathFor 'profile' _id=creator._id }}">
-                            <figure foo="bar" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ creator._id }}" class="pu-avatar pu-avatar-small pu-avatar-square" style="background-image:url('{{ partupImageUrl id=imageForComment store='360x360'}}');"></figure>
+                            <figure foo="bar" data-hovercontainer="HoverContainer_upper" data-hovercontainer-context="{{ creator._id }}" class="pu-avatar pu-avatar-small pu-avatar-square" style="background-image:url('{{ partupImageUrl id=imageForComment store='80x80'}}');"></figure>
                         </a>
                         <div>
                             {{#if partupEquals _id state.editCommentId}}
@@ -87,7 +88,7 @@
         </ul>
         {{/if }}
         {{/unless}}
-        {{#autoForm schema=formSchema id=state.commentFormId class='pu-state-expanded' }}
+        {{#autoForm schema=formSchema id=state.commentFormId class='pu-state-expanded pu-commentform' }}
             <ul class="pu-list
                 {{# unless state.showCommentBox }}
                     pu-state-hidden

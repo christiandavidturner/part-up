@@ -46,6 +46,7 @@ Package.onUse(function(api) {
         'collections/contributions.js',
         'collections/updates.js',
         'collections/notifications.js',
+        'collections/partup_user_settings.js',
         'collections/partups.js',
         'collections/images.js',
         'collections/ratings.js',
@@ -145,6 +146,7 @@ Package.onUse(function(api) {
     api.export('Networks');
     api.export('Notifications');
     api.export('Partups');
+    api.export('PartupUserSettings');
     api.export('Ratings');
     api.export('Tags');
     api.export('Updates');

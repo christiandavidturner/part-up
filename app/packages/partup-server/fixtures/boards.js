@@ -44,7 +44,7 @@ Meteor.startup(function () {
             });
             /* Incubator board */
             Boards.insert({
-                '_id': 'vGaxNojSerdizDPjc',
+                '_id': 'Gzmun04TtYiP8llQ1',
                 'partup_id': 'IGhBN2Z3mrA90j3g7',
                 'created_at': new Date(),
                 'updated_at': new Date(),
@@ -64,9 +64,9 @@ Meteor.startup(function () {
                 ]
             });
 
-            
 
-            
+
+
         }
     }
 });

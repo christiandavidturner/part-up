@@ -16,7 +16,7 @@
                 <ul class="pu-boardview-lane__content" data-sortable-lane="{{ _id }}" id="{{ _id }}">
                     {{#each activities}}
                         <li class="pu-boardview-card pu-js-sortable-card" data-activity="{{ _id }}">
-                            {{> Activity activity=. EXPANDABLE=false COMMENTS_LINK=true isUpper=isUpper BOARDVIEW=true }}
+                            {{> Activity activity=. type='boardview' }}
                         </li>
                     {{/each}}
                 </ul>

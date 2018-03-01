@@ -20,14 +20,10 @@
         padding: 0;
         padding-left: 3px;
         margin-bottom: 0;
-        white-space: initial;
 
         .pu-tag {
             margin-right: 12px;
             color: $color-text;
-            line-height: 14px;
-            margin-top: 5px;
-            margin-left: -2px;
 
             span:after {
                 content: $picon-times-content;

@@ -1,3 +1,9 @@
+.pu-commentform {
+  .pu-list {
+    margin-top: 10px;
+  }
+}
+
 .pu-composition-partupdetailupdates {
     $dotted-line-color: #ccc;
 
@@ -16,10 +22,6 @@
             border-width: 5px 0;
             margin: (-5px) 0;
         }
-    }
-
-    .pu-temporary-loadmore {
-        margin-top: 40px;
     }
 
     .pu-sub-timelineline {
@@ -75,6 +77,7 @@
         .pu-textline {
             font-size: 14px;
             color: $color-primary;
+            margin-top: 0;
 
             &:after {
                 border-top: 2px solid $color-primary;
@@ -108,7 +111,11 @@
         }
     }
 
+
     .pu-sub-revealupdatesbutton {
+      grid-column: span 3;
+      margin: 25px 0px 25px 47px;
+
         aside {
             height: 1px;
         }
@@ -125,10 +132,6 @@
     }
 
     .pu-update:last-of-type {
-        margin-bottom: 200px;
-    }
-
-    .pu-update + .pu-temporary-loadmore {
-        margin-top: -150px;
+        margin-bottom: 45px;
     }
 }

@@ -242,6 +242,7 @@ Partup.prototype.makeSupporter = function(upperId) {
     Partups.update(this._id, { $addToSet: { 'supporters': upperId }, $pull: { invites: upperId } });
     Meteor.users.update(upperId, { $addToSet: { 'supporterOf': this._id } });
     Invites.remove({ partup_id: this._id, invitee_id: upperId });
+    PartupUserSettings.setLandingPage(this._id, upperId, 'conversations');
 
     this.createUpperDataObject(upperId);
 };
@@ -253,8 +254,7 @@ Partup.prototype.makeSupporter = function(upperId) {
  * @param {String} upperId the user that gets promoted
  */
 Partup.prototype.makeSupporterPartner = function(upperId) {
-    Partups.update(this._id, { $pull: { 'supporters': upperId, 'invites': upperId }, $addToSet: { 'uppers': upperId } });
-    Meteor.users.update(upperId, { $pull: { 'supporterOf': this._id }, $addToSet: { 'upperOf': this._id } });
+  this.makePartner(upperId);
 };
 
 /**
@@ -277,6 +277,7 @@ Partup.prototype.makePartnerSupporter = function(upperId) {
 Partup.prototype.makePartner = function(upperId) {
     Partups.update(this._id, { $pull: { 'supporters': upperId, 'invites': upperId }, $addToSet: { 'uppers': upperId } });
     Meteor.users.update(upperId, { $pull: { 'supporterOf': this._id }, $addToSet: { 'upperOf': this._id } });
+    PartupUserSettings.setLandingPage(this._id, upperId, 'conversations');
 };
 
 /**

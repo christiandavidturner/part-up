@@ -1,6 +1,4 @@
 <template name="modal_create_activities">
-
-    <!-- popup -->
     {{#if partupIsPopupActive 'create-activity' }}
         {{#contentFor "PopupTitle"}}
             {{_ 'pages-modal-create-activities-copy-title'}}
@@ -9,26 +7,23 @@
     {{/if}}
 
     <div class="pu-composition pu-composition-defaultmodal pu-composition-startpartup-activities pu-composition-fixedfooter">
-
         <h2 class="pu-title pu-title-modal">{{_ 'pages-modal-create-activities-heading-title'}}</h2>
         <p class="pu-sub-activitiesparagraph">{{_ 'pages-modal-create-activities-heading-paragraph'}}</p>
+        <a class="pu-button pu-button-text pu-button-no-side-padding" href="#" data-popup="create-activity">{{_ 'pages-modal-create-activities-button-adopt_activities' }}</a>
 
-         <a class="pu-button pu-button-text pu-button-no-side-padding" href="#" data-popup="create-activity">{{_ 'pages-modal-create-activities-button-adopt_activities' }}</a>
-
-        {{> Activity CREATE=true createCallback=createCallback partupId=partupId }}
+        {{> activityForm partupId=partupId CREATE=true createCallback=createCallback }}
 
         <p class="pu-sub-activitiestitle">{{_ 'pages-modal-create-activities-list-heading' }}</p>
 
         {{#if showActivityPlaceholder}}
-            {{> Activity activity=placeholderActivity CREATE_PARTUP=true READONLY=true }}
+            {{> Activity activity=placeholderActivity type='create' }}
         {{/if }}
 
-        {{#each partupActivities}}
-            {{> Activity activity=. CREATE_PARTUP=true isUpper=isUpper }}
+        {{#each activities}}
+            {{> Activity activity=. type='create' }}
         {{/each}}
 
-        <!-- Continue button -->
-        <footer class="pu-sub-modalfooter pu-sub-modalfooter-scrolling {{#if fixFooter }}pu-sub-modalfooter-scrolling-active{{/if}}">
+        <footer class="pu-sub-modalfooter pu-sub-modalfooter-scrolling">
             <div class="pu-wrap pu-wrap-modal">
                 <a href="{{pathFor 'create-promote' _id=partupId slug=networkSlug }}" class="pu-button pu-button-arrow">
                     {{_ 'pages-modal-create-activities-button-next_page' }}
@@ -36,7 +31,5 @@
                 </a>
             </div>
         </footer>
-
     </div>
-
 </template>

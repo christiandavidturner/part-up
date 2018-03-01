@@ -1,122 +1,96 @@
 <template name="app_partup_updates">
-    <div class="pu-composition pu-composition-partupdetailupdates {{#if newUpdatesCount }}pu-composition-partupdetailupdates-newupdatesavailable{{/if}}">
+  <div class="pu-composition pu-composition-partupdetailupdates {{#if newUpdatesCount }}pu-composition-partupdetailupdates-newupdatesavailable{{/if}}">
+    {{#if partupIsPopupActive 'new-message' }}
 
-        <div class="pu-sub-timelineline" style="{{# with containerHeightVar.get }}height: {{ . }}px;{{/ with }}"></div>
+      {{#contentFor "PopupTitle"}}
+        {{_ 'pages-app-partup-updates-newmessage-title'}}
+      {{/contentFor}}
 
-        <!-- messageForm popup -->
-        {{#if partupIsPopupActive 'new-message' }}
-            {{#contentFor "PopupTitle"}}
-                {{_ 'pages-app-partup-updates-newmessage-title'}}
-            {{/contentFor}}
-            {{#contentFor region="PopupContent" data=.}}
-                {{> messageForm }}
-            {{/contentFor}}
-        {{/if}}
+      {{#contentFor region="PopupContent" data=.}}
+        {{> messageForm }}
+      {{/contentFor}}
 
-        <!-- Header buttons -->
-        <header class="pu-row">
-        {{#if showNewMessageButton}}
-            <div class="cell stretch">
-                    <a class="pu-button pu-button-icon" href="#" data-newmessage-popup>
-                        <i class="picon-message"></i>
-                        {{#if routeIsDocuments}}
-                        {{_ 'pages-app-partup-updates-new_message_document' }}
-                        {{else}}
-                            {{_ 'pages-app-partup-updates-new_message' }}
-                        {{/if }}
-                    </a>
-            </div>
-        {{/if}}
-        {{#if pageIsUpdates}}
-            <div class="cell last">
-                <div class="pu-row">
-                    <div class="cell">
-                        {{#if screenSizeIsMinimalWidth 'tablet'}}
-                            {{> PartialDropdownUpdatesActions reactiveVar=filterReactiveVar}}
-                        {{else}}
-                            {{#PartupExpander label='Filter'}}
-                                {{> PartialDropdownUpdatesActions reactiveVar=filterReactiveVar}}
-                            {{/PartupExpander}}
-                        {{/if}}
-                    </div>
-                </div>
-            </div>
-        {{/if}}
-        </header>
+    {{/if}}
 
-        <div>
-            {{#unless updatesLoading }}
-                <!-- Reveal new updates -->
-                {{#if newUpdatesCount }}
-                    <section class="pu-update pu-sub-revealupdatesbutton">
-                        <aside></aside>
-                        <section><a href="#" data-reveal-new-updates class="pu-button pu-button-bluebar">{{_ 'pages-app-partup-updates-revealupdates' count=newUpdatesCount }}</a></section>
-                    </section>
-                {{/if}}
+    <div class="pu-sub-timelineline" style="{{# with containerHeightVar.get }}height: {{ . }}px;{{/ with }}"></div>
 
-                <!-- For each update -->
-                {{#each updates }}
-                    <!-- If the updates doesn't belong to the new updates, draw a line -->
-                    {{# if partupEquals showNewUpdatesSeparator 'top' }}
-                        <div class="pu-sub-newupdatesseparator pu-state-active">
-                            <p class="pu-textline">
-                                <span>
-                                    {{_ 'pages-app-partup-updates-new_updates_separator' }}
-                                    <i class="picon-arrow-up"></i>
-                                </span>
-                            </p>
-                        </div>
-                    {{/ if }}
-
-                    <!-- If it's another day, show a day-separator -->
-                    {{#if isAnotherDay }}
-                        <section class="pu-sub-separator">
-                            {{ partupDatePartupTimeline updated_at }}
-                            <i class="picon-arrow-down"></i>
-                        </section>
-                    {{/if }}
-
-                    <!-- Render the update -->
-                    {{> Update LINK=true COMMENT_LIMIT=2 updateId=_id metadata=metaDataForUpdate }}
-
-                    {{# if partupEquals showNewUpdatesSeparator 'bottom' }}
-                        <div class="pu-sub-newupdatesseparator pu-state-active">
-                            <p class="pu-textline">
-                                <span>
-                                    {{_ 'pages-app-partup-updates-new_updates_separator' }}
-                                    <i class="picon-arrow-up"></i>
-                                </span>
-                            </p>
-                        </div>
-                    {{/ if }}
-
-                {{ else }}
-
-                    <!-- No updates available -->
-                    <section class="pu-update pu-update-placeholder">
-                        <section>
-                            <p>{{_ 'pages-app-partup-updates-no_updates'}}</p>
-                        </section>
-                    </section>
-
-                {{/each }}
-
-
-            {{ else }}
-                <div style="margin:50px 0px 20px 90px;">
-                    {{> Loader }}
-                </div>
-            {{/unless }}
-
-            {{#unless updatesEndReached}}
-                <button class="pu-temporary-loadmore pu-button pu-button-secondary {{#if partupOneIsTrue updatesLoadingMore updatesLoading}}pu-state-disabled pu-state-loading{{/if}}" data-trigger-load>
-                    {{_ 'pages-app-partup-updates-load_more_updates' }}
-                    {{#if partupOneIsTrue updatesLoadingMore updatesLoading}}
-                         {{> Spinner color='inverted' type='small'}}
-                    {{/if}}
-                </button>
-            {{/unless}}
+    <header class="pu-row">
+      {{#if showNewMessageButton}}
+        <div class="cell stretch">
+          <a class="pu-button pu-button-icon" href="#" data-newmessage-popup>
+            <i class="picon-message"></i>
+            {{#if routeIsDocuments}}
+            {{_ 'pages-app-partup-updates-new_message_document' }}
+            {{else}}
+                {{_ 'pages-app-partup-updates-new_message' }}
+            {{/if }}
+          </a>
         </div>
+      {{/if}}
 
-    </div>
+      {{#if routeIsAllUpdates}}
+        <div class="cell last">
+          <div class="pu-row">
+            <div class="cell">
+              {{#if screenSizeIsMinimalWidth 'tablet'}}
+                {{> PartialDropdownUpdatesActions reactiveVar=filterHandle}}
+              {{else}}
+                {{#PartupExpander label='Filter'}}
+                  {{> PartialDropdownUpdatesActions reactiveVar=filterHandle}}
+                {{/PartupExpander}}
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      {{/if}}
+    </header>
+
+    {{#if templateLoaded }}
+      {{#if newUpdatesCount }}
+        <div class="pu-sub-revealupdatesbutton">
+          <a href="#" data-reveal-new-updates class="pu-button pu-button-bluebar">{{_ 'pages-app-partup-updates-revealupdates' count=newUpdatesCount }}</a>
+        </div>
+      {{/if}}
+
+      {{#each updates }}
+        {{#if isAnotherDay }}
+          <section class="pu-sub-separator">
+            {{ partupDatePartupTimeline updated_at }}
+            <i class="picon-arrow-down"></i>
+          </section>
+        {{/if }}
+
+        {{> Update update=. LINK=true DETAIL=false }}
+
+        {{#if showNewUpdatesSeparator }}
+          <div class="pu-sub-newupdatesseparator pu-state-active">
+            <p class="pu-textline">
+              <span>
+                {{_ 'pages-app-partup-updates-new_updates_separator' }}
+                <i class="picon-arrow-up"></i>
+              </span>
+            </p>
+          </div>
+        {{/if }}
+      {{ else }}
+        {{#if loading }}
+          {{> Loader ALIGNMENT='center' }}
+        {{ else }}
+          <section class="pu-update pu-update-placeholder">
+            <p>{{_ 'pages-app-partup-updates-no_updates'}}</p>
+          </section>
+        {{/if }}
+      {{/each }}
+
+      {{#unless loading }}
+      {{#unless endReached }}
+        <button class="pu-temporary-loadmore pu-button pu-button-secondary {{#if partupOneIsTrue loading loadingMore}}pu-state-disabled pu-state-loading{{/if}}" data-trigger-load>
+          {{_ 'pages-app-partup-updates-load_more_updates' }}
+        </button>
+      {{/unless }}
+      {{/unless }}
+    {{ else }}
+      <!-- {{> Loader ALIGNMENT='center' }} -->
+    {{/if }}
+  </div>
 </template>

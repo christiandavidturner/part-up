@@ -7,17 +7,17 @@ const createSubManager = () => {
     });
 
     this.updates = new SubsManager({
-      cacheLimit: 10,
+      cacheLimit: 20,
       expireIn: 5,
     });
 
     this.boards = new SubsManager({
-      cacheLimit: 10,
+      cacheLimit: 5,
       expireIn: 5,
     });
 
     this.activities = new SubsManager({
-      cacheLimit: 10,
+      cacheLimit: 15,
       expireIn: 5,
     });
 

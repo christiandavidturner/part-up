@@ -141,8 +141,6 @@ li {
     }
 
     a {
-        text-decoration: underline;
-        color: $color-text-link;
         cursor: pointer;
 
         &:hover, &:active, &:focus {

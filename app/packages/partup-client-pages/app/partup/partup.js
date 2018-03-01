@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, isString } from 'lodash';
 
 Template.app_partup.onCreated(function() {
     const template = this;
@@ -20,8 +20,7 @@ Template.app_partup.onCreated(function() {
 
     template.loading = {
         partup: new ReactiveVar(true),
-        board: new ReactiveVar(true),
-        activities: new ReactiveVar(true),
+        rest: new ReactiveVar(true),
     };
 
     const sidebarCookie = Cookies.get('partup_sidebar_expanded');
@@ -39,53 +38,51 @@ Template.app_partup.onCreated(function() {
         }
     );
 
-    window.addEventListener('orientationchange', () => {
-        if (screen.width < screen.height) {
-            template.sidebarExpanded.set(false);
-        } else {
-            template.sidebarExpanded.set(true);
+  this.handleOrientationchange = () => {
+    if (screen.width < screen.height) {
+      this.sidebarExpanded.set(false);
+    } else {
+      this.sidebarExpanded.set(true);
+    }
+  };
+  window.addEventListener('orientationchange', this.handleOrientationchange, { passive: true });
+
+  this.autorun(() => {
+    const partupId = Template.currentData().partupId;
+    const accessToken = Session.get('partup_access_token');
+
+    if (!isString(partupId)) {
+      return Router.pageNotFound('partup');
+    }
+    this.partupSub = subManager.partups.subscribe('partups.one', partupId, accessToken);
+    this.boardSub = subManager.boards.subscribe('board.for_partup_id', partupId);
+
+    if (this.partupSub.ready()) {
+      const partup = Partups.findOne(partupId);
+      if (partup) {
+        if (
+            !partup.isViewableByUser(
+              Meteor.userId(),
+              Session.get('partup_access_token')
+            )
+        ) {
+            return Router.pageNotFound('partup-closed');
         }
-    });
-
-    template.autorun(() => {
-        const partupId = Template.currentData().partupId;
-        const accessToken = Session.get('partup_access_token');
-
-        if (typeof partupId !== 'string') {
-            return Router.pageNotFound('partup');
-        }
-
-        Meteor.subscribe('partups.one', partupId, accessToken, {
-            onReady() {
-                const partup = Partups.findOne(partupId);
-                if (partup) {
-                    if (
-                        !partup.isViewableByUser(
-                            Meteor.userId(),
-                            Session.get('partup_access_token')
-                        )
-                    ) {
-                        return Router.pageNotFound('partup-closed');
-                    }
-                    return template.partup.set(partup);
-                }
-
-                return Router.pageNotFound('partup');
-            },
-        });
-
-        subManager.updates.subscribe('updates.from_partup', partupId, {}, accessToken);
-
-        const boardSubHandle = subManager.boards.subscribe('board.for_partup_id', partupId, accessToken);
-        if (boardSubHandle.ready()) {
-          this.loading.board.set(false);
-        }
-        const activitySubHandle = subManager.activities.subscribe('activities.from_partup', partupId, accessToken);
-        if (activitySubHandle.ready()) {
-          this.loading.activities.set(false);
-        }
-    });
+        template.partup.set(partup);
+      } else {
+        Router.pageNotFound('partup');
+      }
+    }
+    if (this.boardSub.ready()) {
+      this.loading.rest.set(false);
+    }
+  });
 });
+
+Template.app_partup.onDestroyed(function() {
+  const self = this;
+  window.removeEventListener('orientationchange', self.handleOrientationchange);
+})
 
 Template.app_partup.helpers({
     network() {
@@ -96,19 +93,7 @@ Template.app_partup.helpers({
     },
     partupLoaded() {
         const { loading, partup } = Template.instance();
-
-        if (
-            ActiveRoute.name(/partup-activities/) &&
-            get(partup.get(), 'board_view', false)
-        ) {
-            return (
-                !loading.partup.get() &&
-                !loading.board.get() &&
-                !loading.activities.get()
-            );
-        }
-
-        return !loading.partup.get();
+        return !loading.partup.get() && !loading.rest.get();
     },
     sidebarExpanded() {
         return Template.instance().sidebarExpanded.get();

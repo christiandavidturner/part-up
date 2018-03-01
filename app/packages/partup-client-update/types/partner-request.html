@@ -1,16 +1,14 @@
 <template name="update_partups_partner_request">
     {{#if userIsPartner}}
-        <section>
-            <article class="pu-block">
-                <div class="pu-row">
-                    <div class="cell">
-                        <button data-accept class="pu-button" type='button'>{{_ "update-partner-request-button-accept"}}</button>
-                    </div>
-                    <div class="cell last">
-                        <button data-decline class="pu-button pu-button-text pu-button-text-subtle" type='button'>{{_ "update-partner-request-button-decline"}}</button>
-                    </div>
-                </div>
-            </article>
+        <section class="pu-block">
+          <div class="pu-row">
+            <div class="cell">
+              <button data-accept class="pu-button" type='button'>{{_ "update-partner-request-button-accept"}}</button>
+            </div>
+            <div class="cell last">
+              <button data-decline class="pu-button pu-button-text pu-button-text-subtle" type='button'>{{_ "update-partner-request-button-decline"}}</button>
+            </div>
+          </div>
         </section>
     {{/if}}
 </template>

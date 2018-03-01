@@ -1,51 +1,40 @@
 <template name="app_partup_update">
-    <div class="pu-composition pu-composition-partupdetailupdateitem">
-        {{#if subscriptionReady}}
-                <!-- Header buttons -->
-                <header class="pu-pageheader">
-                    <section>
-                        {{#if isActivityUpdate}}
-                            <a class="pu-button" href="{{ pathFor 'partup-activities' slug=partup.slug }}">
-                                {{_ 'pages-app-partup-update-back_to_overview-activities' }}
-                            </a>
-                        {{else}}
-                            <a class="pu-button" href="{{ pathFor 'partup' slug=partup.slug }}">
-                                {{_ 'pages-app-partup-update-back_to_overview' }}
-                            </a>
-                        {{/if}}
-                    </section>
-                </header>
+  <div class="pu-composition pu-composition-partupdetailupdateitem pu-update-single">
+    <header class="pu-pageheader">
+      {{#if update.isActivityUpdate}}
+          <a class="pu-button" href="{{ pathFor 'partup-activities' slug=partupSlug }}">
+              {{_ 'pages-app-partup-update-back_to_overview-activities' }}
+          </a>
+      {{ else }}
+          <a class="pu-button" href="{{ pathFor 'partup' slug=partupSlug }}">
+              {{_ 'pages-app-partup-update-back_to_overview' }}
+          </a>
+      {{/if }}
+    </header>
 
-            {{#if metaDataForUpdate}}
-                <!-- Timeline -->
-                <div class="pu-sub-timeline {{# if isAnotherDay metaDataForUpdate.updated_at }}pu-sub-makespaceforthedayheader{{/ if }}">
+    {{#unless update.isActivityUpdate }}
+      <div class="pu-sub-timeline {{# if isAnotherDay update.updated_at }}pu-sub-makespaceforthedayheader{{/ if }}">
+        {{#if isAnotherDay update.updated_at }}
+            <section class="pu-sub-dayheader">
+                {{ partupDatePartupTimeline update.updated_at }}
+                <i class="picon-arrow-down"></i>
+            </section>
+        {{/if }}
+      </div>
+    {{/unless }}
 
-                    <!-- Day header -->
-                    {{# if isAnotherDay metaDataForUpdate.updated_at }}
-                        <section class="pu-sub-dayheader">
-                            {{ partupDatePartupTimeline metaDataForUpdate.updated_at }}
-                            <i class="picon-arrow-down"></i>
-                        </section>
-                    {{/ if }}
-
-                </div>
-
-                <!-- The update itself -->
-                {{#if rerenderHack}}
-                    {{> Update LINK=false updateId=updateId metadata=metaDataForUpdate FORCE_COMMENTFORM=true IS_DETAIL=true FILES_EXPANDED=state.fe }}
-                {{/if}}
-            {{else}}
-                {{> _app_partup_update_placeholder}}
-            {{/if}}
-        {{else}}
-            {{> Spinner}}
-        {{/if}}
-    </div>
+    {{#unless loading }}
+      {{#if update }}
+        {{> Update update=update LINK=false DETAIL=true }}
+      {{ else }}
+        {{> _app_partup_update_placeholder }}
+      {{/if }}
+    {{/unless }}
+  </div>
 </template>
 
 <template name="_app_partup_update_placeholder">
     <div class="pu-sub-timeline pu-sub-makespaceforthedayheader">
-        <!-- Day header -->
         <section class="pu-sub-dayheader">
             {{_ 'pages-app-partup-update-not-found-placeholder-date' }}
             <i class="picon-arrow-down"></i>

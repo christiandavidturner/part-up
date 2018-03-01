@@ -1,6 +1,13 @@
 Template.ImageGallery.onCreated(function() {
     var template = this;
+    this.loading = new ReactiveVar(true);
 
+    const imageIds = Template.instance().data.images
+    this.subscribe('images.many', imageIds, {
+        onReady: () => {
+          this.loading.set(false);
+        }
+    })
 });
 Template.ImageGallery.helpers({
     popupId: function() {
@@ -8,6 +15,9 @@ Template.ImageGallery.helpers({
     },
     singleImage: function() {
         return Template.instance().data.images.length === 1;
+    },
+    loading() {
+        return Template.instance().loading.get();
     }
 });
 

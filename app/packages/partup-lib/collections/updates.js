@@ -1,3 +1,5 @@
+import { isString } from 'lodash';
+
 /**
  * Partup model
  * @ignore
@@ -47,10 +49,10 @@ Update.prototype.isActivityUpdate = function() {
  * @return {Boolean}
  */
 Update.prototype.isContributionUpdate = function() {
-    return /^partups_(contributions|ratings)/.test(this.type) || (
-        this.type === 'partups_comments_added' &&
-        this.type_data.contribution_id
-    );
+  return /^partups_(contributions|ratings)/.test(this.type) || (
+      this.type === 'partups_comments_added' &&
+      !!this.type_data.contribution_id
+  );
 };
 
 /**
@@ -200,11 +202,15 @@ Updates.findForPartup = function(partup, parameters, userId) {
         userId = Meteor.userId();
     }
 
-    var selector = { partup_id: partup._id };
+    const partupId = isString(partup) ? partup : partup._id;
+    var selector = { partup_id: partupId };
     var options = { sort: { updated_at: -1 } };
 
+    if (parameters.skip) {
+      options.skip = parseInt(parameters.skip, 10);
+    }
     if (parameters.limit) {
-        options.limit = parseInt(parameters.limit);
+      options.limit = parseInt(parameters.limit, 10);
     }
 
     if (parameters.filter) {

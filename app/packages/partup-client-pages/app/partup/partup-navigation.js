@@ -1,13 +1,15 @@
+import { get } from 'lodash';
+
 /*************************************************************/
 /* Partial rendered */
 /*************************************************************/
 
 Template.app_partup_navigation.onCreated(function() {
-    const template = this;
-    template.toggle = {
-        settings: new ReactiveVar(false),
-        share: new ReactiveVar(false),
-    }
+  const template = this;
+  template.toggle = {
+      settings: new ReactiveVar(false),
+      share: new ReactiveVar(false),
+  }
 });
 
 /*************************************************************/
@@ -30,27 +32,14 @@ Template.app_partup_navigation.helpers({
         }
     },
     isPartner(user) {
-        const partup = Template.instance().data.partup;
-
-        if (!user) {
-            return false;
-        }
-
-        if (partup) {
-            return User(user).isPartnerInPartup(partup._id);
-        }
+      if (user) {
+        return User(user).isPartnerInPartup(get(this.partup, '_id'));
+      }
+      return false;
     },
-    isPartnerOrSupporter(user) {
-        const partup = Template.instance().data.partup;
-
-        if (!user) {
-            return false;
-        }
-
-        if (partup) {
-            return User(user).isSupporterInPartup(partup._id) || User(user).isPartnerInPartup(partup._id);
-        }
-    }
+    renderIconText() {
+      return this.renderIconText !== undefined ? this.renderIconText : !User(Meteor.user()).isPartnerOrSupporterInPartup(get(this.partup, '_id'));
+    },
 });
 
 Template.app_partup_navigation.events({

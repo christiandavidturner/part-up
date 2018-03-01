@@ -13,7 +13,7 @@ Template.PartupNavigationSelector.onCreated(function() {
         icon: 'recommended'
     },{
         name: TAPi18n.__('pages-app-partup-menu_conversations'),
-        route: 'partup',
+        route: 'partup-conversations',
         slug: partupSlug,
         icon: 'message'
     },{
@@ -32,15 +32,6 @@ Template.PartupNavigationSelector.onCreated(function() {
         slug: partupSlug,
         icon: 'globe'
     }];
-
-    // if (partup.isEditableBy(Meteor.user())) {
-    //     template.options.push({
-    //         name: TAPi18n.__('pages-app-partup-menu_settings'),
-    //         route: 'partup-settings',
-    //         slug: partupSlug,
-    //         icon: 'cog'
-    //     });
-    // }
 
     var defaultOption = template.options[0];
 

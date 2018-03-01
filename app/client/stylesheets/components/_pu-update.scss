@@ -1,210 +1,131 @@
 .pu-update {
-    @extend %clearfix;
+  display: grid;
+  grid-template-columns: 42px 65px calc(100% - 117px);
+  grid-template-rows: auto 12px auto;
+  grid-column-gap: 5px;
 
-    .pu-star-update {
-        display: inline-block;
-        margin-right: 5px;
+  display: -ms-grid;
+  -ms-grid-columns: 42px 65px calc(100% - 117px);
+  -ms-grid-rows: auto 12px auto;
+
+  align-items: center;
+
+  &-aside {
+    grid-row: 1;
+    grid-column: span 2;
+
+    -ms-grid-row: 1;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 2;
+
+    display: grid;
+
+    grid-template-columns: 42px 65px;
+
+    display: -ms-grid;
+    -ms-grid-columns: 42px 65px;
+
+    align-items: center;
+    justify-items: center;
+
+
+    .pu-sub-time {
+      color: #7f7f7f;
+      font-size: 12px;
+      font-family: $font-primary;
+      letter-spacing: 0.6px;
+
+      vertical-align: middle;
+
+      display: block;
+      -ms-grid-column: 2;
+      -ms-grid-row-align: center;
+      -ms-grid-column-align: center;
     }
+  }
 
-    .extra-margin {
-        margin-top: 16px;
+  &-header {
+    grid-row: 1;
+    grid-column: 3;
+
+    -ms-grid-row: 1;
+    -ms-grid-column: 3;
+
+    vertical-align: middle;
+    -ms-grid-row-align: center;
+
+    > h3 {
+      font-size: 15px;
+      line-height: inherit;
+
+      > a {
+        color: $color-secondary;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
+  }
 
-    .pu-commentfield {
-        padding: em(5) em(10) em(10) em(10);
-        border: 2px solid #eee;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-        margin-top: -3px;
-        background-color: #ffffff;
+  &-content {
+    grid-row: 3;
+    grid-column: span 3;
+
+    -ms-grid-row: 3;
+    -ms-grid-column: 3;
+
+    > p {
+      padding: 12px;
+      background: white;
+      border: 2px solid #eee;
+      border-radius: 5px;
     }
+  }
 
+  > .pu-block {
+    grid-row: 3;
+    grid-column: span 3;
 
-    > aside, > section {
-        position: relative;
-        float: none;
-        width: 100%;
+    -ms-grid-row: 3;
+    -ms-grid-column-span: 3;
+
+    .pu-paragraph {
+      width: calc(100% - 40px);
     }
+  }
 
-    > aside {
-        @extend %clearfix;
+  &-comments {
+    grid-row: 4;
+    grid-column: span 3;
 
-        .pu-avatar {
-            float: left;
-            background-color: transparent;
-        }
+    -ms-grid-row: 4;
+    -ms-grid-column-span: 3;
 
-        .pu-sub-time {
-            display: inline-block;
-            margin-left: 15px;
-            color: #7f7f7f;
-            font-size: 12px;
-            font-family: $font-primary;
-            line-height: 39px;
-            letter-spacing: 0.6px;
-        }
+    margin-top: -2px;
+
+    background: white;
+    border: 2px solid #eee;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  @include goingLarge(700) {
+    &-content, > .pu-block, &-comments {
+      grid-column: 3;
+      -ms-grid-column: 3;
     }
+  }
 
-    > section {
-        > header {
-            margin-left: 115px;
-            margin-top: -42px;
-
-            @extend %clearfix;
-
-            h3 {
-                float: left;
-                font-size: 15px;
-                color: $color-secondary;
-                font-weight: 600;
-                margin-top: 8px;
-
-                a {
-                    color: $color-secondary;
-                    text-decoration: none;
-
-                    &:hover {
-                        text-decoration: underline;
-                    }
-                }
-            }
-
-            .pu-button-text {
-                float: right;
-                color: #999;
-                opacity: 0;
-                pointer-events: none;
-                margin-bottom: -18px;
-                transform: translateY(8px);
-
-                &:hover {
-                    color: #595959;
-                }
-            }
-        }
-
-        > section {
-            margin-top: 16px;
-
-            // Type-specific
-            .pu-title-large {
-                margin-top: -9px;
-                margin-bottom: -5px;
-            }
-
-            .pu-paragraph-large {
-                margin-top: -7px;
-                margin-bottom: -9px;
-            }
-        }
-
-        footer {
-            .pu-sub-view-all-comments-button {
-                font-size: 14px;
-                color: $color-text-subtle;
-                margin-top: 5px;
-                // margin-bottom: -10px;
-
-                a {
-                    color: $color-text-subtle;
-
-                    &.pu-sub-action,
-                    &:hover,
-                    &:active,
-                    &:focus {
-                        color: $color-secondary;
-                    }
-                }
-
-                span.pu-sub-seperator {
-                    &:after {
-                        content: "•";
-                        margin-left: 5px;
-                        margin-right: 5px;
-                    }
-                }
-            }
-
-            .pu-list-fieldwithbutton {
-                margin-top: 15px;
-            }
-
-            form {
-                display: none;
-
-                &.pu-state-expanded {
-                    display: block;
-                }
-            }
-        }
+  &-detail {
+    .pu-block, .pu-activity, .pu-update-comments {
+      grid-column: 3;
+      -ms-grid-column: 3;
     }
+  }
 
-    > section > header .pu-button-text {
-        opacity: 1;
-        transform: none;
-        pointer-events: visible;
+  &-placeholder {
+    > p {
+      grid-column: span 3;
     }
-
-    &-placeholder {
-        margin-top: 80px;
-
-        > section {
-            width: 100%;
-            float: none;
-
-            p {
-                width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-                color: #999;
-                font-weight: bold;
-                font-size: 20px;
-                text-align: center;
-            }
-        }
-    }
-
-    @media screen and (min-width: $breakpoint-partup-medium) {
-        > aside, > section {
-            float: left;
-        }
-
-        > aside {
-            width: 130px;
-            margin-top: -8px;
-
-            .pu-sub-time {
-                margin-left: 29px;
-            }
-        }
-
-        > section {
-            width: calc(100% - 130px);
-
-            > header {
-                position: relative;
-                margin: 0;
-                margin-bottom: 16px;
-                width: auto;
-
-                h3 {
-                    margin-top: 0px;
-                }
-            }
-        }
-    }
-
-    @media screen and (min-width: $breakpoint-tablet + 1px) {
-        > section > header .pu-button-text {
-            opacity: 0;
-            transform: translateY(8px);
-            pointer-events: none;
-        }
-
-        &:hover > section > header .pu-button-text {
-            opacity: 1;
-            transform: none;
-            pointer-events: visible;
-        }
-    }
+  }
 }

@@ -1,5 +1,4 @@
 <template name="update_partups_message_added">
-    <!-- messageForm popup -->
     {{#if partupEquals upper_id currentUserId }}
         {{#if partupIsPopupActive dropdownData.editMessagePopupId }}
             {{#contentFor "PopupTitle"}}
@@ -11,36 +10,33 @@
         {{/if}}
     {{/if}}
 
-    <section>
-        <article class="pu-block pu-block-message">
-            {{#if hasMenuEntries }}
-                <div class="more-options">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="25px" width="40px" id="Layer_1" style="enable-background:new 0 0 40 25;" version="1.1" viewBox="0 0 40 25"  xml:space="preserve" data-dropdown-open>
-                            <circle cx="11" cy="12.5" r="2.5" style="fill:#2F3435;"/>
-                            <circle cx="20" cy="12.5" r="2.5" style="fill:#2F3435;"/>
-                            <circle cx="29" cy="12.5" r="2.5" style="fill:#2F3435;"/>
-                        </svg>
-                    {{> Dropdown toggle=dropdownOpen template="messageAddedActionsDropdown" data=dropdownData }}
-                </div>
+    <article class="pu-block pu-block-message">
+        {{#if hasMenuEntries }}
+            <div class="more-options">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="25px" width="40px" id="Layer_1" style="enable-background:new 0 0 40 25;" version="1.1" viewBox="0 0 40 25"  xml:space="preserve" data-dropdown-open>
+                        <circle cx="11" cy="12.5" r="2.5" style="fill:#2F3435;"/>
+                        <circle cx="20" cy="12.5" r="2.5" style="fill:#2F3435;"/>
+                        <circle cx="29" cy="12.5" r="2.5" style="fill:#2F3435;"/>
+                    </svg>
+                {{> Dropdown toggle=dropdownOpen template="messageAddedActionsDropdown" data=dropdownData }}
+            </div>
+        {{/if }}
+
+        {{> dangerouslyRenderHTML HTML=messageContent transform=format access="MARKUP" }}
+
+        {{# if type_data.images }}
+            {{> ImageGallery images=type_data.images updateId=_id}}
+        {{/ if}}
+
+        {{# if type_data.documents }}
+            {{#if areDocumentIds type_data.documents }}
+                {{> documentRenderer documents=type_data.documents updateId=_id }}
+            {{ else }}
+                {{> DocumentRenderer documents=type_data.documents updateId=_id }}
             {{/if }}
-
-            {{> dangerouslyRenderHTML HTML=messageContent transform=format access="MARKUP" }}
-
-            {{# if type_data.images }}
-                {{> ImageGallery images=type_data.images updateId=_id}}
-            {{/ if}}
-
-            {{# if type_data.documents }}
-                {{#if areDocumentIds type_data.documents }}
-                    {{> documentRenderer documents=type_data.documents updateId=_id }}
-                {{ else }}
-                    {{> DocumentRenderer documents=type_data.documents updateId=_id}}
-                {{/if }}
-            {{/ if}}
-        </article>
-    </section>
+        {{/ if}}
+    </article>
 </template>
-
 
 <template name="messageAddedActionsDropdown">
     <ul class="pu-list-dropdown ignore-drag">
@@ -49,6 +45,7 @@
             <a data-edit-message>{{_ 'update-editmessage-edit'}}</a>
         </li>
         {{/if }}
+        {{#if mayStar }}
         {{#if updateIsStarred }}
             <li class="pu-dropdown-item">
                 <a data-unstar-message>{{_ 'unstar'}}</a>
@@ -57,7 +54,8 @@
             <li class="pu-dropdown-item">
                 <a data-star-message>{{_ 'star'}}</a>
             </li>
-        {{/if}}
+        {{/if }}
+        {{/if }}
         {{#if mayRemove }}
             <li class="pu-dropdown-item">
                 <a  data-remove-message>{{_ 'update-editmessage-remove'}}</a>

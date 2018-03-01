@@ -1,49 +1,48 @@
-/**
- * Children of an update
- */
-var updateChildren = [
-    {find: Meteor.users.findUserForUpdate, children: [
-        {find: Images.findForUser}
-    ]},
-    {find: Images.findForUpdate},
-    {find: Images.findForUpdateComments},
-    {find: Files.findForUpdate},
-    {find: Activities.findForUpdate},
-    {find: Contributions.findForUpdate, children: [
-        {find: Activities.findForContribution},
-        {find: Ratings.findForContribution, children: [
-            {find: Meteor.users.findForRating, children: [
-                {find: Images.findForUser}
-            ]}
-        ]}
-    ]}
-];
+import { _ } from 'lodash';
 
-/**
- * Publish all required data for requested update
- *
- * @param {String} updateId
- */
-Meteor.publishComposite('updates.one', function(updateId) {
-    check(updateId, String);
 
-    this.unblock();
+Meteor.publish('updates.single', function(updateId, partupId) {
+  check(updateId, String);
+  check(partupId, String);
 
-    return {
-        find: function() {
-            var updateCursor = Updates.find({_id: updateId}, {limit: 1});
+  const partup = Partups.guardedFind(this.userId, { _id: partupId }, { limit: 1 }).fetch().pop();
 
-            var update = updateCursor.fetch().pop();
-            if (!update) return;
+  if (partup) {
+    // Update
+    const cursor = Updates.find({ _id: updateId }, { limit: 1 });
+    const update = cursor.fetch().pop();
 
-            var partup = Partups.guardedFind(this.userId, {_id: update.partup_id}, {limit:1}).fetch().pop();
-            if (!partup) return;
+    // Uppers
+    const commentUpperIds = _.get(update, 'comments', []).map((comment) => comment.creator._id)
+    const upperIds = _.uniq([update.upper_id, ...commentUpperIds])
 
-            return updateCursor;
-        },
-        children: updateChildren
-    };
-});
+    // Images
+    const creator_image = Meteor.users.findSinglePublicProfile(update.upper_id).fetch().pop().profile.image
+
+    let typeDataImages = [];
+    switch (update.type) {
+      case 'partups_image_changed':
+        typeDataImages = [update.type_data.old_image, update.type_data.new_image];
+        break;
+      case 'partups_message_added':
+        typeDataImages = update.type_data.images || [];
+        break;
+      default:
+        break;
+    }
+
+    const commentImages = _.get(update, 'comments', []).map((comment) => comment.creator.image)
+    const imageIds = _.uniq([creator_image, ...typeDataImages, ...commentImages])
+
+    const cursors = [
+      cursor,
+      Images.find({"_id": {"$in": imageIds}}),
+      Files.findForUpdate(update),
+    ]
+
+    return cursors
+  }
+})
 
 /**
  * Publish all required data for updates in a part-up
@@ -54,7 +53,7 @@ Meteor.publishComposite('updates.one', function(updateId) {
  * @param {String} parameters.filter
  * @param {String} accessToken
  */
-Meteor.publishComposite('updates.from_partup', function(partupId, parameters, accessToken) {
+Meteor.publish('updates.partup', function(partupId, parameters, accessToken) {
 
     check(partupId, String);
     if (accessToken) check(accessToken, String);
@@ -62,25 +61,57 @@ Meteor.publishComposite('updates.from_partup', function(partupId, parameters, ac
     parameters = parameters || {};
     check(parameters, {
         limit: Match.Optional(Number),
+        skip: Match.Optional(Number),
         filter: Match.Optional(String)
     });
 
     this.unblock();
-    var self = this;
 
-    return {
-        find: function() {
-            var partup = Partups.guardedFind(self.userId, {_id: partupId}, {limit: 1}, accessToken).fetch().pop();
+    const partup = Partups.guardedFind(this.userId, {_id: partupId}, {limit: 1}, accessToken).fetch().pop();
+    if (!partup) return;
 
-            if (!partup) return;
+    const updates = Updates.findForPartup(partup, parameters, this.userId)
 
-            return Updates.findForPartup(partup, parameters, self.userId);
-        },
-        children: updateChildren,
-    };
+    const upperIds = []
+    const imageIds = []
+    const fileIds = []
+
+    updates.forEach((update) => {
+
+        // Upper ID is only available for non-system updates
+        if (update.upper_id) {
+            upperIds.push(update.upper_id)
+
+            // Find the image id associated with the user
+            upperImageId = _.get(Meteor.users.findSinglePublicProfile(update.upper_id).fetch().pop(), 'profile.image')
+            if (upperImageId) {
+                imageIds.push(upperImageId)
+            }
+        }
+        // Attached file to update
+        fileIds.push(_.get(update, 'type_data.documents', []))
+
+        // Comment user Ids
+        _.get(update, 'comments', []).map((comment) => upperIds.push(comment.creator._id))
+
+        // Any comment profile images
+        _.get(update, 'comments', []).map((comment) => imageIds.push(comment.creator.image))
+    })
+
+    const cursors = [
+      Meteor.users.findMultiplePublicProfiles(_.uniq(upperIds)),
+      Images.find({"_id": {"$in": _.uniq(imageIds)}}),
+      Files.find({"_id": {"$in": _.flatten(fileIds)}})
+    ]
+
+    return [
+        updates,
+        ...cursors
+    ];
 });
 
-Meteor.publishComposite('updates.comments_by_update_ids', function(updateIds) {
+
+Meteor.publish('updates.comments_by_update_ids', function(updateIds) {
     check(updateIds, [String]);
 
     this.unblock();
@@ -96,12 +127,12 @@ Meteor.publishComposite('updates.comments_by_update_ids', function(updateIds) {
         },
     };
 
-    return {
-        find: () => Updates.find(selector, options),
-    }
+    return [
+        Updates.find(selector, options)
+    ]
 });
 
-Meteor.publishComposite('updates.new_conversations', function({dateFrom}) {
+Meteor.publish('updates.new_conversations', function({dateFrom}) {
     const user = Meteor.user();
 
     const partupIds = [
@@ -126,10 +157,10 @@ Meteor.publishComposite('updates.new_conversations', function({dateFrom}) {
         partup_id: {$in: partupIds},
     };
 
-    return {
-        find: () => Updates.find(selector, options),
-    };
-});
+    return [
+        Updates.find(selector, options),
+    ]
+})
 
 Meteor.publishComposite('updates.new_conversations_count', function({dateFrom}) {
     const user = Meteor.user();

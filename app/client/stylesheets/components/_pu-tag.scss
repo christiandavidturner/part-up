@@ -1,12 +1,11 @@
 .pu-tag {
     display: inline-block;
     position: relative;
-    height: 28px;
-    padding: 6px 8px 0px 12px;
+    padding: 0px 5px 0px 10px;
     background-color: $color-background-secondary;
     font-size: 13px;
     font-weight: 600;
-    line-height: 16px;
+    line-height: 24px;
     color: $color-text;
     border-radius: 2px;
     text-decoration: none;
@@ -20,6 +19,7 @@
         position: absolute;
         right: -6px;
         top: 0;
+        bottom: 0;
         display: block;
         width: 11px;
         height: inherit;
