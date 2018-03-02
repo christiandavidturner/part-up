@@ -28,7 +28,7 @@
             {{/if }}
           {{/unless}}
           <h3 class="title" data-detail>
-              {{#if partupOr partupEquals type 'boardview' partupEquals type 'listview' }}
+              {{#if partupOr (partupEquals type 'boardview') (partupEquals type 'listview') }}
                 <a href="{{ pathFor route='partup-update' slug=partupSlug update_id=activity.update_id }}">{{ activity.name }}</a>
               {{ else }}
                 {{ activity.name }}

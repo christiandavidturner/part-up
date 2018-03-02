@@ -24,7 +24,9 @@
     padding: 6px 12px 10px 12px;
 
     .pu-tag {
+      vertical-align: top;
       margin-right: 10px;
+      margin-top: 10px;
     }
 
     .title {
@@ -33,7 +35,7 @@
       font-size: 15px;
       line-height: 18px;
       font-weight: 700;
-      width: 100%;
+      width: 80%;
 
       > a:focus, > a:hover {
         color: inherit;
@@ -286,6 +288,10 @@
 
     .pu-activity-header {
       padding-bottom: 7px;
+
+      .title {
+        width: 100%;
+      }
     }
 
     .pu-activity-content {
