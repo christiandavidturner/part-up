@@ -1,3 +1,101 @@
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/part-up/part-up/compare/3.9.0...4.0.0) (2018-03-01)
+
+
+### Bug Fixes
+
+* **client:** Allow partup or partupId as param for find ([ca03237](https://github.com/part-up/part-up/commit/ca03237))
+* **client:** Always hide activity more menu after action ([762cc50](https://github.com/part-up/part-up/commit/762cc50))
+* **client:** Always return bool from isContributionUpdate ([5538efc](https://github.com/part-up/part-up/commit/5538efc))
+* **client:** Always show update timeline ([e776df9](https://github.com/part-up/part-up/commit/e776df9))
+* **client:** Bugfixes to updatesController ([a7ef6c1](https://github.com/part-up/part-up/commit/a7ef6c1))
+* **client:** Cancel debounced refresh on autorun ([5a15612](https://github.com/part-up/part-up/commit/5a15612))
+* **client:** Change activity invite to use new sub ([2cd54b7](https://github.com/part-up/part-up/commit/2cd54b7))
+* **client:** Change board sub to normal sub with activities ([2fdd70a](https://github.com/part-up/part-up/commit/2fdd70a))
+* **client:** Change lifely get to lodash get ([6bde030](https://github.com/part-up/part-up/commit/6bde030))
+* **client:** Change sub cache limits ([4ca069c](https://github.com/part-up/part-up/commit/4ca069c))
+* **client:** Check trigger existance and unbind all events ([d2e4f17](https://github.com/part-up/part-up/commit/d2e4f17))
+* **client:** Don't subscribe without networkSlug ([e02317e](https://github.com/part-up/part-up/commit/e02317e))
+* **client:** Fix staging finds ([c54681e](https://github.com/part-up/part-up/commit/c54681e))
+* **client:** Get time once from update ([7f0eb8a](https://github.com/part-up/part-up/commit/7f0eb8a))
+* **client:** Hide comments button for activity comments ([6a8bc31](https://github.com/part-up/part-up/commit/6a8bc31))
+* **client:** Include all images in 1 cursor ([1e98742](https://github.com/part-up/part-up/commit/1e98742))
+* **client:** Make activities compatible with new subs ([d7a9264](https://github.com/part-up/part-up/commit/d7a9264))
+* **client:** Make activity title clickable in listview ([6b204ca](https://github.com/part-up/part-up/commit/6b204ca))
+* **client:** Make archived activity title gray ([710e039](https://github.com/part-up/part-up/commit/710e039))
+* **client:** Make archived activity title gray ([20723f4](https://github.com/part-up/part-up/commit/20723f4))
+* **client:** Make footer sticky for all modals ([2a4ea26](https://github.com/part-up/part-up/commit/2a4ea26))
+* **client:** Make partup route redirect blocking ([38e07c6](https://github.com/part-up/part-up/commit/38e07c6))
+* **client:** Make use of new renderIconText prop in navigation ([5fc2b2f](https://github.com/part-up/part-up/commit/5fc2b2f))
+* **client:** Move updates logic to a controller that manages the required subscriptions ([381b43c](https://github.com/part-up/part-up/commit/381b43c))
+* **client:** New updates button is no longer an update ([6b3393d](https://github.com/part-up/part-up/commit/6b3393d))
+* **client:** No longer set previous route to localStorage ([b51aacf](https://github.com/part-up/part-up/commit/b51aacf))
+* **client:** Only allow uppers to star messages ([581034d](https://github.com/part-up/part-up/commit/581034d))
+* **client:** Only show seperator together with button ([85a4371](https://github.com/part-up/part-up/commit/85a4371))
+* **client:** Pass activity to activity dropdown ([16c4558](https://github.com/part-up/part-up/commit/16c4558))
+* **client:** Pass renderIconText to /start route ([2e5901d](https://github.com/part-up/part-up/commit/2e5901d))
+* **client:** Redirect to /start only once per session ([25dbd92](https://github.com/part-up/part-up/commit/25dbd92))
+* **client:** Refactor activity view ([4b793db](https://github.com/part-up/part-up/commit/4b793db))
+* **client:** Refactor contributions ([1d57c30](https://github.com/part-up/part-up/commit/1d57c30))
+* **client:** Refactor update template ([89d4195](https://github.com/part-up/part-up/commit/89d4195))
+* **client:** Remove activities & updates sub from main partup template ([a7ee8c0](https://github.com/part-up/part-up/commit/a7ee8c0))
+* **client:** Remove query param from single activity view ([a454309](https://github.com/part-up/part-up/commit/a454309))
+* **client:** Remove timeline single update view ([856b44e](https://github.com/part-up/part-up/commit/856b44e))
+* **client:** Remove update subscription ([4cacbd6](https://github.com/part-up/part-up/commit/4cacbd6))
+* **client:** Review finds ([129ec1e](https://github.com/part-up/part-up/commit/129ec1e))
+* **client:** Set delay for initiating scroll handler ([093a852](https://github.com/part-up/part-up/commit/093a852))
+* **client:** Show own update immediatly ([186aa01](https://github.com/part-up/part-up/commit/186aa01))
+* **client:** Show updates as soon as available ([ddd86e7](https://github.com/part-up/part-up/commit/ddd86e7))
+* **client:** Stretch activity placeholder ([69dbbac](https://github.com/part-up/part-up/commit/69dbbac))
+* **client:** Style fixes ([d50618d](https://github.com/part-up/part-up/commit/d50618d))
+* **client:** Sub test finds ([fa4cb71](https://github.com/part-up/part-up/commit/fa4cb71))
+* **client:** Subscribe to files when necessary ([d944e46](https://github.com/part-up/part-up/commit/d944e46))
+* **client:** Time tag is no longer reactive to avoid updating every second ([65f686b](https://github.com/part-up/part-up/commit/65f686b))
+* **client:** Update create_activities to use new sub ([2dec888](https://github.com/part-up/part-up/commit/2dec888))
+* **client:** Update template fixes ([70c4b98](https://github.com/part-up/part-up/commit/70c4b98))
+* **client:** Wait for update in single update view ([1846439](https://github.com/part-up/part-up/commit/1846439))
+* **client:** Wrap dynamic update templates in block ([5b46d32](https://github.com/part-up/part-up/commit/5b46d32))
+* **publication:** Only add image cursor if images present ([3eed317](https://github.com/part-up/part-up/commit/3eed317))
+* **publication:** Replace duplicate files cursor with images ([202d4f1](https://github.com/part-up/part-up/commit/202d4f1))
+* **server:** Change update publications ([26775e7](https://github.com/part-up/part-up/commit/26775e7))
+* **server:** Include activities in board subscription ([019cadb](https://github.com/part-up/part-up/commit/019cadb))
+* **server:** Remove activities.from_partup and add activities.partup_create ([50b93cf](https://github.com/part-up/part-up/commit/50b93cf))
+* **subscription:** Add updates to board subscription ([ce91c7b](https://github.com/part-up/part-up/commit/ce91c7b))
+* **update:** documentRenderer now gets the right subscriptions ([51b98df](https://github.com/part-up/part-up/commit/51b98df))
+* **update:** Fixed design finding for performance refactor ([bed4f77](https://github.com/part-up/part-up/commit/bed4f77)), closes [#1609](https://github.com/part-up/part-up/issues/1609)
+* **update:** Fixed edit form trigger for updates ([d2e0a2b](https://github.com/part-up/part-up/commit/d2e0a2b))
+* **update:** Fixed update view to get subscription with partupId ([30eb1c6](https://github.com/part-up/part-up/commit/30eb1c6))
+* **update:** Images are now loaded for each update ([2f559cf](https://github.com/part-up/part-up/commit/2f559cf))
+
+
+### Code Refactoring
+
+* **update:** Removed compositePublications in the updates view for the partup.updates view ([52e28f4](https://github.com/part-up/part-up/commit/52e28f4))
+
+
+### Features
+
+* **client:** Add logical operator template helpers ([378f65f](https://github.com/part-up/part-up/commit/378f65f))
+* **client:** Add userBackgroundImage template helper ([efd37e7](https://github.com/part-up/part-up/commit/efd37e7))
+* **landingpage:** Store user partup landing page ([c6c653d](https://github.com/part-up/part-up/commit/c6c653d))
+
+
+### Performance Improvements
+
+* **fonts:** Including open sans and meriweather from google fonts ([a37aff2](https://github.com/part-up/part-up/commit/a37aff2))
+* **packages:** Introduced the mixmax:smart-disconnect package ([bd307ba](https://github.com/part-up/part-up/commit/bd307ba))
+* **static:** cache all in /public for a year ([f4e916a](https://github.com/part-up/part-up/commit/f4e916a))
+* **update:** Updated single update view to use a normal subscription ([6742aa5](https://github.com/part-up/part-up/commit/6742aa5))
+* **websocket:** added auto-disconnect ([d078db7](https://github.com/part-up/part-up/commit/d078db7))
+
+
+### BREAKING CHANGES
+
+* **update:** An alot.
+* **update:** An alot.
+
+
+
 <a name="3.9.0"></a>
 # [3.9.0](https://github.com/part-up/part-up/compare/3.8.1...3.9.0) (2018-02-11)
 
