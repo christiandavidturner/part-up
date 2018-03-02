@@ -1,3 +1,14 @@
+<a name="4.0.1"></a>
+## [4.0.1](https://github.com/part-up/part-up/compare/4.0.0...4.0.1) (2018-03-02)
+
+
+### Bug Fixes
+
+* **client:** Update chatbar height on send ([5c6d7d9](https://github.com/part-up/part-up/commit/5c6d7d9))
+* **contribution:** Fixed avatar stack & draggable cursor for activity lane ([8b7a5c8](https://github.com/part-up/part-up/commit/8b7a5c8))
+
+
+
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/part-up/part-up/compare/3.9.0...4.0.0) (2018-03-01)
 
