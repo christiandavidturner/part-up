@@ -142,9 +142,9 @@
                 {{#unless partupEquals ../type 'detail' }}
                   <li
                     data-hovercontainer="HoverContainer_upper"
-                    data-hovercontainer-context="{{ ../activity.creator_id }}"
+                    data-hovercontainer-context="{{ upper_id }}"
                     class="pu-avatar pu-avatar-small {{#unless verified }}unverified{{/unless }}"
-                    style="{{ userBackgroundImage ../activity.creator_id '80x80' }}"></li>
+                    style="{{ userBackgroundImage upper_id '80x80' }}"></li>
                 {{ else }}
                   <li>{{> Contribution contribution=. }}</li>
                 {{/unless }}
