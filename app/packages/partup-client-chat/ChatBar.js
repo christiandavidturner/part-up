@@ -4,7 +4,10 @@ var continueOnCreated = function(chatId) {
     var template = this;
     template.chatId = chatId;
     template.clearMessageInput = function() {
-        $('[data-messageinput]')[0].value = '';
+        const input = $('[data-messageinput]')[0];
+
+        input.value = '';
+        autosize.update(input);
     };
     template.rows = new ReactiveVar(1);
 
