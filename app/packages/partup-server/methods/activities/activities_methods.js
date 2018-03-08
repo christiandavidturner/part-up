@@ -114,7 +114,11 @@ Meteor.methods({
       const activity = Activities.findOneOrFail(activityId);
 
       if (!User(user).isPartnerInPartup(activity.partup_id)) {
-        throw new Error(401, 'unauthorized');
+        throw new Meteor.Error(401, 'unauthorized');
+      }
+
+      if (activity.isRemoved()) {
+        throw new Meteor.Error(0, 'activity is deleted');
       }
 
       try {

@@ -9,8 +9,10 @@
     {{/ if }}
 
     {{#if activity.deleted_at }}
-      <article class="pu-activity">
-        <h3 class="pu-activity-title pu-state-deleted">{{ activity.name }}</h3>
+      <article class="pu-block pu-activity">
+        <header class="pu-activity-header">
+          <h3 class="title pu-state-deleted">{{ activity.name }}</h3>
+        </header>
       </article>
     {{ else }}
       <article
