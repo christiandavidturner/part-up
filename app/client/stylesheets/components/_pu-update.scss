@@ -109,7 +109,7 @@
     border-bottom-right-radius: 5px;
   }
 
-  @include goingLarge(700) {
+  @include goingLarge(805) {
     &-content, > .pu-block, &-comments {
       grid-column: 3;
       -ms-grid-column: 3;
@@ -126,6 +126,20 @@
   &-placeholder {
     > p {
       grid-column: span 3;
+    }
+  }
+
+  &-single {
+    .pu-update-content, .pu-block, .pu-update-comments {
+      grid-column: span 3;
+      -ms-grid-column-span: 3;
+    }
+
+    @include goingLarge(805) {
+      .pu-update-content, .pu-block, .pu-update-comments {
+        grid-column: 3;
+        -ms-grid-column: 3;
+      }
     }
   }
 }
