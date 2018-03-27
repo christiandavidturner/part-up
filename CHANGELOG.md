@@ -1,3 +1,13 @@
+<a name="4.0.2"></a>
+## [4.0.2](https://github.com/part-up/part-up/compare/4.0.1...4.0.2) (2018-03-02)
+
+
+### Bug Fixes
+
+* **client:** Fix activity title width ([3b6579a](https://github.com/part-up/part-up/commit/3b6579a))
+
+
+
 <a name="4.0.1"></a>
 ## [4.0.1](https://github.com/part-up/part-up/compare/4.0.0...4.0.1) (2018-03-02)
 
