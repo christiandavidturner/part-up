@@ -1,3 +1,18 @@
+<a name="4.0.3"></a>
+## [4.0.3](https://github.com/part-up/part-up/compare/4.0.2...4.0.3) (2018-03-27)
+
+
+### Bug Fixes
+
+* **activity:** Show deleted title with strikethrough ([19b0422](https://github.com/part-up/part-up/commit/19b0422))
+* **intercom:** Enable chat support action in profile menu ([8ccd5b5](https://github.com/part-up/part-up/commit/8ccd5b5))
+* **login:** Fixed the floating login button ([42812f2](https://github.com/part-up/part-up/commit/42812f2)), closes [#1623](https://github.com/part-up/part-up/issues/1623)
+* **mobile:** Add mobile subscription ([c5f09d2](https://github.com/part-up/part-up/commit/c5f09d2))
+* **update:** Correct column span for single update view ([5d70d18](https://github.com/part-up/part-up/commit/5d70d18))
+* **update:** Correct column span for single update view ([e9f6353](https://github.com/part-up/part-up/commit/e9f6353))
+
+
+
 <a name="4.0.2"></a>
 ## [4.0.2](https://github.com/part-up/part-up/compare/4.0.1...4.0.2) (2018-03-02)
 
