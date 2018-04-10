@@ -9,7 +9,13 @@ Template.app_network_joinbutton.onCreated(function() {
 
 Template.app_network_joinbutton.helpers({
     joinToggle: function() {
+        console.log(Template.instance().joinToggle.get())
         return Template.instance().joinToggle.get();
+    },
+    networkHasMember: function(slug) {
+        const joined = Template.instance().joinToggle.get()
+        const network = Networks.findOne({slug: slug});
+        return network.hasMember(Meteor.userId())
     }
 });
 
@@ -18,7 +24,7 @@ var joinNetworkOrAcceptInvitation = function(slug) {
     var network = Networks.findOne({slug: slug});
     Meteor.call('networks.join', network._id, function(error) {
         if (error) {
-            Partup.client.notify.error(error.reason);
+            Partup.client.notify.error(TAPi18n.__(error.reason));
         } else {
             Partup.client.notify.success('Joined network');
 
@@ -90,7 +96,12 @@ Template.app_network_joinbutton.events({
             Meteor.call('networks.join', network._id, function(err) {
                 if (err) {
                     console.error(err);
-                    Partup.client.notify.error(TAPi18n.__(err));
+                    if (err && err.reason) {
+                        Partup.client.notify.error(TAPi18n.__(err.reason));    
+                    } else {
+                        Partup.client.notify.error(TAPi18n.__(err));    
+                    }
+                    
                 }
             });
         };
