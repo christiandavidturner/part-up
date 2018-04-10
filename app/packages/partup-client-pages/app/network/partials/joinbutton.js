@@ -9,7 +9,6 @@ Template.app_network_joinbutton.onCreated(function() {
 
 Template.app_network_joinbutton.helpers({
     joinToggle: function() {
-        console.log(Template.instance().joinToggle.get())
         return Template.instance().joinToggle.get();
     },
     networkHasMember: function(slug) {
